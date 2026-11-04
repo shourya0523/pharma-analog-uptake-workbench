@@ -1,0 +1,32 @@
+{
+  "drug_name": "Zynyz",
+  "generic_name": "retifanlimab-dlwr",
+  "manufacturer": "Incyte",
+  "benchmark_identity": "incyte_zynyz_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Merkel cell carcinoma (metastatic or recurrent locally advanced); squamous cell anal carcinoma",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Incyte-recorded net product revenues)",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Humanized monoclonal antibody against programmed death receptor-1 (PD-1)",
+  "moa_class": "pd1_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22ZYNYZ%22&limit=5",
+    "quote": "application_number BLA761334, brand_name ZYNYZ, sponsor INCYTE CORP, submission_type ORIG, submission_status AP, submission_status_date 20230322 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2023Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/879169/000087916923000016/incy-20230331.htm",
+    "quote": "In March 2023, we announced that the FDA approved ZYNYZ (retifanlimab-dlwr), a humanized monoclonal antibody targeting programmed death receptor-1 (PD-1), under accelerated approval, for the treatment of adults with metastatic or recurrent locally advanced Merkel cell carcinoma (MCC). (Incyte Form 10-Q for the quarter ended March 31, 2023)"
+  },
+  "series_start_reason": "ZYNYZ was approved 2023-03-22 (2023Q1, taken as the launch quarter); the Q1 2023 release prints no Zynyz revenue row and the first printed quarter is 2023Q2 (570 thousand), one quarter after approval.",
+  "search_log": [
+    "Listed every Incyte (CIK 879169) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2020-07-01 to 2026-11-04 for 'monjuvi|minjuvi|zynyz|niktimvo' in table rows and text (bin/scan.py).",
+    "Each release from Q2 2023 prints a 'Zynyz' row in the net product revenues table (unaudited, in thousands); 10-Qs print the same figure as 'ZYNYZ revenues, net' / 'ZYNYZ net sales'. Each quarter taken from its own release, three-months column.",
+    "Checks: 2023 570 + 98 + 582 = 1,250; 2024 467 + 651 + 694 + 1,373 = 3,185; 2025 3,009 + 8,921 + 22,674 + 31,747 = 66,351, each equal to the twelve months figure printed in the Q4 release; 2026 six months 41,393 + 49,947 = 91,340 as printed. Prior-year columns match.",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2023Q2"
+}

@@ -1,0 +1,34 @@
+{
+  "drug_name": "Fosrenol",
+  "generic_name": "lanthanum carbonate",
+  "manufacturer": "Shire",
+  "benchmark_identity": "shire_fosrenol_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Nephrology (hyperphosphatemia in end-stage renal disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Shire FOSRENOL product sales row; royalties on FOSRENOL sold by licensees are a separate row and are excluded)",
+  "formulation": "chewable tablet",
+  "route_of_administration": "oral",
+  "moa": "Non-calcium phosphate binder (lanthanum)",
+  "moa_class": "phosphate_binder",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021468",
+    "quote": "10/26/2004 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 021468, FOSRENOL)"
+  },
+  "launch_quarter": "2005Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/936402/000095010305000372/mar0105_9901.htm",
+    "quote": "FOSRENOL: FDA approval received in October 2004 and shipments commenced in the US in December 2004. First sales in January 2005 captured 3.3% of total new prescriptions in the US phosphate binder market"
+  },
+  "series_start_reason": "Series starts at the launch quarter: shipments began in December 2004 and first sales were in January 2005; the Q1 2005 release prints FOSRENOL 4,897 (USD thousands) with a dash for the prior year, and the 2005 quarters sum to the full year 53,516 printed in the Q4 2005 release, so no 2004 sales were recorded.",
+  "series_end_quarter": "2016Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q1 2016 release (filed 2016-04-29, https://www.sec.gov/Archives/edgar/data/936402/000095010316012957/dp65192_ex9901.htm, row 'FOSRENOL | 37.7 | 44.1') is the last with a FOSRENOL product sales row. From the Q2 2016 release (https://www.sec.gov/Archives/edgar/data/936402/000095010316015247/dp67599_ex9901.htm) every FOSRENOL row is labelled 'FOSRENOL royalties' (e.g. 'FOSRENOL royalties | 11.4 | 10.8 | 20.6 | 19.2'), a different measure, and no product sales row appears in any later Shire release.",
+  "search_log": [
+    "Listed every Shire plc (CIK 936402) filing via data.sec.gov/submissions incl. older pages (all forms); fetched every 8-K/8-K/A filed 2004-07 to 2019-02 whose items include 2.02, 12, 9 or 7.01 (or carry none), with every exhibit from each filing's index.json, plus every 10-Q/10-K primary document; table rows naming the brand were extracted from every exhibit (rows.py).",
+    "Shire releases print FOSRENOL in the product sales table and, from 2011, also in the royalties table; each quarter is the product-sales three-month row (first figure the quarter, next figure the prior-year quarter where one exists), and values were chosen so the four quarters reproduce the full-year product-sales row of the Q4 release. 2005 rows are the release tables stated in USD thousands.",
+    "Year checks: 2005 53.5; 2006 44.9; 2007 102.2; 2008 155.4; 2009 184.3; 2010 182.1; 2011 166.9; 2012 172.0; 2013 183.4; 2014 183.0; 2015 177.6; printed full years 2005 53,516 (thousands), 2006 44.8, 2007 102.2, 2008 155.4, 2009 184.4, 2010 182.1, 2011 166.9, 2012 172.0, 2013 183.4, 2014 183.0, 2015 177.6."
+  ],
+  "commercial_start_quarter": "2005Q1"
+}

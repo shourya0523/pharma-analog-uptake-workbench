@@ -1,0 +1,33 @@
+{
+  "drug_name": "Amtagvi",
+  "generic_name": "lifileucel",
+  "manufacturer": "Iovance",
+  "benchmark_identity": "iovance_amtagvi_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Unresectable or metastatic melanoma previously treated with a PD-1 blocking antibody (and a BRAF inhibitor if BRAF V600 positive)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (the issuer's total net product sales line for the product; launched in the U.S.)",
+  "formulation": "suspension for intravenous infusion (autologous cell therapy)",
+  "route_of_administration": "intravenous",
+  "moa": "Autologous tumor-infiltrating lymphocyte (TIL) T-cell therapy",
+  "moa_class": "autologous_til_cell_therapy",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/approved-blood-products/amtagvi",
+    "quote": "STN: 125773 Proper Name: lifileucel Trade Name: AMTAGVI Manufacturer: Iovance Biotherapeutics, Inc. ... Supporting Documents February 16, 2024 Approval Letter - AMTAGVI (FDA CBER product page)"
+  },
+  "launch_quarter": "2024Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1425205/000110465925018212/tm257755d1_ex99-1.htm",
+    "quote": "three quarters of sales following the U.S. launch of Amtagvi on February 20, 2024. (Iovance Q4 2024 release, Form 8-K Exhibit 99.1 filed 2025-02-27)"
+  },
+  "series_start_reason": "Amtagvi launched in the U.S. on February 20, 2024 (2024Q1), but revenue is recognized on completed infusions and the Q1 2024 10-Q prints no Amtagvi revenue; the first printed quarter is 2024Q2 (12,819 thousand), one quarter after launch. The Q4 2024 release describes 2024 as 'three quarters of sales following the U.S. launch'.",
+  "search_log": [
+    "Listed every Iovance (CIK 1425205) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2024-01-01 to 2026-11-04 for 'amtagvi' in table rows and text (bin/scan.py).",
+    "10-Qs print an 'Amtagvi' row in the disaggregated product revenue table (in thousands) from the Q2 2024 10-Q on; the Q1 2024 10-Q prints none. Releases print Amtagvi revenue only in prose; the 10-Ks print full years only.",
+    "2024Q2, 2024Q3, 2025Q1-Q3, 2026Q1-Q2 from the 10-Q three-months column; 2024Q4 from the Q4 2024 release sentence ($48.7 million), cross-checked against 103,567 - 54,857 = 48,710 thousand; 2025Q4 derived as FY2025 10-K 220,024 less nine months 155,127 = 64,897 thousand (the Q4 2025 release states only '~$65 million').",
+    "Checks: 2024 12,819 + 42,038 + 48,710 = 103,567 (FY2024 10-K); 2025 43,571 + 54,074 + 57,482 + 64,897 = 220,024 by construction, and the six-month and nine-month columns (97,645; 155,127) agree with the quarters. Prior-year columns of the 2025 and 2026 10-Qs match.",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2024Q2"
+}

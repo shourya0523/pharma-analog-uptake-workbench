@@ -1,0 +1,35 @@
+{
+  "drug_name": "Saphris",
+  "generic_name": "asenapine",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_saphris_merck_territory_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Psychiatry (schizophrenia, bipolar I disorder)",
+  "revenue_scope": "Merck's Saphris sales",
+  "geography": "Merck's Saphris sales as printed (Merck held the rights outside the markets licensed to Lundbeck, which sells asenapine as Sycrest 'in all markets outside the United States, China and Japan'); predominantly U.S.",
+  "formulation": "sublingual tablet",
+  "route_of_administration": "sublingual",
+  "moa": "Atypical antipsychotic (dopamine D2 / serotonin 5-HT2A receptor antagonist)",
+  "moa_class": "atypical_antipsychotic",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022117",
+    "quote": "08/13/2009 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 022117, SAPHRIS ASENAPINE)"
+  },
+  "launch_quarter": "2009Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000095012309052087/y79850exv99w1.htm",
+    "quote": "U.S. launch in October of SAPHRIS (asenapine) sublingual tablets for acute schizophrenia and bipolar I disorder"
+  },
+  "series_start_reason": "Saphris was launched in the U.S. in October 2009 (2009Q4). Merck states Saphris sales for the first time in its Form 10-K for 2011 and its 2012 Forms 10-Q (which also give the 2011 quarters as prior-year figures); no Merck filing states a 2009Q4 or 2010 quarterly figure (every Merck 10-Q/10-K and earnings exhibit filed 2009-10 to 2011-12 searched). The series starts at 2011Q1, five quarters after launch.",
+  "series_end_quarter": "2013Q4",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Merck sold the U.S. rights to Forest in January 2014 (Merck Form 10-K for 2013, https://www.sec.gov/Archives/edgar/data/310158/000031015814000009/mrk1231201310k.htm: 'In January 2014, Merck sold the U.S. rights to Saphris to Forest Laboratories, Inc.'), so Merck's 2014 figures ($25 million and $21 million in Q1 and Q2 2014) cover a different territory, and the U.S. line passes to Forest (fiscal-2014 10-K: 'Saphris | 27,883 | -' for the part of January-March 2014 it owned) and, after a quarter that no issuer prints (April-June 2014, the Forest-to-Actavis ownership gap), to Actavis/Allergan plc from 2014Q3. With January-March 2014 split between two owners and April-June 2014 unpublished, the U.S. line cannot be joined across 2014 without a gap of two quarters, so the series ends at Merck's last full-scope quarter.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 310158 (Merck & Co., formerly Schering-Plough), CIK 38074 (Forest) and CIK 1578845 (Actavis/Allergan plc) via data.sec.gov/submissions; fetched every Merck earnings 8-K exhibit (items 2.02/12/9/7.01 or none) and every 10-Q/10-K primary document filed 2009-10 to 2014-08.",
+    "Merck's product sales tables have no Saphris row (rows.py found only patent-table rows); the figures are the MD&A sentences 'Merck's sales of Saphris were $x million ...' of the 2011-2013 10-Ks and 2012-2013 10-Qs (prose.py).",
+    "Checks: 2011 23 + 23 + 34 + 40 = 120 (Q4 derived); 2012 41 + 43 + 39 + 43 = 166 = printed full year; 2013 30 + 42 + 44 + 41 = 157 vs 158 printed (the Q4 is 158 less the printed nine months 117; the quarterly figures are rounded to whole millions); first six months 2012 83 = 41 + 43 (adds to 84 from rounded quarters, printed 83).",
+    "Each row checked offline with verify_staged_manifests.check_row before writing."
+  ],
+  "commercial_start_quarter": "2011Q1"
+}

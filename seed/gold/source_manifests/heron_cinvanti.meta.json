@@ -1,0 +1,33 @@
+{
+  "drug_name": "Cinvanti",
+  "generic_name": "aprepitant injectable emulsion",
+  "manufacturer": "Heron",
+  "benchmark_identity": "heron_cinvanti_worldwide_reported",
+  "therapeutic_area": "Oncology supportive care",
+  "indication_area": "Prevention of acute and delayed chemotherapy-induced nausea and vomiting (HEC and MEC regimens)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (the issuer's total net product sales line for the product; launched in the U.S.)",
+  "formulation": "injectable emulsion",
+  "route_of_administration": "intravenous",
+  "moa": "Substance P/neurokinin-1 (NK1) receptor antagonist",
+  "moa_class": "nk1_receptor_antagonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22CINVANTI%22&limit=5",
+    "quote": "application_number NDA209296, brand_name CINVANTI, sponsor HERON THERAPS INC, submission_type ORIG, submission_status AP, submission_status_date 20171109 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2018Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/818033/000119312518320928/d650874dex991.htm",
+    "quote": "CINVANTI was approved by the FDA on November 9, 2017 and became commercially available in the U.S. on January 4, 2018. (Heron Q3 2018 release, Form 8-K Exhibit 99.1 filed 2018-11-07)"
+  },
+  "series_start_reason": "CINVANTI became commercially available on January 4, 2018; the series starts at the launch quarter.",
+  "search_log": [
+    "Listed every Heron (CIK 818033) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2016-07-01 to 2026-11-04 for 'sustol|cinvanti|zynrelef' in table rows and text (bin/scan.py), and extracted the per-product net product sales sentences from every release (bin/prose.py).",
+    "Heron printed per-product net product sales only in release sentences (rounded to $0.1 million) until Q1 2022; 10-Qs print a per-product table (in thousands) from Q2 2022; Q4 releases print per-product sentences for 2022-2023 and a per-product net revenue table from Q4 2024. Each quarter is taken from the filing that reports it as current: 10-Q three-months column for Q1-Q3 from Q2 2022, otherwise the quarter's release.",
+    "CINVANTI: 2018Q1-2022Q1 and Q4 2022-2023 from release sentences; Q2 2022-Q2 2026 Q1-Q3 from 10-Qs; Q4 2024-2025 from the Q4 release product tables.",
+    "Checks against full-year figures: 2018 56.2 (+ SUSTOL 21.3 = CINV franchise 77.5, Q4 2018 release); 2019 132.2 vs 10-K 132,162; 2020 87.9 vs 87,815; 2021 73.6 vs 73,507; 2022 87.230 vs 87,245; 2023 94.899 vs 94,869; 2024 100,079 = 100,079; 2025 96,757 vs 96,758 (differences are rounding of printed figures).",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2018Q1"
+}

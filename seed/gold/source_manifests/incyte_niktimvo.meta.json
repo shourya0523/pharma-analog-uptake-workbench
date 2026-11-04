@@ -1,0 +1,32 @@
+{
+  "drug_name": "Niktimvo",
+  "generic_name": "axatilimab-csfr",
+  "manufacturer": "Incyte",
+  "benchmark_identity": "incyte_niktimvo_worldwide_reported",
+  "therapeutic_area": "Hematology / Immunology",
+  "indication_area": "Chronic graft-versus-host disease after failure of at least two prior lines of systemic therapy",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (the issuer's total net product sales line for the product; launched in the U.S.)",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Monoclonal antibody against colony stimulating factor-1 receptor (CSF-1R)",
+  "moa_class": "csf1r_inhibitor",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22NIKTIMVO%22&limit=5",
+    "quote": "application_number BLA761411, brand_name NIKTIMVO, sponsor INCYTE CORP, submission_type ORIG, submission_status AP, submission_status_date 20240814 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2025Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/879169/000087916925000053/incy-q12025xexx991.htm",
+    "quote": "Niktimvo (axatilimab-csfr) net product revenues of $14 million in the first two months of U.S. launch (Incyte Q1 2025 release, Form 8-K Exhibit 99.1 filed 2025-04-29)"
+  },
+  "series_start_reason": "NIKTIMVO was approved 2024-08-14 but launched in the U.S. in late January 2025 (Q4 2024 release: 'Niktimvo is now commercially available in the U.S. and the commercial launch is underway'); the FY2024 10-K prints no NIKTIMVO revenue, and the series starts at the launch quarter 2025Q1.",
+  "search_log": [
+    "Listed every Incyte (CIK 879169) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2020-07-01 to 2026-11-04 for 'monjuvi|minjuvi|zynyz|niktimvo' (bin/scan.py).",
+    "First 'Niktimvo' revenue row is in the Q1 2025 release (13,613 thousand); each quarter taken from its own release, three-months column (unaudited, in thousands).",
+    "Checks: 2025 13,613 + 36,154 + 45,830 + 56,039 = 151,636, equal to the twelve months figure in the Q4 2025 release (FY2025 10-K 'NIKTIMVO revenues, net' 151.6 million); 2026 six months 55,088 + 60,309 = 115,397 as printed; prior-year columns match.",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2025Q1"
+}

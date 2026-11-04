@@ -1,0 +1,36 @@
+{
+  "drug_name": "Istodax",
+  "generic_name": "romidepsin",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "celgene_istodax_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (cutaneous and peripheral T-cell lymphoma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Celgene net product sales; U.S. plus small international sales)",
+  "formulation": "lyophilised powder for infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Histone deacetylase (HDAC) inhibitor",
+  "moa_class": "hdac_inhibitor",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022393",
+    "quote": "11/05/2009 ORIG-1 Approval (NDA 022393, ISTODAX, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2010Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/816284/000095012310042785/c98019e10vq.htm",
+    "quote": "ISTODAX was launched in the United States in the first quarter of 2010."
+  },
+  "series_start_reason": "Gloucester Pharmaceuticals (private, no SEC filings) received approval on 11/05/2009; Celgene acquired Gloucester in January 2010 and launched ISTODAX in the U.S. in the first quarter of 2010 ('Completed Acquisition of Gloucester Pharmaceuticals and Initiated U.S. Commercial Launch of ISTODAX', first-quarter 2010 release). The series starts at the launch quarter.",
+  "series_end_quarter": "2016Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From 2017 Celgene no longer prints ISTODAX by quarter: its Forms 10-Q for 2017-2019 (e.g. https://www.sec.gov/Archives/edgar/data/816284/000081628417000006/a2017033110q.htm) and its 2017-2019 quarterly releases carry no ISTODAX row with figures; only the 10-Ks print an annual figure ('ISTODAX | 76 | 80 | 69', 10-K for 2017). Bristol-Myers Squibb, which acquired Celgene on November 20, 2019, never prints an Istodax revenue line (full-text search of CIK 14272 filings from 2019-11-01 returns only legal/pipeline mentions).",
+  "search_log": [
+    "Full-text search of CIK 816284 (Celgene) filings 2009-2020 for 'istodax' (85 8-K/10-Q/10-K hits); every hit parsed for a row whose first cell is ISTODAX/romidepsin with figures. Bristol-Myers Squibb (CIK 14272) Item 2.02 8-Ks 2019-10-01 to 2026-10-29 scanned and full-text searched for 'istodax': no revenue line.",
+    "Q1-Q3 from each quarter's own Form 10-Q net product sales table (thousands to 2012, millions from 2013). Celgene's 2010 Forms 10-Q print no ISTODAX row, so 2010Q1-Q3 are read from the prior-year columns of the 2011 10-Qs (direct_prior_year_column).",
+    "Q4 2010-2014: Celgene's fourth-quarter releases fold ISTODAX into 'all other product sales', so Q4 is the 10-K full-year figure less the nine-month figure from the third-quarter 10-Q (arithmetic in each quote). Q4 2015 and 2016 are read directly from the Worldwide row of the release's product table.",
+    "Checks: Q4 2015 17.4 + nine months 51.7 = 69.1 = 10-K 2015 'ISTODAX | 69.1'; Q4 2016 20.7 + 58.6 = 79.3 = 10-K 2016 'ISTODAX | 79.3'.",
+    "Issuer column is Celgene throughout; manufacturer is given as Bristol-Myers Squibb, the brand's current owner, as assigned."
+  ],
+  "commercial_start_quarter": "2010Q1"
+}

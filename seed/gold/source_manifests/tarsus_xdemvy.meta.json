@@ -1,0 +1,30 @@
+{
+  "drug_name": "Xdemvy",
+  "generic_name": "lotilaner ophthalmic solution 0.25%",
+  "manufacturer": "Tarsus Pharmaceuticals",
+  "benchmark_identity": "tarsus_xdemvy_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (Demodex blepharitis)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Tarsus product sales, net; XDEMVY is sold only in the U.S. in this period)",
+  "formulation": "ophthalmic solution",
+  "route_of_administration": "ophthalmic",
+  "moa": "GABA-gated chloride channel antagonist (isoxazoline antiparasitic) targeting Demodex mites",
+  "moa_class": "gaba_chloride_channel_antagonist_antiparasitic",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22XDEMVY%22",
+    "quote": "NDA217603 XDEMVY (LOTILANER), ORIG submission 1, submission_status AP, submission_status_date 20230724 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2023Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979023000080/tars-20230930.htm",
+    "quote": "We launched XDEMVY on August 24, 2023 with our targeted sales force and recognized $1.7 million in product sales, net during the third quarter of 2023"
+  },
+  "search_log": [
+    "Listed every filing for CIK 1819790 (Tarsus Pharmaceuticals) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2023-07 to 2026-11 and searched for 'XDEMVY'. No table prints an 'XDEMVY' row; product sales are the 'Product sales, net' line (license fees and collaboration revenue are a separate line).",
+    "Q1-Q3 from the 10-Q statements of operations (three-month column); Q4 from the three-month column of the Q4 earnings release (8-K Ex. 99.1), which prints both three-month and full-year columns.",
+    "Full-year checks: 2023 1,653 + 13,076 = 14,729; 2024 24,720 + 40,813 + 48,118 + 66,408 = 180,059; 2025 78,335 + 102,660 + 118,697 + 151,668 = 451,360, each equal to the printed full year. Prior-year columns of each 10-Q equal the earlier rows."
+  ],
+  "commercial_start_quarter": "2023Q3"
+}

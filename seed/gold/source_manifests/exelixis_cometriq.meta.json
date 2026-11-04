@@ -1,0 +1,33 @@
+{
+  "drug_name": "Cometriq",
+  "generic_name": "cabozantinib (capsules)",
+  "manufacturer": "Exelixis",
+  "benchmark_identity": "exelixis_cometriq_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Progressive, metastatic medullary thyroid cancer",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide as recorded by Exelixis (its total COMETRIQ net product revenues; the FY2015 10-K attributes part of 2014-2015 net product revenues to the European Union)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Multi-targeted tyrosine kinase inhibitor (MET, VEGFR2, RET)",
+  "moa_class": "multikinase_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22COMETRIQ%22&limit=5",
+    "quote": "application_number NDA203756, brand_name COMETRIQ, sponsor EXELIXIS, submission_type ORIG, submission_status AP, submission_status_date 20121129 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2013Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/939767/000093976713000017/exel2013033110-q.htm",
+    "quote": "On November 29, 2012, the U.S. Food and Drug Administration approved COMETRIQ for the treatment of progressive, metastatic medullary thyroid cancer (\u201cMTC\u201d), in the United States, where it became commercially available in late January 2013. (Exelixis Form 10-Q for the quarter ended March 31, 2013)"
+  },
+  "series_start_reason": "COMETRIQ became commercially available in late January 2013; the FY2012 10-K prints no product revenue and the Q1 2013 10-Q prints the first net product revenues (1,856 thousand), so the series starts at the launch quarter.",
+  "search_log": [
+    "Listed every Exelixis (CIK 939767) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2012-10-01 to 2026-11-04 for 'cometriq' (bin/scan.py), then read the 'Net product revenues' rows of every 2013-2016 10-Q/10-K and Q4 release.",
+    "2013Q1-2016Q1: 'Net product revenues' (COMETRIQ was the only product until CABOMETYX's April 2016 launch); from the Q2 2016 10-Q a 'COMETRIQ' row in the net product revenues by product table. Q1-Q3 from 10-Qs (three-months column); Q4 2013-2015 from the Q4 releases' 'Net product revenues' row; Q4 2016 from the Q4 2016 release sentence ($7.2 million); Q4 2017-2025 derived as 10-K fiscal year less the third-quarter 10-Q nine-month figure because Exelixis prints no Q4 COMETRIQ figure.",
+    "Exelixis's fiscal quarters end on the Friday nearest the calendar quarter end from 2020 (e.g. April 4, 2025); each fiscal quarter is mapped to its calendar quarter label.",
+    "Checks: 2013 1,856+4,043+4,771+4,347=15,017; 2014 4,905+6,562+6,291+7,353=25,111; 2015 9,388+7,992+6,854+9,924=34,158 (each equal to the twelve months figure in the Q4 release); 2016 9,099+14,044+11,504+7,247=41,894 (10-K); 2017-2025 sum to the 10-K figures by construction; year-to-date columns agree with the quarters; prior-year columns match.",
+    "Series ends 2026Q2 per the brief (Q3 2026 10-Q of 2026-10-29 exists but is outside the target window)."
+  ],
+  "commercial_start_quarter": "2013Q1"
+}

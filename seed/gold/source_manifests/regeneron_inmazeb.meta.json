@@ -1,0 +1,46 @@
+{
+  "drug_name": "Inmazeb",
+  "generic_name": "atoltivimab, maftivimab and odesivimab-ebgn",
+  "manufacturer": "Regeneron",
+  "benchmark_identity": "regeneron_inmazeb_worldwide_reported",
+  "therapeutic_area": "Infectious Disease",
+  "indication_area": "Infectious disease (Zaire ebolavirus infection)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (single printed geography row per quarter; U.S. in most quarters, Global/ROW where so labelled)",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Combination of three monoclonal antibodies against the Zaire ebolavirus glycoprotein",
+  "moa_class": "anti_ebolavirus_monoclonal_antibody",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761169",
+    "quote": "10/14/2020 ORIG-1 Approval (BLA 761169, INMAZEB, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2020Q4",
+  "launch_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761169",
+    "quote": "10/14/2020 ORIG-1 Approval (BLA 761169, INMAZEB, Drugs@FDA overview)",
+    "note": "No filing names a commercial launch; sales are government procurement. launch_quarter is the approval quarter, the earliest a sale could occur; the first net product sales Regeneron prints are in 2022Q3 (Form 10-Q for the quarter ended September 30, 2022: 'Inmazeb - U.S. | 3.0 | \u2014', the prior-year column a printed nil)."
+  },
+  "series_start_reason": "Regeneron's net product sales tables carry no Inmazeb row before the third quarter of 2022 (searched every Regeneron 10-Q, 10-K and Item 2.02 8-K from 2020-10-01); the 2022Q3 10-Q prints 2021 comparatives as nil. Before then Inmazeb revenue was BARDA development funding recognised in other revenue (2020 Form 10-K: 'recognition of revenue in connection with our agreement with BARDA related to funding of certain development activities for Inmazeb'), not product sales. 2022Q3 is seven quarters after the 2020Q4 approval.",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Regeneron's Forms 10-Q for the quarters ended March 31, June 30 and September 30, 2026 (e.g. https://www.sec.gov/Archives/edgar/data/872589/000087258926000016/regn-20260331.htm) print no Inmazeb row in the net product sales tables; Inmazeb appears only in the trademark list and the product/indication table. The fourth-quarter 2025 release (exhibit991q42025.htm) is the last to print 'Inmazeb - U.S.'.",
+  "search_log": [
+    "Listed every filing for CIK 872589 (Regeneron) via data.sec.gov/submissions; searched every 10-Q, 10-K and Item 2.02 8-K (all documents per filing) from 2020-10-01 to 2026-11-03 for 'inmazeb'.",
+    "Q1-Q3 read from each quarter's own Form 10-Q net product sales table (one decimal); Q4 from the fourth-quarter earnings release (whole millions), the only filing that prints the fourth quarter as current.",
+    "Checks against the 10-K annual rows (one decimal): 2022 3.0+0 = 3.0 ('Inmazeb - U.S. | 3.0' FY2022); 2023 2.2+2.2+3.3+62 = 69.7 vs 69.8 (FY2023 10-K), the Q4 release rounding; 2024 1.0+0+35.6+40 = 76.6 vs 76.8 (FY2024 10-K; Q4 by subtraction 40.2); 2025 0+0+0+37 = 37 vs 37.4 (FY2025 10-K).",
+    "Regeneron labels the single Inmazeb row by where the period's sales occurred ('Inmazeb - U.S.', '- Global', '- ROW'); only one Inmazeb row is printed each period, so each row is the product total and the series is one scope (total net product sales)."
+  ],
+  "commercial_start_quarter": "2022Q3",
+  "reviewed_anomalies": {
+    "2022Q4": "Inmazeb sales are occasional government purchases; nil or one-off quarters are what Regeneron printed. Checked at source and kept as printed.",
+    "2023Q4": "Inmazeb sales are occasional government purchases; nil or one-off quarters are what Regeneron printed. Checked at source and kept as printed.",
+    "2024Q1": "Inmazeb sales are occasional government purchases; nil or one-off quarters are what Regeneron printed. Checked at source and kept as printed.",
+    "2024Q2": "Inmazeb sales are occasional government purchases; nil or one-off quarters are what Regeneron printed. Checked at source and kept as printed.",
+    "2024Q4": "Inmazeb sales are occasional government purchases; nil or one-off quarters are what Regeneron printed. Checked at source and kept as printed.",
+    "2025Q1": "Inmazeb sales are occasional government purchases; nil or one-off quarters are what Regeneron printed. Checked at source and kept as printed.",
+    "2025Q2": "Inmazeb sales are occasional government purchases; nil or one-off quarters are what Regeneron printed. Checked at source and kept as printed.",
+    "2025Q3": "Inmazeb sales are occasional government purchases; nil or one-off quarters are what Regeneron printed. Checked at source and kept as printed."
+  }
+}

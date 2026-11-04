@@ -1,0 +1,60 @@
+{
+  "drug_name": "Namenda",
+  "generic_name": "memantine hydrochloride (immediate release)",
+  "manufacturer": "Forest",
+  "benchmark_identity": "forest_namenda_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Alzheimer disease (moderate to severe dementia of the Alzheimer's type)",
+  "revenue_scope": "Namenda (immediate-release) net sales",
+  "geography": "U.S. (Forest's Namenda sales; Allergan plc's 'Namenda IR' row prints '-' in its International column)",
+  "formulation": "tablet / oral solution",
+  "route_of_administration": "oral",
+  "moa": "NMDA receptor antagonist",
+  "moa_class": "nmda_receptor_antagonist",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021487",
+    "quote": "10/16/2003 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 021487, NAMENDA MEMANTINE HYDROCHLORIDE)"
+  },
+  "launch_quarter": "2004Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/38074/000003807404000023/forest10qjun04.htm",
+    "quote": "Sales of Namenda\u00ae, an NMDA receptor antagonist for the treatment of moderate to severe Alzheimer's disease, launched in March 2004, amounted to $57,368,000 for the current quarter."
+  },
+  "series_start_reason": "Namenda was launched in March 2004 (calendar 2004Q1). Forest's filings state its 2004Q1-2004Q4 Namenda sales only in whole dollars (e.g. 'Sales of Namenda to March 31, 2004 were $45,472,000', 10-K filed 2004-06-14; '$57,368,000 for the current quarter', 10-Q for June 2004), which the staging verifier cannot hold to a declared millions/thousands unit. The series therefore starts at 2005Q1, the first quarter derivable from figures stated in USD thousands (fiscal-2005 10-K full year less the nine months), four quarters after launch.",
+  "joined_issuers": [
+    {
+      "issuer": "Forest Laboratories",
+      "first_quarter": "2005Q1",
+      "last_quarter": "2014Q1"
+    },
+    {
+      "issuer": "Actavis plc / Allergan plc",
+      "first_quarter": "2014Q3",
+      "last_quarter": "2018Q3"
+    }
+  ],
+  "unreported_quarters": {
+    "2014Q2": "Ownership change Forest Laboratories to Actavis plc; no full-quarter figure is published. Forest's fiscal year ended 2014-03-31 and after its Form 10-K filed 2014-05-30 it filed no 10-Q or earnings release (Form 15-12B filed 2014-07-15, data.sec.gov/submissions CIK 38074); Actavis plc closed the Forest acquisition on July 1, 2014 and its releases of 2015 print the 2014Q2 Namenda IR comparative as '-' (Q2 2015 release, https://www.sec.gov/Archives/edgar/data/1578845/000114420415046696/v417293_ex99-1.htm, row 'Namenda IR | 232.6 | - | 232.6')."
+  },
+  "series_end_quarter": "2018Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Allergan plc's Q3 2018 release (https://www.sec.gov/Archives/edgar/data/1578845/000114420418055985/tv505705_ex99-1.htm) is the last with a 'Namenda IR' row; from the Q4 2018 release (https://www.sec.gov/Archives/edgar/data/1578845/000114420419003275/tv511761_ex99-1.htm) Allergan prints a single 'Namenda' row covering Namenda XR and Namenda IR together ('Namenda | - | 10.7 | ... | 97.8'), a different scope, and AbbVie's releases after the May 2020 acquisition print no Namenda row.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 38074 (Forest Laboratories) and CIK 1578845 (Actavis plc / Allergan plc) via data.sec.gov/submissions incl. older pages; fetched every 8-K/8-K/A with items 2.02, 12, 9 or 7.01 (or none) with all exhibits, and every 10-Q/10-K primary document, Forest 2002-07 to 2014-07 and Allergan plc 2014-07 to 2020-06.",
+    "Forest prints Namenda only in prose until fiscal 2014. 2005Q2-2008Q4 (Forest fiscal Q1-Q3) are read from the 10-Q MD&A sentence (USD thousands; Forest's earnings releases of those years state sales in whole dollars); calendar Q1 2005-2008 (Forest fiscal Q4, no 10-Q) = 10-K fiscal-year figure (thousands) less the nine months of the third-quarter 10-Q; 2009Q1-2014Q1 from each quarter's earnings-release sentence (USD millions; the releases switched to millions with the April 2009 release).",
+    "Cross-checks: each derived fiscal Q4 equals the figure Forest's April release states in whole dollars ($93,945,000 for Jan-Mar 2005, $145,385,000 for 2006, $179,746,000 for 2007, $226,331,000 for 2008, against 226,332 thousand derived - a one-thousand rounding difference); fiscal 2010 quarters 259.3 + 275.3 + 282.5 + 297.9 = 1,115.0 vs fiscal-year 1,114.9 printed in the April 2010 release.",
+    "Allergan plc: 'Namenda IR' rows of each quarter's release from 2015Q1 (columns differ by year: current/prior through 2016Q3; U.S. Specialized, U.S. General Medicine, International, Corporate, Total from 2016Q4; the Total is recorded); 2014Q3 and 2014Q4 printed only as 'Namenda franchise' in Actavis's own releases and taken from the prior-year columns of the Q3 and Q4 2015 releases (307.0 and 322.7; 427.6 franchise less 120.6 XR = 307.0).",
+    "Quarters whose Total cell is printed as a dash (2017Q2-2017Q4) are recorded as 0, as the quote says.",
+    "Each row checked offline with verify_staged_manifests.check_row before writing."
+  ],
+  "commercial_start_quarter": "2005Q1",
+  "reviewed_anomalies": {
+    "2017Q1": "Near-nil or nil (printed as a dash) figures for the immediate-release line after generic entry. Checked at source and kept as printed.",
+    "2017Q2": "Near-nil or nil (printed as a dash) figures for the immediate-release line after generic entry. Checked at source and kept as printed.",
+    "2017Q3": "Near-nil or nil (printed as a dash) figures for the immediate-release line after generic entry. Checked at source and kept as printed.",
+    "2017Q4": "Near-nil or nil (printed as a dash) figures for the immediate-release line after generic entry. Checked at source and kept as printed.",
+    "2018Q1": "Near-nil or nil (printed as a dash) figures for the immediate-release line after generic entry. Checked at source and kept as printed.",
+    "2018Q2": "Near-nil or nil (printed as a dash) figures for the immediate-release line after generic entry. Checked at source and kept as printed."
+  }
+}

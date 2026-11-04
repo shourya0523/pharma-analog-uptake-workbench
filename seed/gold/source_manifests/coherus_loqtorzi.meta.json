@@ -1,0 +1,32 @@
+{
+  "drug_name": "Loqtorzi",
+  "generic_name": "toripalimab-tpzi",
+  "manufacturer": "Coherus",
+  "benchmark_identity": "coherus_loqtorzi_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (nasopharyngeal carcinoma)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "PD-1 blocking antibody",
+  "moa_class": "pd_1_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761240",
+    "quote": "10/27/2023 ORIG-1 Approval (BLA 761240, LOQTORZI, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2023Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1512762/000155837024003110/chrs-20240313xex99d1.htm",
+    "quote": "$0.6 million of net sales of LOQTORZI which began shipping to distributors in December 2023 in preparation for launch"
+  },
+  "series_start_reason": "First sales were distributor shipments in December 2023 (2023Q4, $0.6 million); Coherus dates the commercial launch to January 2, 2024 ('commercial launch commencing on January 2, 2024', same release). 2023Q4 is kept as the first quarter of revenue and launch_quarter is set to it.",
+  "search_log": [
+    "Listed every filing for CIK 1512762 via data.sec.gov/submissions (recent plus older pages, all forms incl. 8-K/A); selected 8-K/8-K/A filings with Item 2.02 from 2023-10-01 and searched every document in each (index.json) for 'loqtorzi'.",
+    "Each quarter read from the quarter's own earnings release (Exhibit 99.1) sentence stating LOQTORZI net sales/net revenue for that quarter; January preliminary-results presentations (2024-01-10, 2025-01-13, 2026-01-13) not used.",
+    "Checks: 2024 quarters 2.0+3.8+5.8+7.5 = 19.1, equal to 'LOQTORZI net product sales in FY 2024 were $19.1 million' (2025-03-10 release); 2025 quarters 7.3+10.0+11.2+12.4 = 40.9 vs 'LOQTORZI net revenue more than doubled to $40.8 million' (2026-03-09 release), within rounding of the one-decimal quarterly figures.",
+    "Verifier run on staging: every row's label and figures found on one line of its cited document."
+  ],
+  "commercial_start_quarter": "2023Q4"
+}

@@ -1,0 +1,33 @@
+{
+  "drug_name": "Zynrelef",
+  "generic_name": "bupivacaine and meloxicam extended-release solution",
+  "manufacturer": "Heron",
+  "benchmark_identity": "heron_zynrelef_worldwide_reported",
+  "therapeutic_area": "Pain / Anesthesia",
+  "indication_area": "Postsurgical analgesia for up to 72 hours after soft tissue or orthopedic surgery (instillation)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (the issuer's total net product sales line for the product; launched in the U.S.)",
+  "formulation": "extended-release solution for instillation",
+  "route_of_administration": "instillation (local, into the surgical site)",
+  "moa": "Local anesthetic (sodium channel blocker) combined with an NSAID (COX inhibitor) in an extended-release polymer",
+  "moa_class": "local_anesthetic_nsaid_combination",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22ZYNRELEF%22&limit=5",
+    "quote": "application_number NDA211988, brand_name ZYNRELEF KIT, sponsor HERON THERAPS INC, submission_type ORIG, submission_status AP, submission_status_date 20210512 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/818033/000156459021053940/hrtx-ex991_6.htm",
+    "quote": "ZYNRELEF became commercially available in the U.S. on July 1, 2021, and net product sales for the three and nine months ended September 30, 2021 were $2.1 million (Heron Q3 2021 release, Form 8-K Exhibit 99.1 filed 2021-11-03)"
+  },
+  "series_start_reason": "ZYNRELEF was approved 2021-05-12 and became commercially available on July 1, 2021; the series starts at the launch quarter.",
+  "search_log": [
+    "Listed every Heron (CIK 818033) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2016-07-01 to 2026-11-04 for 'sustol|cinvanti|zynrelef' in table rows and text (bin/scan.py), and extracted the per-product net product sales sentences from every release (bin/prose.py).",
+    "Heron printed per-product net product sales only in release sentences (rounded to $0.1 million) until Q1 2022; 10-Qs print a per-product table (in thousands) from Q2 2022; Q4 releases print per-product sentences for 2022-2023 and a per-product net revenue table from Q4 2024. Each quarter is taken from the filing that reports it as current: 10-Q three-months column for Q1-Q3 from Q2 2022, otherwise the quarter's release.",
+    "ZYNRELEF: 2021Q3-2022Q1 and Q4 2022-2023 from release sentences; Q2 2022-Q2 2026 Q1-Q3 from 10-Qs; Q4 2024-2025 from the Q4 release product tables.",
+    "Checks against full-year figures: 2021 2.1+0.8=2.9 vs 10-K 2,924; 2022 10.240 vs 10,196; 2023 17.633 vs 17,727 (the Q4 2023 sentence states $5.6 million while the Q4 2024 release's prior-year column gives 5,694); 2024 25,546 = 25,546; 2025 38,074 vs 38,072.",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2021Q3"
+}

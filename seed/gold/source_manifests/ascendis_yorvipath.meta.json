@@ -1,0 +1,31 @@
+{
+  "drug_name": "Yorvipath",
+  "generic_name": "palopegteriparatide",
+  "manufacturer": "Ascendis",
+  "benchmark_identity": "ascendis_yorvipath_worldwide_reported",
+  "therapeutic_area": "Endocrinology",
+  "indication_area": "Endocrinology (hypoparathyroidism)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide total YORVIPATH revenue (Europe and international markets from January 2024; U.S. from late December 2024)",
+  "formulation": "prefilled pen (once-daily injection)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Long-acting prodrug of parathyroid hormone PTH(1-34) (PTH receptor agonist)",
+  "moa_class": "parathyroid_hormone_analog",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=216490",
+    "quote": "08/09/2024 ORIG-1 Approval (NDA 216490, YORVIPATH, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2024Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1612042/000119312524003814/d700978dex991.htm",
+    "quote": "YORVIPATH first launch in Germany January 2024"
+  },
+  "series_start_reason": "YORVIPATH was approved in the EU before the U.S. and launched in Germany in January 2024; the first-quarter 2024 release is the first to print YORVIPATH revenue ('reflecting first two months of delivery to patients'). U.S. approval followed on 08/09/2024 and the U.S. launch in late December 2024 ('available in the U.S. since late December 2024', January 2025 presentation).",
+  "search_log": [
+    "Listed every filing for CIK 1612042 (Ascendis Pharma A/S) via data.sec.gov/submissions; every 6-K from 2021-08-01 to 2026-10-26 searched (all documents per filing except XBRL viewer pages) for 'skytrofa|yorvipath'; 20-F for 2021 read for the launch-quarter figure.",
+    "Each quarter read from the quarter's own results release: the YORVIPATH revenue sentence (EUR millions) for 2024Q1-Q3 and the revenue-from-commercial-products table (EUR'000) from 2024Q4.",
+    "Checks: 2024 quarters 1.5+5.2+8.5+13.584 = 28.784 vs 'YORVIPATH | 13,584 | \u2014 | 28,727' (twelve months 2024), within the rounding of the one-decimal quarters; 2025 44.688+102.957+143.089+186.677 = 477.411 vs 477,412."
+  ],
+  "commercial_start_quarter": "2024Q1"
+}

@@ -1,0 +1,33 @@
+{
+  "drug_name": "Ztalmy",
+  "generic_name": "ganaxolone",
+  "manufacturer": "Marinus Pharmaceuticals",
+  "benchmark_identity": "marinus_ztalmy_us_reported",
+  "therapeutic_area": "Neurology",
+  "indication_area": "Neurology (seizures in CDKL5 deficiency disorder)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Marinus product revenue, net)",
+  "formulation": "oral suspension",
+  "route_of_administration": "oral",
+  "moa": "Neuroactive steroid positive allosteric modulator of GABA-A receptors",
+  "moa_class": "gaba_a_positive_allosteric_modulator",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22ZTALMY%22",
+    "quote": "NDA215904 ZTALMY (GANAXOLONE), ORIG submission 1, submission_status AP, submission_status_date 20220318 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2022Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1267813/000155837022016604/mrns-20220930x10q.htm",
+    "quote": "ZTALMY became available for commercial sale and shipment to patients with a prescription in the U.S. in the third quarter of 2022."
+  },
+  "series_end_quarter": "2024Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Marinus was acquired by Immedica Pharma AB (not an SEC filer) before filing a 2024 Form 10-K or a fourth-quarter 2024 release; its last periodic report is the 10-Q for September 30, 2024. 8-K filed 2025-02-11 (accession 0001104659-25-011211) reports the Merger Agreement 'with Immedica Pharma AB, a Swedish corporation' and that 'the Merger had been consummated'; a Form 15-12G followed on 2025-02-21.",
+  "search_log": [
+    "Listed every filing for CIK 1267813 (Marinus Pharmaceuticals) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2022-04 to 2025-05 and searched for 'ZTALMY'. No table prints a 'ZTALMY' row; the product is the 'Product revenue, net' line.",
+    "Q1-Q3 from the 10-Q statements of operations (three-month column); Q4 2022 and Q4 2023 from the three-month column of the Q4 earnings release (8-K Ex. 99.1).",
+    "Full-year checks: 2022 555 + 2,317 = 2,872; 2023 3,332 + 4,249 + 5,429 + 6,551 = 19,561; each equals the printed full year. 2024 prior-year columns (3,332; 4,249; 5,429) equal the 2023 rows. The 2025-03 deck text gives 'U.S. net product revenue of $6.6M for the fourth quarter of 2023'."
+  ],
+  "commercial_start_quarter": "2022Q3"
+}

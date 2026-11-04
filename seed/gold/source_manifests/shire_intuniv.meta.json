@@ -1,0 +1,34 @@
+{
+  "drug_name": "Intuniv",
+  "generic_name": "guanfacine extended-release",
+  "manufacturer": "Shire",
+  "benchmark_identity": "shire_intuniv_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Psychiatry (ADHD)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Shire INTUNIV product sales row)",
+  "formulation": "extended-release tablet",
+  "route_of_administration": "oral",
+  "moa": "Selective alpha-2A adrenergic receptor agonist",
+  "moa_class": "alpha2a_adrenergic_agonist",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022037",
+    "quote": "09/02/2009 ORIG-1 Approval Type 3 - New Dosage Form STANDARD (NDA 022037, INTUNIV)"
+  },
+  "launch_quarter": "2009Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/936402/000095010311000539/dp20986_ex9901.htm",
+    "quote": "INTUNIV was launched in the US in Q4 2009, (2009 sales: $5.4 million)."
+  },
+  "series_start_reason": "Series starts at the launch quarter (Q4 2009; the Q4 2009 release prints INTUNIV 5.4).",
+  "series_end_quarter": "2016Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q1 2016 release (filed 2016-04-29, https://www.sec.gov/Archives/edgar/data/936402/000095010316012957/dp65192_ex9901.htm, row 'INTUNIV | 10.2 | 17.4') is the last Shire release with an INTUNIV product sales row; none of the releases filed 2016-08-02 to 2018-11-01 nor 'Shire's Full Year 2018 Results' has an INTUNIV row (row scan of every Shire earnings exhibit), and Takeda's revenue-by-product tables have no INTUNIV row (its FY2018 Q4 summary prints only 'INTUNIV | 1.3 | \u2014' Bn JPY for the Shire stub period).",
+  "search_log": [
+    "Listed every Shire plc (CIK 936402) filing via data.sec.gov/submissions incl. older pages (all forms); fetched every 8-K/8-K/A filed 2004-07 to 2019-02 whose items include 2.02, 12, 9 or 7.01 (or carry none), with every exhibit from each filing's index.json, plus every 10-Q/10-K primary document; table rows naming the brand were extracted from every exhibit (rows.py).",
+    "Shire releases print several INTUNIV rows (product sales, a separate royalties table from 2014Q4, and an 'INTUNIV license payment' line); each quarter is the product-sales three-month row: the row whose first figure is the quarter and whose next figure is the prior-year quarter where one existed. Values were chosen so that the four quarters reproduce the full-year product-sales row printed in each Q4 release.",
+    "Year checks: 2010 165.9; 2011 223.0; 2012 287.8; 2013 334.9; 2014 327.2; 2015 65.1; printed full years 2010 165.9, 2013 334.9, 2014 327.2, 2015 65.1 match."
+  ],
+  "commercial_start_quarter": "2009Q4"
+}

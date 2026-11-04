@@ -1,0 +1,35 @@
+{
+  "drug_name": "Latisse",
+  "generic_name": "bimatoprost ophthalmic solution 0.03%",
+  "manufacturer": "Allergan",
+  "benchmark_identity": "allergan_latisse_worldwide_reported",
+  "therapeutic_area": "Dermatology / Aesthetics",
+  "indication_area": "Aesthetics (hypotrichosis of the eyelashes)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Allergan, Inc. product net sales, total column)",
+  "formulation": "topical solution (applied to the upper eyelid margin)",
+  "route_of_administration": "topical",
+  "moa": "Prostaglandin F2-alpha analog (prostamide) promoting eyelash growth",
+  "moa_class": "prostaglandin_analog",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022369",
+    "quote": "12/24/2008 ORIG-1 Approval Type 5 - New Formulation or New Manufacturer PRIORITY (NDA 022369, LATISSE BIMATOPROST)"
+  },
+  "launch_quarter": "2009Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/850693/000119312509105410/d10q.htm",
+    "quote": "Latisse \u2122 , our treatment for inadequate or insufficient eyelashes, which we launched in the United States in January 2009"
+  },
+  "series_start_reason": "Series starts at the launch quarter (January 2009); the Q1 2009 release is the first with a Latisse row (prior-year column '\u2014').",
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Allergan, Inc. was acquired by Actavis plc (renamed Allergan plc) on March 17, 2015; its last release is for 2014Q4 (filed 2015-02-04). Allergan plc printed no Latisse row in its 2015 releases; its first Latisse figures are U.S. Specialized Therapeutics segment figures only (a recast 8-K filed 2016-10-06, https://www.sec.gov/Archives/edgar/data/1578845/000119312516732764/d261256dex991.htm, 'Latisse 2.7 22.9 13.8 23.8 19.8 17.7' for 2015Q1-2016Q2, and the Q2-Q3 2016 releases), and a worldwide Total (U.S. plus International) only from the Q4 2016 release. 2015Q1 is a post-close stub (2.7), so a worldwide series cannot be continued without changing scope or leaving a gap of more than one quarter; the series ends at Allergan, Inc.'s last quarter.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 850693 (Allergan, Inc.), CIK 1578845 (Actavis/Allergan plc) and CIK 1551152 (AbbVie) via data.sec.gov/submissions incl. older pages; fetched every earnings 8-K exhibit (items 2.02/12/9/7.01 or none) and 10-Q/10-K primary document for Allergan, Inc. 2007-07 to 2015-03 and Allergan plc 2014-07 to 2020-06.",
+    "Each quarter is the first 'Latisse' row (three months) of the product net sales table in the release reporting it as current; Q4 releases print a second Latisse row for the full year.",
+    "Year sums: 2009 73.7; 2010 81.8; 2011 93.6; 2012 97.3; 2013 100.0; 2014 98.6; each equals the full-year Latisse row printed in the following Q4 release (2009 73.7, 2010 81.8, 2011 93.6, 2012 97.3, 2013 100.0, 2014 98.6).",
+    "Each row checked offline with verify_staged_manifests.check_row before writing."
+  ],
+  "commercial_start_quarter": "2009Q1"
+}

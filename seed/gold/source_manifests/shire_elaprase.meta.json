@@ -1,0 +1,56 @@
+{
+  "drug_name": "Elaprase",
+  "generic_name": "idursulfase",
+  "manufacturer": "Shire",
+  "benchmark_identity": "shire_elaprase_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Metabolic",
+  "indication_area": "Rare disease (mucopolysaccharidosis II, Hunter syndrome)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Shire: ELAPRASE product sales, USD; Takeda: worldwide ELAPRASE revenue, JPY)",
+  "formulation": "concentrate for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Enzyme replacement therapy (recombinant iduronate-2-sulfatase)",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125151",
+    "quote": "07/24/2006 ORIG-1 Approval N/A; Orphan (BLA 125151, ELAPRASE IDURSULFASE)"
+  },
+  "launch_quarter": "2006Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/936402/000095010306002475/dp03851_ex9901.htm",
+    "quote": "ELAPRASE was launched at the end of July 2006 and has had a strong start with sales reaching $4.3 million by the end of Q3 2006."
+  },
+  "series_start_reason": "Series starts at the launch quarter (launched at the end of July 2006; the Q3 2006 release prints $4.3 million).",
+  "joined_issuers": [
+    {
+      "issuer": "Shire plc",
+      "first_quarter": "2006Q3",
+      "last_quarter": "2018Q4"
+    },
+    {
+      "issuer": "Takeda",
+      "first_quarter": "2019Q2",
+      "last_quarter": "2025Q1"
+    }
+  ],
+  "unreported_quarters": {
+    "2019Q1": "Ownership change Shire plc to Takeda; no full-quarter figure is published. Takeda completed the Shire acquisition on January 8, 2019; Shire filed no report for 2019. Takeda's FY2018 Q4 summary (Form 6-K filed 2019-05-14, https://www.sec.gov/Archives/edgar/data/1395064/000119312519146473/d741893d6k.htm) prints ELAPRASE 15.1 Bn JPY in a column headed 'Shire 3 Months', covering only January 8 to March 31, 2019, so the quarter is not recorded."
+  },
+  "series_end_quarter": "2025Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Takeda's FY2025 Q1 earnings release (Form 6-K filed 2025-07-30, https://www.sec.gov/Archives/edgar/data/1395064/000139506425000120/form-6k_073025.htm) contains no occurrence of 'ELAPRASE', and neither does the FY2026 Q1 release (https://www.sec.gov/Archives/edgar/data/1395064/000139506426000327/form6k_073026.htm); the FY2025 half-year report prints only the six-month figure ('Elaprase | 53,120 | 49,067') and the FY2025 Q3 release only nine months (JPY 74.2 billion), so no three-month figure for April-June 2025 or any later quarter can be read or derived from sec.gov documents. The last quarter with a three-month figure is January-March 2025 (FY2024 Q4).",
+  "search_log": [
+    "Listed every Shire plc (CIK 936402) filing via data.sec.gov/submissions incl. older pages (all forms); fetched every 8-K/8-K/A filed 2004-07 to 2019-02 whose items include 2.02, 12, 9 or 7.01 (or carry none), with every exhibit from each filing's index.json, plus every 10-Q/10-K primary document; table rows naming the brand were extracted from every exhibit (rows.py).",
+    "Takeda (CIK 1395064): 'Shire's Full Year 2018 Results' (Form 6-K filed 2019-02-15) and Takeda's earnings documents furnished on Form 6-K/20-F for FY2018 Q4 to FY2026 Q1 (the per-quarter list in tk.py) were fetched and searched for the brand.",
+    "Shire quarters: three-month 'ELAPRASE' row of each quarter's own release (the smallest of the brand's rows before 2016Q2, where the other rows are year-to-date; from 2016Q2 the Total/prior/year-to-date row). 2018Q4 from 'Shire's Full Year 2018 Results' furnished by Takeda.",
+    "Shire year checks (sum of quarters vs full-year row): 2007 181.8; 2008 305.0; 2009 353.2; 2010 403.6; 2011 464.9; 2012 497.6; 2013 545.6; 2014 592.8; 2015 552.6; 2016 589.0; 2017 615.7; 2018 634.0; printed full years 2007 181.8, 2008 305.1, 2009 353.1, 2010 403.6, 2011 464.9, 2012 497.6, 2013 545.6, 2014 592.8, 2015 552.6, 2016 589.0, 2017 615.7, 2018 634.0.",
+    "Takeda quarters (fiscal year April-March; FQ1=calendar Q2 ... FQ4=calendar Q1): three-month revenue-by-product notes (columns prior-year then current) of the FY2020-FY2023 quarterly securities reports; FY2019 Q1-Q3 reports print no ELAPRASE figure, so 2019Q2-Q4 are the prior-year columns of the FY2020 reports; Q4 = 20-F full year less nine months; FY2024 Q1 and Q3 from the earnings-release prose, Q2 = half-year less Q1.",
+    "Takeda cross-checks: FY2019 nine months 18,842 + 16,699 + 16,828 = 52,369 (printed); FY2020 17,637 + 16,679 + 17,215 = 51,531 (printed); FY2021 57,714 (printed); FY2022 65,003 vs 65,002 printed; FY2023 69,984 vs 69,983 printed.",
+    "Every row checked offline with verify_staged_manifests.check_row before writing."
+  ],
+  "commercial_start_quarter": "2006Q3",
+  "reviewed_anomalies": {
+    "2019Q2": "Reporting currency changes here from Shire's USD to Takeda's JPY; gold normalizes both to USD. Checked at source and kept as printed."
+  }
+}

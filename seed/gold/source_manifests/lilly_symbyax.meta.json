@@ -1,0 +1,35 @@
+{
+  "drug_name": "Symbyax",
+  "generic_name": "olanzapine and fluoxetine hydrochloride",
+  "manufacturer": "Eli Lilly",
+  "benchmark_identity": "lilly_symbyax_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Psychiatry (bipolar depression)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Lilly Form 10-Q sales-by-product Total column: U.S. plus outside U.S.)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Atypical antipsychotic (olanzapine) combined with a selective serotonin reuptake inhibitor (fluoxetine)",
+  "moa_class": "atypical_antipsychotic_ssri_combination",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021520",
+    "quote": "12/24/2003 ORIG-1 Approval Type 4 - New Combination PRIORITY"
+  },
+  "launch_quarter": "2004Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/59478/000095013704003746/c85216e10vq.htm",
+    "quote": "Symbyax was launched in the U.S. in January 2004."
+  },
+  "series_start_reason": "Series starts at the launch quarter (January 2004); the first-quarter 2004 Form 10-Q prints a Symbyax row with no prior-year figure.",
+  "series_end_quarter": "2006Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Form 10-Q for the quarter ended March 31, 2006 (https://www.sec.gov/Archives/edgar/data/59478/000095013706005239/c04851e10vq.htm, row 'Symbyax 12.9 0.5 13.4 12.6 6 %') is the last Lilly filing with a Symbyax sales row. The Form 10-Q for the quarter ended June 30, 2006 (https://www.sec.gov/Archives/edgar/data/59478/000095013706008651/c07379e10vq.htm) contains no occurrence of 'Symbyax' at all, and no later Lilly 10-Q, 10-K or earnings-release exhibit filed through 2017 has a Symbyax table row (row scan of every Lilly 10-Q/10-K and item 2.02 exhibit); the releases mention Symbyax only inside a list of products 'launched this decade'.",
+  "search_log": [
+    "Listed every Eli Lilly (CIK 59478) filing via data.sec.gov/submissions incl. older pages (all forms); fetched every 8-K/8-K/A whose items include 2.02, 12, 9 or 7.01 (or carry no items) filed 2003-10 to 2017-12 with all exhibits from each filing's index.json, and every 10-Q, 10-K and 10-K/A primary document in that range.",
+    "Scanned all of them for table rows whose first cell starts with 'Symbyax' (rows.py) and for any occurrence of the word (grep.py). Rows exist only in the Forms 10-Q for 2004Q1-2005Q3 and 2006Q1 and in the Form 10-K for 2005 (2005 and 2004 full years); the 2004 Form 10-K and the 2006Q2 and later 10-Qs have no Symbyax row.",
+    "Q4 2004 and Q4 2005 are derived as full year less the third-quarter 10-Q nine-month Total. Year checks: 2004 = 33.7 + 7.9 + 13.5 + 15.2 = 70.3 vs printed 70.2 only because Q4 is derived from 55.0, which is itself the printed nine-month total (33.7+7.9+13.5 = 55.1 against printed 55.0 - one-decimal rounding in the 10-Q); 2005 = 12.6 + 14.9 + 13.0 + 13.4 = 53.9 = printed full year.",
+    "Each row checked offline with verify_staged_manifests.check_row before writing."
+  ],
+  "commercial_start_quarter": "2004Q1"
+}

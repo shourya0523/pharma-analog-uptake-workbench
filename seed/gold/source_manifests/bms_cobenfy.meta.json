@@ -1,0 +1,32 @@
+{
+  "drug_name": "Cobenfy",
+  "generic_name": "xanomeline and trospium chloride",
+  "benchmark_identity": "bms_cobenfy_worldwide_reported",
+  "therapeutic_area": "Neuroscience",
+  "indication_area": "Psychiatry (schizophrenia)",
+  "formulation": "capsule",
+  "moa": "Muscarinic M1/M4 receptor agonist (xanomeline) with peripherally restricted muscarinic antagonist (trospium)",
+  "moa_class": "muscarinic_agonist",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=216158",
+    "quote": "09/26/2024 ORIG-1 Approval (NDA 216158, COBENFY, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2024Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000001427225000037/a2024ex991-filing.htm",
+    "quote": "Regulatory Milestones in the Fourth Quarter, Including U.S. Approval of Opdivo Qvantig and the U.S. Launch of Cobenfy"
+  },
+  "series_start_reason": "Cobenfy was approved on 09/26/2024 and launched in the fourth quarter of 2024; Karuna Therapeutics (acquired by BMS in March 2024) had no product sales, so there is no earlier issuer to join. The third-quarter 2024 release prints no Cobenfy row.",
+  "search_log": [
+    "Listed every filing for CIK 14272 (Bristol-Myers Squibb) via data.sec.gov/submissions (recent plus older pages, all forms incl. 8-K/A); selected Item 2.02 8-Ks from 2019-10-01 to 2026-10-29 and searched every document in each for the brand.",
+    "Each quarter read from the quarter's own release, first product revenue table, WW column.",
+    "Check: 2025 quarters 27+35+43+51 = 156 vs 'Cobenfy | 155 | \u2014 | 155' (year 2025 row, fourth-quarter 2025 release), within the rounding of whole-million quarterly figures; first-half 2026 56+63 = 119 = 'Cobenfy | 116 | 3 | 119' (six months, second-quarter 2026 release).",
+    "Verifier run on staging: all rows matched."
+  ],
+  "manufacturer": "Bristol-Myers Squibb",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (WW column; U.S. plus Int'l.)",
+  "route_of_administration": "oral",
+  "commercial_start_quarter": "2024Q4"
+}

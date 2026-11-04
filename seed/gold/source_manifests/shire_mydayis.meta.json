@@ -1,0 +1,37 @@
+{
+  "drug_name": "Mydayis",
+  "generic_name": "mixed salts of a single-entity amphetamine product (extended-release)",
+  "manufacturer": "Shire",
+  "benchmark_identity": "shire_mydayis_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Psychiatry (ADHD)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Shire MYDAYIS row; U.S.-only product, International column printed as a dash)",
+  "formulation": "extended-release capsule",
+  "route_of_administration": "oral",
+  "moa": "CNS stimulant (amphetamine mixed salts, triple-bead extended release)",
+  "moa_class": "cns_stimulant_amphetamine",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022063",
+    "quote": "06/20/2017 ORIG-1 Approval Type 3 - New Dosage Form STANDARD (NDA 022063, MYDAYIS)"
+  },
+  "launch_quarter": "2017Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/936402/000093640217000031/q210q-063017.htm",
+    "quote": "MYDAYIS, approved by the FDA on June 20, 2017, contributed $15.7 million of product sales related to launch stocking."
+  },
+  "series_start_reason": "Series starts at the launch-stocking quarter (Q2 2017, $15.7 million); Shire states the product was made available to patients on August 28, 2017.",
+  "series_end_quarter": "2018Q4",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Takeda completed its acquisition of Shire on January 8, 2019. Shire's last quarter is printed in 'Shire's Full Year 2018 Results' (Takeda Form 6-K filed 2019-02-15, row 'MYDAYIS | 22.5 | (4.3) | 62.9 | 21.6'). None of Takeda's sec.gov earnings documents for FY2018 Q4 to FY2026 Q1 (tk.py list) has a MYDAYIS revenue row; the FY2019 20-F names MYDAYIS only in its patent table.",
+  "search_log": [
+    "Listed every Shire plc (CIK 936402) filing via data.sec.gov/submissions incl. older pages (all forms); fetched every 8-K/8-K/A filed 2004-07 to 2019-02 whose items include 2.02, 12, 9 or 7.01 (or carry none), with every exhibit from each filing's index.json, plus every 10-Q/10-K primary document; table rows naming the brand were extracted from every exhibit (rows.py).",
+    "Takeda (CIK 1395064): 'Shire's Full Year 2018 Results' (Form 6-K filed 2019-02-15) and Takeda's earnings documents furnished on Form 6-K/20-F for FY2018 Q4 to FY2026 Q1 (the per-quarter list in tk.py) were fetched and searched for the brand.",
+    "Each quarter: the brand's Total/prior/year-to-date row of the quarter's release. 2017Q4 is printed negative ('(4.3)') and kept as printed; Shire's 2017 full year 21.6 = 15.7 + 10.2 - 4.3. 2018: 4.5 + 16.6 + 19.3 + 22.5 = 62.9 = printed full year."
+  ],
+  "commercial_start_quarter": "2017Q2",
+  "reviewed_anomalies": {
+    "2017Q4": "A negative quarter as printed. Checked at source and kept as printed."
+  }
+}

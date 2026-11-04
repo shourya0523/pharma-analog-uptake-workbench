@@ -1,0 +1,45 @@
+{
+  "drug_name": "Gocovri",
+  "generic_name": "amantadine extended-release",
+  "manufacturer": "Supernus Pharmaceuticals",
+  "benchmark_identity": "supernus_gocovri_us_reported",
+  "therapeutic_area": "Neurology",
+  "indication_area": "Neurology (dyskinesia and OFF episodes in Parkinson's disease)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Adamas, then Supernus, net product sales)",
+  "formulation": "extended-release capsule",
+  "route_of_administration": "oral",
+  "moa": "NMDA receptor antagonist (amantadine)",
+  "moa_class": "nmda_receptor_antagonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22GOCOVRI%22",
+    "quote": "NDA208944 GOCOVRI (AMANTADINE HYDROCHLORIDE), ORIG submission 1, submission_status AP, submission_status_date 20170824 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2017Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1328143/000162828018002045/adms1231201710k.htm",
+    "quote": "We made GOCOVRI available for physician and patient use in the fourth quarter of 2017, and commenced the full commercial launch of GOCOVRI in January 2018."
+  },
+  "unreported_quarters": {
+    "2021Q4": "Ownership change Adamas to Supernus. Supernus acquired Adamas on November 24, 2021 (Supernus 10-Q for March 31, 2022: 'On November 24, 2021, the Purchaser was merged with and into Adamas'); Adamas filed no report for the fourth quarter of 2021 (its last periodic report is the 10-Q for September 30, 2021), and Supernus's fourth-quarter 2021 release prints Gocovri $9.8 million covering only the period from the acquisition (footnote: 'Net product sales as of the acquisition of Adamas'), so no full-quarter figure is published."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Adamas Pharmaceuticals",
+      "first_quarter": "2017Q4",
+      "last_quarter": "2021Q3"
+    },
+    {
+      "issuer": "Supernus Pharmaceuticals",
+      "first_quarter": "2022Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "search_log": [
+    "Listed every filing for CIK 1328143 (Adamas Pharmaceuticals) and CIK 1356576 (Supernus Pharmaceuticals) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 (Adamas 2017-10 to 2021-11; Supernus 2013-01 to 2026-11) and searched for 'GOCOVRI'.",
+    "Adamas 2017Q4-2020Q4: 'Product sales' line (GOCOVRI sole product) from the 10-Q statements of operations (Q1-Q3) and the three-month column of the Q4 release (8-K Ex. 99.1). Adamas 2021Q1-Q3: the 'GOCOVRI' row of the MD&A product table. Supernus 2022Q1 onward: 'Gocovri' row of the 10-Q product table (thousands) and of the Q4 release ($ millions).",
+    "Checks: Adamas 2018 2,553 + 7,565 + 10,613 + 13,315 = 34,046; 2019 11,665 + 12,691 + 13,933 + 16,348 = 54,637; 2020 14,481 + 17,954 + 18,970 + 19,761 = 71,166 (each = printed full year). Supernus 2022 22,601 + 24,700 + 27,878 + 29.2m = 104.379 vs 10-K 104,421; 2023 vs 119,637; 2024 vs 130,824; 2025 vs 146,824 (within the rounding of the one-decimal Q4 figure). Adamas 2021 10-Q prior-year columns equal the 2020 product sales rows."
+  ],
+  "commercial_start_quarter": "2017Q4"
+}

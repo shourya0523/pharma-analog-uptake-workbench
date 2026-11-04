@@ -1,0 +1,31 @@
+{
+  "drug_name": "Xtampza ER",
+  "generic_name": "oxycodone (extended-release, abuse-deterrent)",
+  "manufacturer": "Collegium Pharmaceutical",
+  "benchmark_identity": "collegium_xtampza_er_us_reported",
+  "therapeutic_area": "Pain",
+  "indication_area": "Pain (severe chronic pain requiring long-term opioid treatment)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Collegium net product revenue)",
+  "formulation": "extended-release capsule",
+  "route_of_administration": "oral",
+  "moa": "Mu-opioid receptor agonist (abuse-deterrent extended-release oxycodone)",
+  "moa_class": "mu_opioid_receptor_agonist",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22XTAMPZA%22",
+    "quote": "NDA208090 XTAMPZA ER (OXYCODONE), ORIG submission 1, submission_status AP, submission_status_date 20160426 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2016Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1267565/000155837016009927/coll-20160930x10q.htm",
+    "quote": "In June 2016, we announced the commercial launch of Xtampza"
+  },
+  "series_start_reason": "Launched June 2016; the 10-Q for June 30, 2016 prints no product revenue, and the first product revenue (408 thousand) is in the third quarter of 2016.",
+  "search_log": [
+    "Listed every filing for CIK 1267565 (Collegium Pharmaceutical) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2016-01 to 2026-11 and searched for 'Xtampza'.",
+    "2016Q3-2017Q3 from the 'Product revenues, net' line of the 10-Q statements of operations (Xtampza ER sole product); 2016Q4 and 2017Q4 from the three-month column of the Q4 earnings release. From 2018 the 10-Q revenue note prints a product row ('Xtampza' in 2018, 'Xtampza ER' from 2019). Q4 2018-2025 derived as the 10-K full-year 'Xtampza ER' row less the nine-month column of the Q3 10-Q, because the Q4 releases print Xtampza ER only rounded in text.",
+    "Checks: 2016 408 + 1,303 = 1,711; 2017 2,172 + 3,560 + 11,950 + 10,794 = 28,476 (both equal to the 10-K product rows). Release text cross-checks: Q4 2019 'Xtampza ER net product revenues were $27.4 million' (derived 27,380); Q4 2020 '$30.8 million' (30,793); Q4 2021 '$5.3 million ... includes returns adjustments of $13.8 million' (5,260); Q4 2024 '$51.5 million' (51,454). Prior-year columns of each 10-Q equal the earlier rows (e.g. 2026Q2 prior 52,605)."
+  ],
+  "commercial_start_quarter": "2016Q3"
+}

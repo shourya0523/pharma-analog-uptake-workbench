@@ -1,0 +1,33 @@
+{
+  "drug_name": "Crenessity",
+  "generic_name": "crinecerfont",
+  "manufacturer": "Neurocrine",
+  "benchmark_identity": "neurocrine_crenessity_worldwide_reported",
+  "therapeutic_area": "Endocrinology / Rare Disease",
+  "indication_area": "Classic congenital adrenal hyperplasia (adults and pediatric patients 4 years and older)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (the issuer's total net product sales line for the product; launched in the U.S.)",
+  "formulation": "capsule and oral solution",
+  "route_of_administration": "oral",
+  "moa": "Corticotropin-releasing factor type 1 (CRF1) receptor antagonist",
+  "moa_class": "crf1_receptor_antagonist",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22CRENESSITY%22&limit=5",
+    "quote": "application_number NDA218808 (capsules) and NDA218820 (oral solution), brand_name CRENESSITY, sponsor NEUROCRINE, submission_type ORIG, submission_status AP, submission_status_date 20241213 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2024Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000034/q4-2024xearningsrelease.htm",
+    "quote": "CRENESSITY TM (crinecerfont), a First-in-Class Treatment for Children and Adults with Classic Congenital Adrenal Hyperplasia, Approved and Launched in the United States (Neurocrine Q4 2024 release, Form 8-K Exhibit 99.1 filed 2025-02-06)"
+  },
+  "series_start_reason": "CRENESSITY was approved 2024-12-13 and launched in December 2024; the Q4 2024 release prints its first net product sales, so the series starts at the launch quarter.",
+  "search_log": [
+    "Listed every Neurocrine (CIK 914475) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2024-10-01 to 2026-11-04 for 'crenessity' in table rows and text (bin/scan.py).",
+    "The Q4 2024 release states fourth quarter and fiscal 2024 sales of $2 million in prose (no table row); the FY2024 10-K prints no CRENESSITY revenue row. From Q1 2025 every release and 10-Q prints a 'CRENESSITY Net Product Sales' / 'CRENESSITY net product sales' row.",
+    "Quarters 2025Q1-2026Q1 from the releases' three-months column; 2026Q2 from the Q2 2026 10-Q (183.5) because the Q2 2026 release prints rounded whole millions (184).",
+    "Checks: 2025 quarters 14.5 + 53.2 + 98.1 + 135.3 = 301.1 against the printed twelve months 301.2 (rounding of printed one-decimal figures); six months 2026 153.3 + 183.5 = 336.8 as printed; prior-year columns of the 2026 filings (14.5, 53.2) match the 2025 rows.",
+    "Series ends 2026Q2 per the brief (Q3 2026 filings of 2026-11-02 exist but are outside the target window)."
+  ],
+  "commercial_start_quarter": "2024Q4"
+}

@@ -1,0 +1,33 @@
+{
+  "drug_name": "Xphozah",
+  "generic_name": "tenapanor",
+  "manufacturer": "Ardelyx",
+  "benchmark_identity": "ardelyx_xphozah_worldwide_reported",
+  "therapeutic_area": "Nephrology",
+  "indication_area": "Hyperphosphatemia in adults with chronic kidney disease on dialysis (add-on to phosphate binders)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (the issuer's total net product sales line for the product; launched in the U.S.)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Sodium/hydrogen exchanger 3 (NHE3) inhibitor reducing paracellular phosphate absorption",
+  "moa_class": "nhe3_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22XPHOZAH%22&limit=5",
+    "quote": "application_number NDA213931, brand_name XPHOZAH, sponsor ARDELYX INC, submission_type ORIG, submission_status AP, submission_status_date 20231017 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2023Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1437402/000162828024006321/ardx-20231231xexhibit991.htm",
+    "quote": "XPHOZAH (tenapanor) launched in November 2023; records $2.5 million net product sales revenue during Q4 2023 (Ardelyx Q4 2023 release, Form 8-K Exhibit 99.1 filed 2024-02-22)"
+  },
+  "series_start_reason": "XPHOZAH was approved 2023-10-17 and launched in November 2023; the Q4 2023 release prints its first quarter of net product sales, so the series starts at the launch quarter.",
+  "search_log": [
+    "Listed every Ardelyx (CIK 1437402) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2023-07-01 to 2026-11-04 for 'xphozah' in table rows and text (bin/scan.py).",
+    "The Q2 and Q3 2023 filings mention XPHOZAH but print no XPHOZAH revenue row; the first is the Q4 2023 release (2,464 thousand), and every later release prints an 'XPHOZAH' row under 'Product sales, net' in the Condensed Statements of Operations (in thousands).",
+    "Each quarter taken from that quarter's release, three-months column.",
+    "Checks: 2024 quarters 15,151 + 37,146 + 51,452 + 57,161 = 160,910 and 2025 quarters 23,411 + 25,032 + 27,357 + 27,801 = 103,601, both equal to the twelve months figures printed in the Q4 releases and the 10-Ks; 2023 full year equals Q4 (2,464). Prior-year columns of later releases match.",
+    "Series ends 2026Q2 per the brief (Q3 2026 filings of 2026-11-03 exist but are outside the target window)."
+  ],
+  "commercial_start_quarter": "2023Q4"
+}

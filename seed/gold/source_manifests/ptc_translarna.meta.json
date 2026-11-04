@@ -1,0 +1,31 @@
+{
+  "drug_name": "Translarna",
+  "generic_name": "ataluren",
+  "manufacturer": "PTC Therapeutics",
+  "benchmark_identity": "ptc_translarna_exus_reported",
+  "therapeutic_area": "Neurology / Rare disease",
+  "indication_area": "Neuromuscular (nonsense mutation Duchenne muscular dystrophy)",
+  "revenue_scope": "Ex-U.S.",
+  "geography": "Outside the U.S. (EEA, Latin America, Middle East and other territories); Translarna is not approved in the U.S.",
+  "formulation": "granules for oral suspension",
+  "route_of_administration": "oral",
+  "moa": "Nonsense-mutation readthrough agent (ribosomal readthrough of premature stop codons)",
+  "moa_class": "nonsense_mutation_readthrough",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008118000042/ptct1231201710-k.htm",
+    "quote": "Translarna received marketing authorization from the European Commission in August 2014 for the treatment of nonsense mutation Duchenne muscular dystrophy"
+  },
+  "launch_quarter": "2014Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1070081/000104746915001457/a2223091z10-k.htm",
+    "quote": "We commenced our commercial launch of Translarna in Germany in December 2014"
+  },
+  "series_start_reason": "Commercial launch in Germany in December 2014; 2014Q4 is the first quarter PTC prints net product revenue for its own quarter. A 2014Q3 amount of 81 thousand (early access programme sales) appears only as a prior-year comparative in later filings; the 10-Q for September 30, 2014 prints no product revenue line.",
+  "search_log": [
+    "Listed every filing for CIK 1070081 (PTC Therapeutics) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2014-01 to 2026-11 and searched for 'Translarna' and 'ataluren'.",
+    "2014Q4-2017Q1: 'Net product revenue' line (Translarna sole product) from the 10-Q statements of operations (Q1-Q3) and the three-month column of the Q4 release. 2017Q2 onward: the financial-highlights text of each quarter's own release ('Translarna net product sales/revenues were $X million for the ... quarter of YYYY'; '(ataluren)' added from 2025Q4), because the statements print only the Translarna-plus-Emflaza total.",
+    "Checks: 2015 5,069 + 6,161 + 9,772 + 12,694 = 33,696 and 2016 18,878 + 15,437 + 22,013 + 25,119 = 81,447 (printed full years). Release full years: 2017 '$145.2 million' (26.442 + 45.8 + 32.0 + 41.0 = 145.2); 2018 '$171.0 million' (171.0); 2019 '$190 million' (189.8); 2020 '$191.9 million' (191.9); 2021 '$236.0 million' (236.0); 2022 '$288.6 million' (288.6); 2023 '$355.8 million' (355.8); 2024 '$339.9 million' (340.0); 2025 '$235.3 million' (235.4). The 2025Q4 release restates 2024Q4 as $89.1 million and FY2024 as $321.1 million; rows keep the figure printed for each quarter as current (2024Q4 93.7)."
+  ],
+  "commercial_start_quarter": "2014Q4"
+}

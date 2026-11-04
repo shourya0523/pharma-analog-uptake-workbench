@@ -1,0 +1,36 @@
+{
+  "drug_name": "Sustol",
+  "generic_name": "granisetron extended-release injection",
+  "manufacturer": "Heron",
+  "benchmark_identity": "heron_sustol_worldwide_reported",
+  "therapeutic_area": "Oncology supportive care",
+  "indication_area": "Prevention of acute and delayed chemotherapy-induced nausea and vomiting (moderately emetogenic or AC regimens)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (the issuer's total net product sales line for the product; launched in the U.S.)",
+  "formulation": "extended-release injection (polymer-based)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Serotonin 5-HT3 receptor antagonist",
+  "moa_class": "5ht3_receptor_antagonist",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22SUSTOL%22&limit=5",
+    "quote": "application_number NDA022445, brand_name SUSTOL, sponsor HERON THERAPS INC, submission_type ORIG, submission_status AP, submission_status_date 20160809 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2016Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/818033/000129993318000208/exhibit1.htm",
+    "quote": "Heron commenced commercial sales of SUSTOL in October 2016. Net product sales of SUSTOL for both the three and twelve months ended December 31, 2016 were $1.3 million (Heron Q4 2017 release, Form 8-K Exhibit 99.1 filed 2018-02-27)"
+  },
+  "series_start_reason": "SUSTOL was approved 2016-08-09 and commercial sales began in October 2016; the series starts at the launch quarter.",
+  "search_log": [
+    "Listed every Heron (CIK 818033) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2016-07-01 to 2026-11-04 for 'sustol|cinvanti|zynrelef' in table rows and text (bin/scan.py), and extracted the per-product net product sales sentences from every release (bin/prose.py).",
+    "Heron printed per-product net product sales only in release sentences (rounded to $0.1 million) until Q1 2022; 10-Qs print a per-product table (in thousands) from Q2 2022; Q4 releases print per-product sentences for 2022-2023 and a per-product net revenue table from Q4 2024. Each quarter is taken from the filing that reports it as current: 10-Q three-months column for Q1-Q3 from Q2 2022, otherwise the quarter's release.",
+    "SUSTOL: 2016Q4-2017Q4 from the releases' 'Net product sales' row (SUSTOL was the only product); 2018Q1-2022Q1 and Q4 2022-2023 from release sentences; Q2 2022-Q2 2026 Q1-Q3 from 10-Qs; Q4 2024-2025 from the Q4 release product tables.",
+    "Checks against full-year figures: 2017 3,632+8,510+8,572+10,053=30,767 (twelve months, Q4 2017 release); 2018 6.4+6.1+3.4+5.4=21.3 (with CINVANTI 56.2 gives the CINV franchise 77.5 stated in the Q4 2018 release); 2019 13.8 vs 10-K 13,806; 2020 0.8 vs 823; 2021 9.8 vs 9,915; 2022 10.217 vs 10,231; 2023 13.058 vs 13,057; 2024 14,143 vs 14,142; 2025 8,502 vs 8,503 (10-K/release full-year rows; differences are rounding of printed figures).",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2016Q4",
+  "reviewed_anomalies": {
+    "2019Q4": "A step down from the previous quarter as printed. Checked at source and kept as printed."
+  }
+}

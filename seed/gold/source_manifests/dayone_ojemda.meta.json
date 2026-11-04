@@ -1,0 +1,34 @@
+{
+  "drug_name": "Ojemda",
+  "generic_name": "tovorafenib",
+  "manufacturer": "Day One Biopharmaceuticals",
+  "benchmark_identity": "dayone_ojemda_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (relapsed/refractory BRAF-altered pediatric low-grade glioma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Day One net product revenue as printed: predominantly U.S.; the 2025Q4 earnings deck notes 2024 net revenue included about $3.0m of ex-U.S. sales",
+  "formulation": "tablet and powder for oral suspension",
+  "route_of_administration": "oral",
+  "moa": "Type II pan-RAF kinase inhibitor",
+  "moa_class": "raf_kinase_inhibitor",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22OJEMDA%22",
+    "quote": "NDA218033 / NDA217700 OJEMDA (TOVORAFENIB), ORIG submission 1, submission_status AP, submission_status_date 20240423 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2024Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1845337/000095017024089945/dawn-20240630.htm",
+    "quote": "Upon FDA approval and commercial launch of OJEMDA in April 2024, the Company capitalized the $ 9.0 million milestone payment to Viracta Therapeutics"
+  },
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Day One was acquired by Servier and deregistered; its last periodic report is the FY2025 10-K. 8-K filed 2026-04-23 (accession 0001193125-26-171997): 'on April 23, 2026, the Servier Parties completed the acquisition of the Company ... with the Company continuing as the surviving corporation ... and a wholly owned subsidiary of Parent'; a Form 15-12G followed on 2026-05-04. Servier does not file with the SEC, so 2026Q1 onward is not printed on sec.gov.",
+  "search_log": [
+    "Listed every filing for CIK 1845337 (Day One Biopharmaceuticals) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2024-01 to 2026-11 and searched for 'OJEMDA'. No filing prints an 'OJEMDA' table row; the product is reported as the 'Product revenue, net' line (sole commercial product).",
+    "Q2/Q3 read from the 10-Q statements of operations (three-month column); Q4 derived as the full-year 'Product revenue, net' in the Q4 earnings release (8-K Ex. 99.1) less the nine-month column of the Q3 10-Q, because no filing prints a fourth-quarter three-month table.",
+    "Checks: 2024Q4 derived 28,955 thousand vs release text 'fourth quarter ... $29.0 million'; 2025Q4 derived 52,834 thousand vs release text '$52.8 million'. 2025 quarters 30,503 + 33,562 + 38,522 + 52,834 = 155,421 = printed full year. Prior-year columns of 2025Q2/Q3 10-Qs (8,192; 20,070) equal the 2024 rows.",
+    "No filing after the FY2025 10-K (filed 2026-02-24) reports a quarter: the company was acquired on 2026-04-23."
+  ],
+  "commercial_start_quarter": "2024Q2"
+}

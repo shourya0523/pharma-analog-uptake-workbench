@@ -1,0 +1,35 @@
+{
+  "drug_name": "Lialda",
+  "generic_name": "mesalamine delayed-release (MMX)",
+  "manufacturer": "Shire",
+  "benchmark_identity": "shire_lialda_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Gastroenterology (ulcerative colitis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Shire 'LIALDA' row in 2007, then 'LIALDA/MEZAVANT' - the same mesalamine MMX product sold as Mezavant outside the U.S.)",
+  "formulation": "delayed-release tablet",
+  "route_of_administration": "oral",
+  "moa": "Aminosalicylate (5-ASA) anti-inflammatory, colonic-release formulation",
+  "moa_class": "aminosalicylate",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022000",
+    "quote": "01/16/2007 ORIG-1 Approval Type 3 - New Dosage Form STANDARD; Orphan (NDA 022000, LIALDA MESALAMINE)"
+  },
+  "launch_quarter": "2007Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/936402/000095010308000425/dp08699_ex9901.htm",
+    "quote": "Since the launch of LIALDA in March 2007, PENTASA and LIALDA's combined share of the US oral mesalamine prescription market had grown to 24.9% as at December 31, 2007"
+  },
+  "series_start_reason": "LIALDA was launched in March 2007; Shire's Q1 2007 release (filed 2007-04-25) prints no LIALDA row, and the first row is the Q2 2007 release (5.0), one quarter after launch.",
+  "series_end_quarter": "2018Q4",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Takeda completed its acquisition of Shire on January 8, 2019. Shire's last quarter is printed in 'Shire's Full Year 2018 Results' (Takeda Form 6-K filed 2019-02-15, row 'LIALDA/MEZAVANT | 96.0 | 99.8 | 383.0 | 569.4'). Takeda's sec.gov filings print a LIALDA line in only one document: the underlying-revenue table of its FY2019 Q1 Quarterly Securities Report (Form 6-K filed 2019-08-09, row 'Lialda | 11.7 | (0.1) | 5.6 ...', Bn JPY, April-June 2018 pro-forma and April-June 2019). No other Takeda report or 20-F (tk.py list, FY2018 Q4 to FY2026 Q1) has a Lialda revenue row, and January-March 2019 is printed by neither issuer, so the line cannot be continued past 2018Q4 without a gap longer than one quarter.",
+  "search_log": [
+    "Listed every Shire plc (CIK 936402) filing via data.sec.gov/submissions incl. older pages (all forms); fetched every 8-K/8-K/A filed 2004-07 to 2019-02 whose items include 2.02, 12, 9 or 7.01 (or carry none), with every exhibit from each filing's index.json, plus every 10-Q/10-K primary document; table rows naming the brand were extracted from every exhibit (rows.py).",
+    "Takeda (CIK 1395064): 'Shire's Full Year 2018 Results' (Form 6-K filed 2019-02-15) and Takeda's earnings documents furnished on Form 6-K/20-F for FY2018 Q4 to FY2026 Q1 (the per-quarter list in tk.py) were fetched and searched for the brand.",
+    "Each quarter: three-month row of the brand in the release reporting it as current (smallest of the brand's rows before 2016Q2, the Total/prior/year-to-date row from 2016Q2).",
+    "Year checks (sum of quarters): 2008 140.3; 2009 235.9; 2010 293.4; 2011 372.1; 2012 399.9; 2013 528.9; 2014 633.8; 2015 684.4; 2016 792.1; 2017 569.4; 2018 383.0; printed full years 2016 792.1, 2017 569.4, 2018 383.0 match."
+  ],
+  "commercial_start_quarter": "2007Q2"
+}

@@ -1,0 +1,33 @@
+{
+  "drug_name": "Ogsiveo",
+  "generic_name": "nirogacestat",
+  "manufacturer": "SpringWorks Therapeutics",
+  "benchmark_identity": "springworks_ogsiveo_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (progressing desmoid tumors)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (SpringWorks product revenue, net)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Gamma-secretase inhibitor",
+  "moa_class": "gamma_secretase_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22OGSIVEO%22",
+    "quote": "NDA217677 OGSIVEO (NIROGACESTAT HYDROBROMIDE), ORIG submission 1, submission_status AP, submission_status_date 20231127 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2023Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1773427/000177342725000015/swtx-20250331.htm",
+    "quote": "In December 2023, we began to generate revenue from sales of OGSIVEO in the United States and in February 2025, we began to generate revenue from sales of GOMEKLI in the United States."
+  },
+  "series_end_quarter": "2024Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From 2025Q1 SpringWorks prints only combined product revenue for two products: 10-Q for March 31, 2025 (accession 0001773427-25-000015): 'For the three months ended March 31, 2025, the Company recorded net product revenue of $ 49.1 million from the sales of OGSIVEO and GOMEKLI.' No OGSIVEO-only figure is printed for 2025Q1, and SpringWorks was then acquired (8-K filed 2025-07-01, accession 0001104659-25-064445: 'On July 1, 2025 ..., Merck KGaA, Darmstadt, Germany ... completed the previously announced acquisition of SpringWorks Therapeutics, Inc.'); Merck KGaA does not file with the SEC, and SpringWorks filed no 10-Q after March 31, 2025.",
+  "search_log": [
+    "Listed every filing for CIK 1773427 (SpringWorks Therapeutics) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2023-10 to 2025-11 and searched for 'OGSIVEO'. No table prints an 'OGSIVEO' row; the product is the 'Product revenue, net' line.",
+    "2024 Q1-Q3 from the 10-Q statements of operations (three-month column). 2023Q4 is the full-year 2023 product revenue (first sale December 2023). 2024Q4 derived: full year 172,042 (Q4 release) less nine months 110,493 (Q3 10-Q) = 61,549.",
+    "Check: 2024 21,006 + 40,186 + 49,301 + 61,549 = 172,042. The 2025Q1 10-Q prior-year column (21,006) equals the 2024Q1 row."
+  ],
+  "commercial_start_quarter": "2023Q4"
+}

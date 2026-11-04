@@ -1,0 +1,31 @@
+{
+  "drug_name": "Emflaza",
+  "generic_name": "deflazacort",
+  "manufacturer": "PTC Therapeutics",
+  "benchmark_identity": "ptc_emflaza_us_reported",
+  "therapeutic_area": "Neurology / Rare disease",
+  "indication_area": "Neuromuscular (Duchenne muscular dystrophy)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (PTC net product revenue of Emflaza; Emflaza is sold in the U.S.)",
+  "formulation": "tablet and oral suspension",
+  "route_of_administration": "oral",
+  "moa": "Corticosteroid (glucocorticoid receptor agonist; deflazacort prodrug)",
+  "moa_class": "corticosteroid",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22EMFLAZA%22",
+    "quote": "NDA208684 / NDA208685 EMFLAZA (DEFLAZACORT), ORIG submission 1, submission_status AP, submission_status_date 20170209 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2017Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008117000117/ptct0630201710-q.htm",
+    "quote": "In May 2017, Emflaza became commercially available in the U.S."
+  },
+  "series_start_reason": "Emflaza was approved in February 2017 for Marathon Pharmaceuticals; PTC completed the acquisition of all rights on April 20, 2017 (10-Q for June 30, 2017) and Emflaza became commercially available in May 2017, so PTC's first quarter, 2017Q2, is the launch quarter (a partial quarter of sales).",
+  "search_log": [
+    "Listed every filing for CIK 1070081 (PTC Therapeutics) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2014-01 to 2026-11 and searched for 'Emflaza'. The 10-Q/10-K statements of operations print only total 'Net product revenue' (Translarna plus Emflaza), and their 'Emflaza' table rows are expense lines; the 10-Q for March 31, 2018 states U.S. product sales of $19.2 million 'consisting solely of emflaza'.",
+    "Every quarter is read from the financial-highlights text of that quarter's own earnings release (8-K Ex. 99.1): 'Emflaza net product sales were $X million for the ... quarter of YYYY' (2017Q2-2018Q1) and 'Emflaza net product revenue(s) were/was ...' thereafter, in $ millions to one decimal.",
+    "Checks: full years stated in Q4 releases - 2017 '$28.8 million' (2.1 + 9.8 + 17.0 = 28.9, rounding); 2018 '$92.0 million' (19.2 + 20.3 + 22.6 + 29.8 = 91.9); 2019 '$101 million' (101.0); 2020 '$139.0 million' (139.0); 2021 '$187.3 million' (187.2); 2022 '$218.3 million' (218.3); 2023 '$255.1 million' (255.1); 2024 '$207.2 million' (207.2); 2025 '$146.4 million' (146.5). The prior-year comparison quoted in each release equals the row recorded for that earlier quarter."
+  ],
+  "commercial_start_quarter": "2017Q2"
+}

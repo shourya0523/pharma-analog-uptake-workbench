@@ -1,0 +1,32 @@
+{
+  "drug_name": "Oxtellar XR",
+  "benchmark_identity": "supernus_oxtellar_xr_us_reported",
+  "manufacturer": "Supernus Pharmaceuticals",
+  "therapeutic_area": "Neurology",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Supernus net product sales)",
+  "route_of_administration": "oral",
+  "generic_name": "oxcarbazepine extended-release",
+  "indication_area": "Neurology (partial-onset seizures)",
+  "formulation": "extended-release tablet",
+  "moa": "Voltage-gated sodium channel blocker",
+  "moa_class": "sodium_channel_blocker",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22OXTELLAR%22",
+    "quote": "NDA202810 OXTELLAR XR (OXCARBAZEPINE), ORIG submission 1, submission_status AP, submission_status_date 20121019 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2013Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1356576/000110465914079796/a14-19694_110q.htm",
+    "quote": "We launched Oxtellar XR in February 2013 and recognized $1.1 million of revenue in the third quarter of 2013 based on prescriptions filled at the patient level during the second quarter of 2013"
+  },
+  "series_start_reason": "Launched February 2013 (2013Q1). Supernus prints Oxtellar XR net product sales as a table row only from its 2016 filings (with 2015 prior-year columns) and the fourth-quarter 2015 release; 2013-2014 product figures exist only as rounded prose, recognised on a lagged sell-through basis. The series starts 2015Q1, eight quarters after launch.",
+  "search_log": [
+    "Listed every filing for CIK 1356576 (Supernus Pharmaceuticals) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2013-01 to 2026-11 and searched for 'Oxtellar XR'.",
+    "2013-2015: Supernus's 10-Q/10-K tables print only total 'Net product sales'; the product split appears only in release prose (rounded) until the fourth-quarter 2015 release, and 2014 Trokendi XR revenue was recognised on a sell-through basis then changed to recognition on shipment (10-Q for June 30, 2015). The series therefore starts 2015Q1, read from the prior-year columns of the 2016 10-Q product tables (thousands).",
+    "2016Q1 onward: Q1-Q3 from the current three-month column of the product table in each 10-Q (thousands); Q4 from the three-month column of the Q4 earnings release product table ($ millions, one decimal), except 2019Q4, which the release prints only as a full year: derived as the 2019 10-K full year less the nine-month column of the Q3 2019 10-Q.",
+    "Full-year checks against the 10-K product tables: 2015 vs 33,165 thousand (2017 10-K); 2016 vs 51,694; 2017 vs 67,579; 2018 vs 84,576; 2019 vs 88,186; 2020 vs 98,725; 2021 vs 110,708; 2022 vs 115,345; 2023 vs 113,404; 2024 vs 99,464; 2025 vs 40,700. Four-quarter sums (2015-2025, $m): 33.168, 51.705, 67.626, 84.614, 88.186, 98.683, 110.72, 115.407, 113.359, 99.464, 40.651. All agree within the rounding of the one-decimal Q4 release figure except 2022 (115.407 vs 115.345: the release prints Q4 2022 as 27.4 while 10-K full year less nine months gives 27.338). Prior-year columns of each 10-Q equal the earlier rows."
+  ],
+  "commercial_start_quarter": "2015Q1"
+}

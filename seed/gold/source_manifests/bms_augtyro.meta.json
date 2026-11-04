@@ -1,0 +1,35 @@
+{
+  "drug_name": "Augtyro",
+  "generic_name": "repotrectinib",
+  "benchmark_identity": "bms_augtyro_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (ROS1-positive non-small cell lung cancer; NTRK fusion-positive solid tumours)",
+  "formulation": "capsule",
+  "moa": "ROS1/TRK tyrosine kinase inhibitor",
+  "moa_class": "ros1_ntrk_kinase_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=218213",
+    "quote": "11/15/2023 ORIG-1 Approval (NDA 218213, AUGTYRO, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2023Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000001427224000020/q42023ex991-filing.htm",
+    "quote": "Advances Research Pipeline Including U.S. Approval of Augtyro ... Augtyro 1 \u2014 1 N/A N/A N/A N/A N/A (first product revenue row, quarter ended December 31, 2023)"
+  },
+  "series_start_reason": "Augtyro was approved on 11/15/2023 and its first revenue row is in BMS's fourth-quarter 2023 release. Turning Point Therapeutics (acquired by BMS in August 2022) had no product sales, so there is no earlier issuer to join.",
+  "series_end_quarter": "2024Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the first-quarter 2025 release (https://www.sec.gov/Archives/edgar/data/14272/000001427225000089/a2025q1ex991-filing.htm) BMS's product revenue table no longer prints an Augtyro row; it is folded into 'Other growth products (a)', footnote '(a) Includes Augtyro , Onureg, Inrebic, Nulojix, Empliciti and royalty revenue'. Releases 2025Q1-2026Q3 carry no Augtyro row.",
+  "search_log": [
+    "Listed every filing for CIK 14272 (Bristol-Myers Squibb) via data.sec.gov/submissions (recent plus older pages, all forms incl. 8-K/A); selected Item 2.02 8-Ks from 2019-10-01 to 2026-10-29 and searched every document in each for the brand.",
+    "Each quarter read from the quarter's own release, first product revenue table, WW column.",
+    "Check: 2024 quarters 6+7+10+15 = 38 = 'Augtyro | 36 | 2 | 38' (year 2024 row of the fourth-quarter 2024 release).",
+    "Verifier run on staging: all rows matched."
+  ],
+  "manufacturer": "Bristol-Myers Squibb",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (WW column; U.S. plus Int'l.)",
+  "route_of_administration": "oral",
+  "commercial_start_quarter": "2023Q4"
+}

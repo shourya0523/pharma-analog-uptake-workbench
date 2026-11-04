@@ -1,0 +1,49 @@
+{
+  "drug_name": "Dalvance",
+  "generic_name": "dalbavancin",
+  "manufacturer": "Allergan",
+  "benchmark_identity": "allergan_dalvance_us_reported",
+  "therapeutic_area": "Infectious Disease",
+  "indication_area": "Infectious disease (acute bacterial skin and skin structure infections)",
+  "revenue_scope": "U.S. net revenues",
+  "geography": "U.S. (Durata's product revenue, all U.S.; Allergan plc's U.S. General Medicine Dalvance figure)",
+  "formulation": "powder for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Lipoglycopeptide antibiotic (inhibits bacterial cell-wall synthesis)",
+  "moa_class": "lipoglycopeptide_antibiotic",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021883",
+    "quote": "05/23/2014 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY (NDA 021883, DALVANCE DALBAVANCIN)"
+  },
+  "launch_quarter": "2014Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1544116/000119312514402186/d773629d10q.htm",
+    "quote": "The increase of $2.9 million is due to costs associated with the third quarter 2014 launch of Dalvance."
+  },
+  "series_start_reason": "Series starts at the launch quarter (Q3 2014; Durata's Q3 2014 10-Q prints its first product revenue).",
+  "joined_issuers": [
+    {
+      "issuer": "Durata Therapeutics",
+      "first_quarter": "2014Q3",
+      "last_quarter": "2014Q3"
+    },
+    {
+      "issuer": "Allergan plc",
+      "first_quarter": "2015Q1",
+      "last_quarter": "2020Q1"
+    }
+  ],
+  "unreported_quarters": {
+    "2014Q4": "Ownership change Durata Therapeutics to Actavis plc; no full-quarter figure is published. Actavis plc completed the Durata acquisition on November 17, 2014 (Actavis Form 10-K for 2014, https://www.sec.gov/Archives/edgar/data/1578845/000119312515052898/d842874d10k.htm: 'On November 17, 2014, Actavis plc completed the Durata acquisition'); Durata's last periodic report is the Form 10-Q for September 30, 2014 (its filings end 2014-12-12, data.sec.gov/submissions CIK 1544116), and Actavis's Q4 2014 release (https://www.sec.gov/Archives/edgar/data/1578845/000114420415010486/v401917_ex99-1.htm) prints no Dalvance row; Allergan plc's recast segment table (8-K 2016-10-06) begins with 2015Q1."
+  },
+  "series_end_quarter": "2020Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Allergan plc's last periodic report is the Form 10-Q for the quarter ended March 31, 2020 (filed 2020-05-07); AbbVie completed the acquisition on May 8, 2020 and Allergan filed Form 15-12B on 2020-05-21. None of AbbVie's 177 earnings-related 8-K exhibits filed 2020-07-29 to 2026-11 (items 2.02, 7.01 or 9.01; every exhibit text searched, 10-Qs not searched) contains the word 'Dalvance', so no issuer prints the product's line after 2020Q1.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 1544116 (Durata), CIK 1578845 (Actavis/Allergan plc) and CIK 1551152 (AbbVie) via data.sec.gov/submissions; fetched Durata's 2014 8-K exhibits and 10-Q/10-K documents, every Allergan plc earnings 8-K exhibit and 10-Q/10-K 2014-07 to 2020-06, and every AbbVie earnings 8-K exhibit 2020-07 to 2026-11.",
+    "Allergan plc prints Dalvance in its own releases from 2016Q2; 2015Q1-2016Q1 are read from the US General Medicine table of the recast 8-K of 2016-10-06, whose 2016Q2 column (10.2) equals the Q2 2016 release figure. From 2016Q4 the release table has U.S. Specialized / U.S. General Medicine / International (/ Corporate) / Total columns and the U.S. General Medicine figure is recorded so that the series stays U.S. only.",
+    "Each row checked offline with verify_staged_manifests.check_row before writing."
+  ],
+  "commercial_start_quarter": "2014Q3"
+}

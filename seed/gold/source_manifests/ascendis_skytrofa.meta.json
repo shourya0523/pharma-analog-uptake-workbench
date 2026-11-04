@@ -1,0 +1,31 @@
+{
+  "drug_name": "Skytrofa",
+  "generic_name": "lonapegsomatropin-tcgd",
+  "manufacturer": "Ascendis",
+  "benchmark_identity": "ascendis_skytrofa_worldwide_reported",
+  "therapeutic_area": "Endocrinology",
+  "indication_area": "Endocrinology (pediatric growth hormone deficiency)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide total SKYTROFA revenue (U.S. only until the Germany launch in Q3 2023)",
+  "formulation": "prefilled cartridge (once-weekly injection)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Long-acting prodrug of somatropin (growth hormone receptor agonist)",
+  "moa_class": "growth_hormone_analog",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761177",
+    "quote": "08/25/2021 ORIG-1 Approval (BLA 761177, SKYTROFA, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2021Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1612042/000119312522062979/d180395dex991.htm",
+    "quote": "In fall-2021, the Company commercially launched in the U.S., TransCon hGH under the brand name of SKYTROFA (lonapegsomatropin-tcgd)"
+  },
+  "search_log": [
+    "Listed every filing for CIK 1612042 (Ascendis Pharma A/S) via data.sec.gov/submissions; every 6-K from 2021-08-01 to 2026-10-26 searched (all documents per filing except XBRL viewer pages) for 'skytrofa|yorvipath'; 20-F for 2021 read for the launch-quarter figure.",
+    "Each quarter read from the quarter's own results release: the SKYTROFA revenue sentence (EUR millions) through 2024Q3 and the revenue-from-commercial-products table (EUR'000) from 2024Q4; 2023Q2 from the release's SKYTROFA revenue table (35.9; sentence rounds to \u20ac36 million); 2021Q4 derived from the 2021 20-F (943 thousand, no sales in the first nine months).",
+    "Checks: 2022 quarters 0+1.9+4.4+12.3+17.1 = 35.7 = 'full-year contribution of SKYTROFA U.S. revenue of \u20ac35.7 million' (2022 annual report 6-K, 2023-05-02); 2023 31.6+35.9+47.0+64 = 178.5 vs 178,663 thousand (2024 table prior-year column); 2024 65+26.2+47.2+58.546 = 196.9 vs 197,001; 2025 51.340+50.706+50.701+53.415 = 206.162 vs 206,160.",
+    "Values in EUR, the currency the releases report; one series covers total SKYTROFA revenue, which was U.S.-only until the Q3 2023 Germany launch ('SKYTROFA was launched in U.S. in Q4 2021, Germany in Q3 2023', January 2024 presentation)."
+  ],
+  "commercial_start_quarter": "2021Q4"
+}

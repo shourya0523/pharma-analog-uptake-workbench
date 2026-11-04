@@ -1,0 +1,32 @@
+{
+  "drug_name": "Defitelio",
+  "generic_name": "defibrotide sodium",
+  "manufacturer": "Jazz",
+  "benchmark_identity": "jazz_defitelio_worldwide_reported",
+  "therapeutic_area": "Hematology / Transplant",
+  "indication_area": "Hepatic veno-occlusive disease (sinusoidal obstruction syndrome) after hematopoietic stem-cell transplantation",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Jazz 'Defitelio/defibrotide' line)",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Oligonucleotide mixture with profibrinolytic, antithrombotic and endothelial-protective properties",
+  "moa_class": "profibrinolytic_oligonucleotide",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22DEFITELIO%22&limit=5",
+    "quote": "application_number NDA208114, brand_name DEFITELIO, sponsor JAZZ PHARMS INC, submission_type ORIG, submission_status AP, submission_status_date 20160330 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2014Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1232524/000123252414000049/jazz2014q1doc.htm",
+    "quote": "We commenced the launch of Defitelio in Europe beginning in Germany and Austria in March 2014 (Jazz Form 10-Q for the quarter ended March 31, 2014)"
+  },
+  "series_start_reason": "Defitelio's commercial launch began in Germany and Austria in March 2014, the quarter Jazz acquired Gentium (January 23, 2014); the series starts at the launch quarter. Before the EU launch Gentium supplied defibrotide under named-patient programs, which Jazz's line continues to include.",
+  "search_log": [
+    "Listed every Jazz (CIK 1232524) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2007-05-01 to 2026-11-04 for 'xyrem|defitelio|defibrotide' in table rows and text (bin/scan.py).",
+    "Each quarter taken from that quarter's release, row 'Defitelio/defibrotide' (labelled 'Defitelio (defibrotide sodium) / defibrotide' in 2016-Q1 2021) of the net product sales table; in thousands through 2025, in millions from the Q1 2026 release. The 2014 releases also print a second Defitelio/defibrotide row with Gentium's 2013 figures as comparison; the row used is the reported (GAAP) row with '\u2014' prior-year column.",
+    "Checks: 2014 12,209+20,244+18,892+19,192=70,537; 2015 70,731; 2016 108,952; 2017 133,650; 2018 149,448; 2019 172,938; 2020 195,842; 2021 197,931; 2022 194,290; 2023 184,000; 2024 216,565; 2025 199,392 - quarters equal the twelve months figure of each Q4 release (verifier sum check); year-to-date and prior-year columns match.",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2014Q1"
+}

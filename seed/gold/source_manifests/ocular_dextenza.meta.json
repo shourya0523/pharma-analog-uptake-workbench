@@ -1,0 +1,31 @@
+{
+  "drug_name": "Dextenza",
+  "generic_name": "dexamethasone ophthalmic insert 0.4 mg",
+  "manufacturer": "Ocular Therapeutix",
+  "benchmark_identity": "ocular_dextenza_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (post-surgical ocular inflammation and pain; allergic conjunctivitis)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Ocular Therapeutix net product revenue of DEXTENZA)",
+  "formulation": "intracanalicular insert",
+  "route_of_administration": "intracanalicular (ophthalmic)",
+  "moa": "Corticosteroid (glucocorticoid receptor agonist), sustained-release",
+  "moa_class": "corticosteroid",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22DEXTENZA%22",
+    "quote": "NDA208742 DEXTENZA (DEXAMETHASONE), ORIG submission 1, submission_status AP, submission_status_date 20181130 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2019Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1393434/000155837019010684/ocul-20190930x10q.htm",
+    "quote": "The Company recognizes product revenue from DEXTENZA for the treatment of post-surgical ocular inflammation and pain, which it began selling to customers in June 2019, and ReSure Sealant."
+  },
+  "series_start_reason": "DEXTENZA was first sold in June 2019 (the 2019Q4 release: 'DEXTENZA was commercially launched in July 2019'). For 2019Q2-2019Q3 Ocular prints only combined DEXTENZA and ReSure Sealant product revenue; the first DEXTENZA-only figure printed for its own quarter is 2019Q4 (the 2019Q3 figure, $0.3 million, appears only as a sequential comparison in the 2019Q4 release). The series starts 2019Q4, two quarters after launch.",
+  "search_log": [
+    "Listed every filing for CIK 1393434 (Ocular Therapeutix) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2018-10 to 2026-11 and searched for 'DEXTENZA'. No table prints a DEXTENZA revenue row (DEXTENZA table rows in the 10-Qs are research and development expense by program).",
+    "2019Q4-2021Q4: DEXTENZA-only net product revenue as printed in the quarter's own earnings release text ($ millions, one decimal), because 'Product revenue, net' then included ReSure Sealant (e.g. 2021Q4 total 12,308 thousand 'also includes net product revenue of $58 thousand from ReSure Sealant'). 2022Q1 onward: the 'Product revenue, net' line (10-Q statements of operations for Q1-Q3; three-month column of the Q4 release), which the issuer identifies as DEXTENZA net product revenue.",
+    "Cross-checks: 10-Q text for 2020-2021 ('of which $X million was attributable to sales of DEXTENZA') agrees with each prose row; 2022 releases: Q1 '$12.5 million' (12,498), Q4 '$13.9 million' (13,902). Full years: 2023 13,214 + 15,029 + 14,950 + 14,677 = 57,870; 2024 14,715 + 16,379 + 15,347 + 17,020 = 63,461 (each = printed full year)."
+  ],
+  "commercial_start_quarter": "2019Q4"
+}

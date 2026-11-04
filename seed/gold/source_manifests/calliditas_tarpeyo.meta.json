@@ -1,0 +1,34 @@
+{
+  "drug_name": "Tarpeyo",
+  "generic_name": "budesonide (delayed release capsules)",
+  "manufacturer": "Calliditas",
+  "benchmark_identity": "calliditas_tarpeyo_us_reported",
+  "therapeutic_area": "Nephrology",
+  "indication_area": "Nephrology (IgA nephropathy)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "delayed-release capsule",
+  "route_of_administration": "oral",
+  "moa": "Locally acting corticosteroid targeting the gut-associated lymphoid tissue (Peyer's patches)",
+  "moa_class": "corticosteroid",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=215935",
+    "quote": "12/15/2021 ORIG-1 Approval (NDA 215935, TARPEYO, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2022Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1795579/000141057822001814/calt-20220331xex99d1.htm",
+    "quote": "In January 2022, Calliditas announced commercial availability and initial sales of TARPEYO (budesonide) delayed release capsules, the first and only FDA approved treatment for IgA nephropathy"
+  },
+  "series_end_quarter": "2024Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Calliditas was acquired by Asahi Kasei through a tender offer (SC TO-T filings by Asahi Kasei, 2024); its last interim report on sec.gov is the six-month report furnished on Form 6-K on 2024-08-13 (calt-20240630x6k.htm). It then filed Form 25 (2024-09-13), Form 25-NSE (2024-09-20) and Form 15F-12B (2024-09-23, https://www.sec.gov/Archives/edgar/data/1795579/000110465924102072/tm2424569d1_15f12b.htm), terminating its SEC registration; no third-quarter 2024 report is on sec.gov.",
+  "search_log": [
+    "Listed every filing for CIK 1795579 (Calliditas Therapeutics AB) via data.sec.gov/submissions; all 6-K and 20-F filings from 2022-01-01 to deregistration searched (every document in each filing's index.json except XBRL viewer pages) for 'tarpeyo'.",
+    "Quarterly interim reports are furnished on Form 6-K (Exhibit 99.1); each quarter is read from that quarter's own report, key-figures sentence 'Net sales amounted to SEK x million, of which TARPEYO net sales amounted to SEK y million, for the three months ended ...'. The reports do print net sales per quarter, including the fourth quarter (year-end report).",
+    "Checks: 2022 quarters 18.0+63.6+123.4+167.3 = 372.3 vs 'TARPEYO net sales amounted to SEK 372.2 million' for the year ended December 31, 2022 (year-end report 2024-02-21), within rounding; 2023 quarters 185.7+259.2+283.6+347.3 = 1,075.8 = 'TARPEYO net sales amounted to SEK 1,075.8 million, for the year ended December 31, 2023'. Six-month figures agree: 18.0+63.6 = 81.6 and 278.3+493.4 = 771.7 vs 771.6.",
+    "Values are in SEK, the currency the reports state; not converted."
+  ],
+  "commercial_start_quarter": "2022Q1"
+}

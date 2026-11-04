@@ -1,0 +1,36 @@
+{
+  "drug_name": "Monjuvi",
+  "generic_name": "tafasitamab-cxix",
+  "manufacturer": "MorphoSys",
+  "benchmark_identity": "morphosys_monjuvi_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Relapsed or refractory diffuse large B-cell lymphoma (with lenalidomide) in adults not eligible for autologous stem cell transplant",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "lyophilized powder for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Fc-modified humanized monoclonal antibody against CD19",
+  "moa_class": "cd19_monoclonal_antibody",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22MONJUVI%22&limit=5",
+    "quote": "application_number BLA761163, brand_name MONJUVI, sponsor MORPHOSYS US INC, submission_type ORIG, submission_status AP, submission_status_date 20200731 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2020Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1340243/000119312520291771/d18988dex991.htm",
+    "quote": "Monjuvi (tafasitamab-cxix) delivered Q3 sales of US$ 5.0 million (\u20ac 4.4 million) since launch in mid-August 2020 (MorphoSys Q3 2020 statement, Form 6-K Exhibit 99.1 filed 2020-11-12)"
+  },
+  "series_start_reason": "Monjuvi was approved 2020-07-31 and launched in mid-August 2020; the series starts at the launch quarter.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "MorphoSys sold tafasitamab to Incyte on February 5, 2024, so 2023Q4 is the last full quarter of MorphoSys' Monjuvi U.S. line (Q1 2024 statement, 6-K filed 2024-04-30: 'Until the sale of tafasitamab to Incyte on February 5, 2024, Monjuvi sales reached \u20ac 5.9 million or US$ 6.4 million, respectively', a partial quarter). From Q1 2024 Incyte prints only a combined worldwide 'Minjuvi/Monjuvi' line in U.S. dollars (Q1 2024 release: 'Minjuvi/Monjuvi | 23,874'), which includes ex-U.S. Minjuvi that Incyte had printed separately ('Minjuvi' 8,994 in Q4 2023), so it is a different scope and currency and cannot continue this U.S. series.",
+  "search_log": [
+    "Looked up MorphoSys AG on EDGAR (CIK 1340243) and listed every filing via data.sec.gov/submissions; scanned every 6-K and 20-F filed 2020-07-01 to 2024-12-31 for 'monjuvi' (bin/scan.py). Also scanned Incyte (CIK 879169) 8-K item 2.02 exhibits and 10-Q/10-K 2020-07 to 2026-11 for 'monjuvi|minjuvi'.",
+    "Incyte's own line is 'Minjuvi' (ex-U.S. only) through Q4 2023 and 'Minjuvi/Monjuvi' (worldwide) from Q1 2024, so Incyte prints no U.S. Monjuvi line for 2020-2023; MorphoSys records 100% of U.S. Monjuvi sales and is the issuer of this series.",
+    "MorphoSys quarterly releases print a 'Monjuvi product sales' row (EUR millions) for Q1 2021-Q4 2022 and Q3-Q4 2023; Q3 2020, Q4 2020, Q1 2023 and Q2 2023 are taken from the euro figure in the statement's own sentence (Q1 2023 and H1 2023 statements print no Monjuvi table row; the Q4 2020 table row is absent from the FY2020 release, which states Q4 in prose).",
+    "Checks: 2020 4.4 + 14.1 = 18.5 (FY2020 release '\u20ac 18.5 million'); 2021 12.9 + 14.9 + 18.6 + 20.5 = 66.9; 2022 16.6 + 21.7 + 21.9 + 24.7 = 84.9 and 2023 19.4 + 21.7 + 21.5 + 22.4 = 85.0, equal to the full-year 'Monjuvi product sales' figures printed in the FY2022 and FY2023 releases (84.9; 85.0); H1 2021 27.8 = 12.9 + 14.9; H1 2023 41.1 = 19.4 + 21.7; each release's prior-quarter and prior-year columns match the rows.",
+    "Series kept in EUR as printed (MorphoSys also states rounded USD figures in some releases); not converted or summed with Incyte figures."
+  ],
+  "commercial_start_quarter": "2020Q3"
+}

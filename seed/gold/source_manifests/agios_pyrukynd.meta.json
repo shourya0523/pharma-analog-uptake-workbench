@@ -1,0 +1,36 @@
+{
+  "drug_name": "Pyrukynd",
+  "generic_name": "mitapivat",
+  "manufacturer": "Agios",
+  "benchmark_identity": "agios_pyrukynd_worldwide_reported",
+  "therapeutic_area": "Hematology / Rare Disease",
+  "indication_area": "Hemolytic anemia in adults with pyruvate kinase deficiency",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. plus small ex-U.S. sales from 2025)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Allosteric activator of pyruvate kinase (PKR)",
+  "moa_class": "pyruvate_kinase_activator",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22PYRUKYND%22&limit=5",
+    "quote": "application_number NDA216196, brand_name PYRUKYND, sponsor AGIOS PHARMS INC, submission_type ORIG, submission_status AP, submission_status_date 20220217 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2022Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922223000037/agio-022322xex991earningsr.htm",
+    "quote": "PYRUKYND U.S. Launch: Continued to execute launch, generating $4.3 million in U.S. net revenue for the fourth quarter of 2022, the third full quarter following FDA approval. (Agios Q4 2022 release, Form 8-K Exhibit 99.1 filed 2023-02-23; FDA approval 2022-02-17, first product revenue 832 thousand in Q1 2022)"
+  },
+  "series_start_reason": "PYRUKYND was approved 2022-02-17 and Agios recognized its first product revenue (832 thousand) in Q1 2022; the series starts at the launch quarter.",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From Q1 2026 Agios reports mitapivat as one line covering PYRUKYND and AQVESME (the thalassemia brand launched in January 2026): Q1 2026 release 'Mitapivat (PYRUKYND and AQVESME) generated worldwide net revenues of $20.7 million in the first quarter of 2026'; Q2 2026 10-Q 'We generated $65.5 million and $21.2 million of net product revenues from sales of PYRUKYND and AQVESME in the six months ended June 30, 2026 and 2025' and the 'Product revenue, net' table splits only by United States / Rest of world. No PYRUKYND-only figure is printed after 2025Q4.",
+  "search_log": [
+    "Listed every Agios (CIK 1439222) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2021-10-01 to 2026-11-04 for 'pyrukynd|product revenue' in table rows and text (bin/scan.py).",
+    "Agios prints no PYRUKYND-named revenue row; 'Product revenue, net' in the statement of operations is PYRUKYND alone for 2022-2025 (the earlier Tibsovo product revenue moved to discontinued operations, shown as '\u2014' in the 2022 comparatives). Q1-Q3 taken from each quarter's release three-months column (in thousands).",
+    "Q4 releases print the statement of operations for full years only, so each Q4 is the release's own sentence (rounded to $0.1 million): 2022 4.3, 2023 7.1, 2024 10.7, 2025 20.0. Cross-check against full year less nine months: 11,740-7,430=4,310; 26,823-19,720=7,103; 36,498-25,768=10,730; 54,028-34,061=19,967.",
+    "Six- and nine-month columns agree with the quarters; prior-year columns of later releases match.",
+    "Series ends 2025Q4: from 2026 the line combines PYRUKYND and AQVESME (see series_end_reason)."
+  ],
+  "commercial_start_quarter": "2022Q1"
+}

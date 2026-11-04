@@ -1,0 +1,46 @@
+{
+  "drug_name": "Belbuca",
+  "generic_name": "buprenorphine buccal film",
+  "manufacturer": "Collegium Pharmaceutical",
+  "benchmark_identity": "collegium_belbuca_us_reported",
+  "therapeutic_area": "Pain",
+  "indication_area": "Pain (severe chronic pain requiring long-term opioid treatment)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (BDSI then Collegium net product sales of BELBUCA as printed)",
+  "formulation": "buccal film",
+  "route_of_administration": "buccal",
+  "moa": "Partial mu-opioid receptor agonist",
+  "moa_class": "partial_mu_opioid_receptor_agonist",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22BELBUCA%22",
+    "quote": "NDA207932 BELBUCA (BUPRENORPHINE HYDROCHLORIDE), ORIG submission 1, submission_status AP, submission_status_date 20151023 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2016Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1103021/000119312517170784/d352014d10q.htm",
+    "quote": "BELBUCA was launched February 22, 2016, and therefore, results as of March 31, 2016 were not readily available."
+  },
+  "series_start_reason": "BELBUCA was launched in February 2016 by its licensee Endo, which does not print BELBUCA net sales; BDSI reacquired the rights in January 2017 ('On January 6, 2017, we announced the closing of the transaction to reacquire the license to BELBUCA from Endo') and its own BELBUCA product sales start in 2017Q1, four quarters after launch.",
+  "unreported_quarters": {
+    "2022Q1": "Ownership change BDSI to Collegium. Collegium acquired BDSI on March 22, 2022; BDSI filed no report for the quarter ended March 31, 2022 (its last periodic report is the FY2021 10-K filed 2022-03-09), and Collegium's 10-Q for March 31, 2022 prints Belbuca 3,310 thousand covering only the post-acquisition days, so no full-quarter figure is published."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "BioDelivery Sciences International",
+      "first_quarter": "2017Q1",
+      "last_quarter": "2021Q4"
+    },
+    {
+      "issuer": "Collegium Pharmaceutical",
+      "first_quarter": "2022Q2",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "search_log": [
+    "Listed every filing for CIK 1103021 (BioDelivery Sciences International) and CIK 1267565 (Collegium Pharmaceutical) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 (BDSI 2016-01 to 2022-03; Collegium 2016-01 to 2026-11) and searched for 'BELBUCA'.",
+    "Q1-Q3 from the 'BELBUCA'/'Belbuca' row of the product revenue table in each 10-Q; Q4 derived as the 10-K full-year row less the nine-month column of the Q3 10-Q (neither issuer's Q4 release prints a product table). 2017Q1 is the prior-year column of the 2018Q1 10-Q (the 2017Q1 10-Q prints only combined product sales).",
+    "Checks: 2017 4,555 + 6,563 + 6,437 + 9,426 = 26,981 vs 10-K 26,980 (2017Q2 10-Q six-month 11,117 implies Q1 4,554; rounding). Prior-year columns of the 2018-2021 and 2023-2026 10-Qs equal the earlier rows. Collegium's 2022Q1 Belbuca figure (3,310, from the March 22, 2022 acquisition date) is excluded as a partial quarter."
+  ],
+  "commercial_start_quarter": "2017Q1"
+}

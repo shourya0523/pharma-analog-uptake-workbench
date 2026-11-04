@@ -1,0 +1,32 @@
+{
+  "drug_name": "Tryngolza",
+  "generic_name": "olezarsen",
+  "manufacturer": "Ionis",
+  "benchmark_identity": "ionis_tryngolza_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Rare Disease",
+  "indication_area": "Familial chylomicronemia syndrome (adjunct to diet); severe hypertriglyceridemia",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (the issuer's total net product sales line for the product; launched in the U.S.)",
+  "formulation": "subcutaneous autoinjector",
+  "route_of_administration": "subcutaneous",
+  "moa": "Antisense oligonucleotide (GalNAc-conjugated) reducing apolipoprotein C-III (APOC3) production",
+  "moa_class": "apoc3_antisense_oligonucleotide",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22TRYNGOLZA%22&limit=5",
+    "quote": "application_number NDA218614, brand_name TRYNGOLZA (AUTOINJECTOR), sponsor IONIS PHARMS INC, submission_type ORIG, submission_status AP, submission_status_date 20241219 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2025Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/874015/000114036125016562/ef20048172_ex99-1.htm",
+    "quote": "With an encouraging start to the TRYNGOLZA launch for familial chylomicronemia syndrome, the first of four independent launches expected over the next two years (Ionis Q1 2025 release, Form 8-K Exhibit 99.1 filed 2025-04-30)"
+  },
+  "series_start_reason": "TRYNGOLZA was approved 2024-12-19; the FY2025 10-K prints TRYNGOLZA sales for 2024 as '-', and the first printed quarter is Q1 2025, the launch quarter.",
+  "search_log": [
+    "Listed every Ionis (CIK 874015) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2020-07-01 to 2026-11-04 for 'tegsedi|tryngolza' (bin/scan.py).",
+    "10-Qs print 'TRYNGOLZA sales, net' in thousands; releases print it in whole millions. Q1-Q3 2025 and Q1-Q2 2026 from the 10-Q three-months column; Q4 2025 derived as FY2025 10-K 107,526 less nine months 57,353 = 50,173 thousand (release: 50 million).",
+    "Checks: six months 2025 6,287 + 19,273 = 25,561 and nine months 25,561 + 31,792 = 57,353 as printed; 2025 sums to 107,526 by construction; six months 2026 27,100 + 4,574 = 31,674 as printed; prior-year columns match. The 2026Q2 drop follows the April 2026 WAC reduction stated in the Q2 2026 10-Q.",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2025Q1"
+}

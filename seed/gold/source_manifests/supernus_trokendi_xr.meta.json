@@ -1,0 +1,32 @@
+{
+  "drug_name": "Trokendi XR",
+  "benchmark_identity": "supernus_trokendi_xr_us_reported",
+  "manufacturer": "Supernus Pharmaceuticals",
+  "therapeutic_area": "Neurology",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Supernus net product sales)",
+  "route_of_administration": "oral",
+  "generic_name": "topiramate extended-release",
+  "indication_area": "Neurology (epilepsy; migraine prophylaxis)",
+  "formulation": "extended-release capsule",
+  "moa": "Topiramate: sodium-channel blockade, GABA-A potentiation and AMPA/kainate antagonism",
+  "moa_class": "topiramate_antiepileptic",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.brand_name:%22TROKENDI%22",
+    "quote": "NDA201635 TROKENDI XR (TOPIRAMATE), ORIG submission 1, submission_status AP, submission_status_date 20130816 (Drugs@FDA via openFDA)"
+  },
+  "launch_quarter": "2013Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1356576/000135657613000041/supn-20130930x10q.htm",
+    "quote": "Company received final approval from the FDA for Trokendi XR on August 16, 2013 and the Company launch ed this product during the third quarter of 2013"
+  },
+  "series_start_reason": "Launched 2013Q3. Supernus prints Trokendi XR net product sales as a table row only from its 2016 filings (with 2015 prior-year columns) and the fourth-quarter 2015 release; 2013-2014 product figures exist only as rounded prose on a revenue-recognition basis Supernus later changed (sell-through, then shipment). The series starts 2015Q1, six quarters after launch.",
+  "search_log": [
+    "Listed every filing for CIK 1356576 (Supernus Pharmaceuticals) via data.sec.gov/submissions; fetched every 10-Q/10-K and every exhibit of each 8-K with item 2.02 filed 2013-01 to 2026-11 and searched for 'Trokendi XR'.",
+    "2013-2015: Supernus's 10-Q/10-K tables print only total 'Net product sales'; the product split appears only in release prose (rounded) until the fourth-quarter 2015 release, and 2014 Trokendi XR revenue was recognised on a sell-through basis then changed to recognition on shipment (10-Q for June 30, 2015). The series therefore starts 2015Q1, read from the prior-year columns of the 2016 10-Q product tables (thousands).",
+    "2016Q1 onward: Q1-Q3 from the current three-month column of the product table in each 10-Q (thousands); Q4 from the three-month column of the Q4 earnings release product table ($ millions, one decimal), except 2019Q4, which the release prints only as a full year: derived as the 2019 10-K full year less the nine-month column of the Q3 2019 10-Q.",
+    "Full-year checks against the 10-K product tables: 2015 sum vs 110,361 thousand (2017 10-K); 2016 vs 158,384; 2017 vs 226,518; 2018 vs 315,295; 2019 vs 295,214; 2020 vs 319,640; 2021 vs 304,817; 2022 vs 261,221; 2023 vs 94,336; 2024 vs 63,201; 2025 vs 42,421. Four-quarter sums (2015-2025, $m): 110.346, 158.373, 226.437, 315.263, 295.214, 319.631, 304.831, 261.233, 94.334, 63.193, 42.437. All agree within the rounding of the one-decimal Q4 release figure except 2017 (226.437 vs 226.518: the release prints Q4 2017 as 69.1 while 10-K full year less nine months gives 69.181). Prior-year columns of each 10-Q equal the earlier rows."
+  ],
+  "commercial_start_quarter": "2015Q1"
+}

@@ -1,0 +1,34 @@
+{
+  "drug_name": "Victrelis",
+  "generic_name": "boceprevir",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_victrelis_worldwide_reported",
+  "therapeutic_area": "Infectious Disease",
+  "indication_area": "Infectious disease (chronic hepatitis C genotype 1)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Global column)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "HCV NS3/4A protease inhibitor",
+  "moa_class": "hcv_ns3_4a_protease_inhibitor",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=202258",
+    "quote": "05/13/2011 ORIG-1 Approval (NDA 202258, VICTRELIS, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2011Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000119312511201698/dex991.htm",
+    "quote": "VICTRELIS (boceprevir), the company's oral hepatitis C protease inhibitor, was approved by the U.S. Food and Drug Administration (FDA) and in Europe by the European Medicines Agency. The U.S. launch of VICTRELIS is underway."
+  },
+  "series_start_reason": "Series starts 2011Q3, one quarter after the 2011Q2 launch: no filing prints 2011Q2 as the current quarter. Merck's second-quarter 2011 release (dex991.htm, 2011-07-29) and Form 10-Q for the quarter ended June 30, 2011 describe the approval and launch but print no VICTRELIS sales figure; the 2011Q2 amount (21) appears only as a historical column in the third-quarter 2011 trend table.",
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck's first-quarter 2015 release (https://www.sec.gov/Archives/edgar/data/310158/000110465915030743/a15-9874_1ex99d1.htm) and every later 2015 release carry no VICTRELIS row; the fourth-quarter 2014 release Exhibit 99.2 (a15-3619_1ex99d2.htm) is the last to print one.",
+  "search_log": [
+    "Full-text search of CIK 310158 (Merck & Co.) filings 2011-2018 for 'victrelis'; every 8-K exhibit returned was parsed for a row whose first cell is VICTRELIS; Form 10-Q for 2011Q2 read for a quarter figure (none).",
+    "Each quarter read from the quarter's own Exhibit 99.2 Global/U.S./International table.",
+    "Checks: 2012 quarters 111+126+149+115 = 501 vs 502 in the year column of the fourth-quarter 2012 Exhibit 99.2 ('VICTRELIS | 502 | 140'), whole-million rounding; 2013 110+116+121+81 = 428 = 'VICTRELIS | 428 | 502'; 2014 59+46+27+21 = 153 = 'VICTRELIS | 153 | 428'."
+  ],
+  "commercial_start_quarter": "2011Q3"
+}

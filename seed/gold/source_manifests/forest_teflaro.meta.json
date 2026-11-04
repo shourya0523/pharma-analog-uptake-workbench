@@ -1,0 +1,35 @@
+{
+  "drug_name": "Teflaro",
+  "generic_name": "ceftaroline fosamil",
+  "manufacturer": "Forest",
+  "benchmark_identity": "forest_teflaro_us_reported",
+  "therapeutic_area": "Infectious Disease",
+  "indication_area": "Infectious disease (community-acquired bacterial pneumonia, acute bacterial skin and skin structure infections)",
+  "revenue_scope": "Teflaro net sales",
+  "geography": "U.S. (Forest held the U.S. rights; Forest's net sales by product)",
+  "formulation": "powder for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Fifth-generation cephalosporin (beta-lactam; PBP2a-binding, anti-MRSA)",
+  "moa_class": "cephalosporin",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=200327",
+    "quote": "10/29/2010 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 200327, TEFLARO CEFTAROLINE FOSAMIL)"
+  },
+  "launch_quarter": "2011Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/38074/000003807411000022/forest10k2011.htm",
+    "quote": "Sales of Teflaro, our newest marketed product, launched in March 2011, achieved sales of $2,716 in fiscal 2011."
+  },
+  "series_start_reason": "Teflaro was launched in March 2011 (2011Q1). Forest's filings print no Teflaro figure for April 2011-March 2012 quarters except two prior-year sentences in later releases ('$5.3 million in last year's second quarter', '$6.5 million in last year's third fiscal quarter') and the fiscal-2012 total ($22.4 million / 22,449 thousand), which leave April-June 2011 and January-March 2012 undetermined. The first quarter from which the series is contiguous is 2012Q2 (prior-year column of the fiscal-2014 June 10-Q), five quarters after launch.",
+  "series_end_quarter": "2014Q1",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Forest's last report is the fiscal-2014 Form 10-K (quarter ended March 31, 2014); it filed no report for April-June 2014 and Form 15-12B on 2014-07-15, and Actavis plc closed the acquisition on July 1, 2014. Actavis/Allergan plc's own releases print no Teflaro row for 2014Q2-2015Q4 (rows first appear in the Q2 2016 release, https://www.sec.gov/Archives/edgar/data/1578845/000114420416117011/v446159_ex99-1.htm, and a recast 8-K of 2016-10-06 gives 2015Q1 onward); 2014Q2-2014Q4 are printed by no issuer, a gap of three quarters, so the Forest series cannot be joined to Allergan's line and ends at 2014Q1.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 38074 (Forest) and CIK 1578845 (Actavis/Allergan plc) via data.sec.gov/submissions incl. older pages; fetched every earnings 8-K exhibit and every 10-Q/10-K primary document (Forest 2002-07 to 2014-07, Allergan plc 2014-07 to 2020-06).",
+    "Searched every Forest document for Teflaro sentences with a dollar figure (prose.py) and table rows (rows.py): quarterly Teflaro figures exist only in the fiscal-2014 10-Q tables (current and prior-year three-month columns) and the fiscal-2013/2014 10-K tables (fiscal years).",
+    "Checks: fiscal 2013 = 9,383 + 9,977 + 11,546 + 13,104 = 44,010 (printed); fiscal 2014 = 14,241 + 14,854 + 22,303 + 18,938 = 70,336 (printed); the December 2013 10-Q nine months 51,398 = 14,241 + 14,854 + 22,303 and its prior-year 30,906 = 9,383 + 9,977 + 11,546.",
+    "Each row checked offline with verify_staged_manifests.check_row before writing."
+  ],
+  "commercial_start_quarter": "2012Q2"
+}
