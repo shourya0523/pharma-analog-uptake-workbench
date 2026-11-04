@@ -411,6 +411,23 @@ def _decimals(text: str) -> int:
     return len(digits.split(".")[1]) if "." in digits else 0
 
 
+def _only_us_cell(offered: list[Cell], choice: dict[str, Any], text: str, end: dt.date) -> tuple[Cell | None, dict]:
+    """The product's U.S. cell for the quarter when the model chose none: the
+    one figure among the U.S. cells that pass the checks, at its most precise
+    printing. The unit is the exhibit's declared scale when the model gave
+    none."""
+    declared = declared_scale(text)
+    unit = choice.get("unit") or (next(iter(declared)) if len(declared) == 1 else None)
+    filled = {**choice, "kind": choice.get("kind") or "product_sales", "unit": unit}
+    passing = [c for c in offered if is_us(c) and check_cell(filled, c, text, end)[0] == "accepted"]
+    if not passing:
+        return None, filled
+    coarsest = min(_decimals(c.text) for c in passing)
+    if len({round(_figure(c.text), coarsest) for c in passing}) > 1:
+        return None, filled  # several U.S. figures for the quarter: no single answer
+    return max(passing, key=lambda c: _decimals(c.text)), filled
+
+
 def split_by_place(cell: Cell, offered: list[Cell]) -> bool:
     """Whether the row prints `cell`'s period in more than one column: a
     sibling under the same column path whose last label carries no year or
@@ -453,8 +470,15 @@ def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask
                                     label=label, cells=listing))
     picked = str(choice.get("cell") or "")
     if not re.fullmatch(r"c\d+", picked) or int(picked[1:]) >= len(offered):
-        return None, "the model chose no cell"
-    cell = offered[int(picked[1:])]
+        if scope != "us":
+            return None, "the model chose no cell"
+        # The prompt asks for the product's whole line; a table printing only
+        # its parts has none, and the U.S. part is then the answer itself.
+        cell, choice = _only_us_cell(offered, choice, text, end)
+        if cell is None:
+            return None, "the model chose no cell, and no single U.S. cell names the quarter"
+    else:
+        cell = offered[int(picked[1:])]
     geography = None
     if scope == "us":
         us = us_cell(cell, offered)
@@ -511,7 +535,14 @@ def read_exhibit(exhibit: dict, product: str, end: dt.date, label: str, *, get: 
         reading.value = float(answer["value"]) * _SCALES[str(answer["unit"]).lower()]
         reading.currency = str(answer.get("currency") or "").upper() or None
         if scope == "us":
-            reading.geography = "no_geographic_split"
+            # A sentence states no place; it stands for the U.S. only when no
+            # table in the release splits the product by place.
+            printed = cells(raw, first_name(product))
+            if any(is_us(c) or split_by_place(c, printed) for c in printed):
+                reading.status, reading.value = "no_us_column", None
+                reading.reason = "the release splits the product by place; a sentence does not say which part"
+            else:
+                reading.geography = "no_geographic_split"
     return reading
 
 

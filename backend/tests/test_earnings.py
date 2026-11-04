@@ -238,3 +238,22 @@ def test_an_8k_from_before_item_202_is_read_whatever_its_items():
             _hit("0001-25-2", 1, "ACME PHARMA (CIK 1)", "ex99-2025.htm", items=("8.01",))]
     found = find_exhibits("Calderon", END, get=_sec(hits, {}))
     assert [f["url"].rsplit("/", 1)[-1] for f in found] == ["ex99-2003.htm"]
+
+
+def test_a_us_question_over_a_table_of_parts_takes_the_us_part_not_a_sentence_total():
+    release = (b"<p>Calderon sales for the second quarter of 2025 were $66 million.</p>"
+               b"<table><tr><td>(in millions)</td><td>Three Months Ended June 30, 2025</td></tr>"
+               b"<tr><td>Calderon - U.S.</td><td>25</td></tr><tr><td>Calderon - International</td><td>41</td></tr>"
+               b"</table>")
+    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": release})
+
+    def ask(prompt):
+        if "c0:" in prompt:
+            return {"cell": None, "unit": "millions", "currency": "USD"}
+        return {**GOOD, "value": 66, "row_quote": "Calderon sales for the second quarter of 2025 were $66 million.",
+                "period_labels": []}
+
+    us = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False, scope="us")
+    assert (us.status, us.value) == ("found", 25e6)
+    worldwide = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False)
+    assert worldwide.value == 66e6
