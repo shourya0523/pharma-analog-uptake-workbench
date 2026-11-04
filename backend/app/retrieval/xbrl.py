@@ -124,6 +124,7 @@ class XbrlAnswer:
     filing_url: str | None = None
     by_geography: dict[str, float] = field(default_factory=dict)
     candidates: list[dict[str, Any]] = field(default_factory=list)
+    geography: str | None = None  # no_geographic_split: a U.S. answer from a line tagged with no place at all
     filings_checked: list[str] = field(default_factory=list)
 
 
@@ -659,9 +660,11 @@ US_MEMBER = "country:US"
 
 def in_scope(answer: XbrlAnswer, scope: str) -> XbrlAnswer:
     """The answer at `scope`: "worldwide" as read, or "us", the tagged U.S.
-    part of the figure. A figure with no tagged U.S. part is `no_us_part`: a
-    product sold only in the U.S. tags none either, and nothing in the filing
-    says which case it is. A filer that tags only the parts, with no whole
+    part of the figure. A figure split by place with no U.S. part among them is
+    `no_us_part`. A figure tagged with no place at all answers the U.S.
+    question whole, labelled `geography="no_geographic_split"`: the filer
+    reports the product as one line, as one selling it in the U.S. alone
+    does. A filer that tags only the parts, with no whole
     (`dimensioned_only`), still answers a U.S. question from its U.S. part."""
     if scope == "worldwide" or answer.status not in ("found", "dimensioned_only"):
         return answer
@@ -669,7 +672,9 @@ def in_scope(answer: XbrlAnswer, scope: str) -> XbrlAnswer:
         raise ValueError(f"unknown scope {scope!r}")
     us = answer.by_geography.get(US_MEMBER)
     scoped = replace(answer, scope="us")
-    if us is None:
+    if us is None and answer.status == "found" and not answer.by_geography:
+        scoped.geography = "no_geographic_split"
+    elif us is None:
         scoped.status, scoped.value = ("no_us_part" if answer.status == "found" else answer.status), None
     else:
         scoped.status, scoped.value = "found", us

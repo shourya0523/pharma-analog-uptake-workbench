@@ -56,6 +56,13 @@ class Derived:
     # input's declared last place, summed. A quarter the issuer printed itself
     # can differ from the derived one by up to this much.
     plus_minus: float | None = None
+    # no_geographic_split when an input answered a U.S. question from a line
+    # tagged with no place (see `xbrl.in_scope`).
+    geography: str | None = None
+
+
+def _geography(inputs: list[XbrlAnswer]) -> str | None:
+    return next((a.geography for a in inputs if getattr(a, "geography", None)), None)
 
 
 def _period_end(year: int, n: int) -> dt.date:
@@ -149,7 +156,7 @@ def derive_quarter(
         return Derived("no_sales", product, period, method=method, inputs=inputs,
                        reason="every input is zero: nothing was sold to report")
     return Derived("derived", product, period, value=value, unit=current.unit, method=method, inputs=inputs,
-                   plus_minus=rounding)
+                   plus_minus=rounding, geography=_geography(used))
 
 
 def _shift_back(end: dt.date, months: int) -> dt.date:
@@ -199,7 +206,7 @@ def _fiscal_quarter(product: str, period: str, end: dt.date, n: int, issuer: str
             return Derived("imprecise_input", product, period, value=value, unit=current.unit, method=method,
                            inputs=inputs)
         return Derived("derived", product, period, value=value, unit=current.unit, method=method, inputs=inputs,
-                       plus_minus=rounding)
+                       plus_minus=rounding, geography=_geography([current, previous]))
     return None
 
 
@@ -226,7 +233,7 @@ def _first_quarter(product: str, period: str, year: int, issuer: str | None, *, 
     if value > 0 and rounding > MAX_ROUNDING_SHARE * value:
         return Derived("imprecise_input", product, period, value=value, unit=six.unit, method=method, inputs=inputs)
     return Derived("derived", product, period, value=value, unit=six.unit, method=method, inputs=inputs,
-                   plus_minus=rounding)
+                   plus_minus=rounding, geography=_geography([six, q2]))
 
 
 def xbrl_quarter(

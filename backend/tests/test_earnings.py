@@ -199,11 +199,15 @@ def test_a_us_question_takes_the_rows_us_column():
     us = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False, scope="us")
     assert (worldwide.value, us.value) == (712.4e6, 412.2e6)
 
-    no_split = EXHIBIT
-    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": no_split})
-    answer = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=lambda p: {"cell": "c0", **GOOD},
-                           later=False, scope="us")
-    assert answer.status != "found" and answer.readings[0].status == "no_us_column"
+    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": EXHIBIT})
+    unsplit = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=lambda p: {"cell": "c0", **GOOD},
+                            later=False, scope="us")
+    assert (unsplit.status, unsplit.value, unsplit.geography) == ("found", 412.5e6, "no_geographic_split")
+
+    abroad = table.replace(b"U.S.", b"Europe")
+    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": abroad})
+    split = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False, scope="us")
+    assert split.status != "found" and split.readings[0].status == "no_us_column"
 
 
 def test_a_us_line_label_answers_and_a_rounded_summary_takes_its_precise_twin():

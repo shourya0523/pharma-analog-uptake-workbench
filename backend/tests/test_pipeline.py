@@ -235,3 +235,18 @@ def test_a_combined_member_gives_way_to_the_products_own_printed_line():
 
     result = quarter_revenue("Calderon", "Q2 2023", "Acme", xbrl=xbrl, earnings=_earnings_found, **BASE)
     assert result.route == "earnings" and result.corroboration.startswith("xbrl:combined")
+
+
+def test_an_unsplit_release_line_answers_a_us_question_unless_xbrl_tags_places():
+    def earnings(name, period, issuer, **kwargs):
+        return SimpleNamespace(status="found", value=161e6, currency="USD", url="u", scope="Calderon 161",
+                               later=False, readings=[], geography="no_geographic_split")
+
+    result = quarter_revenue("Calderon", "Q2 2023", "Acme", scope="us", xbrl=_miss, earnings=earnings, **BASE)
+    assert (result.status, result.match, result.value) == ("found", "no_geographic_split", 161e6)
+
+    def xbrl(name, period, issuer, **kwargs):
+        return SimpleNamespace(status="no_us_part", candidates=[], readings=[], by_geography={"country:DE": 1.0})
+
+    vetoed = quarter_revenue("Calderon", "Q2 2023", "Acme", scope="us", xbrl=xbrl, earnings=earnings, **BASE)
+    assert vetoed.status == "not_found"

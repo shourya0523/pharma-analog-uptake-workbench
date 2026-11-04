@@ -137,6 +137,7 @@ class Reading:
     method: str | None = None  # grid | text
     cell: str | None = None  # the chosen cell's full label, for a grid reading
     reason: str = ""
+    geography: str | None = None  # no_geographic_split: a U.S. answer from a line printed with no place split
 
 
 @dataclass
@@ -163,6 +164,7 @@ class EarningsAnswer:
     scope: str | None = None
     later: bool = False
     readings: list[Reading] = field(default_factory=list)
+    geography: str | None = None  # the accepted reading's `geography`
 
 
 # ---------------------------------------------------------------- locating
@@ -402,6 +404,15 @@ def _decimals(text: str) -> int:
     return len(digits.split(".")[1]) if "." in digits else 0
 
 
+def split_by_place(cell: Cell, offered: list[Cell]) -> bool:
+    """Whether the row prints `cell`'s period in more than one column: a
+    sibling under the same column path whose last label carries no year or
+    figure ("ROW", "Europe", "Total"), which a period label always does."""
+    return any(other is not cell and other.table == cell.table and other.row == cell.row
+               and other.column[:-1] == cell.column[:-1] and other.column
+               and not re.search(r"\d", other.column[-1]) for other in offered)
+
+
 def most_precise(cell: Cell, offered: list[Cell], choice: dict[str, Any], text: str, end: dt.date) -> Cell:
     """The most precise printing of `cell`'s figure: a release that rounds a
     figure in its summary often prints it to a decimal in a later table. A
@@ -437,13 +448,16 @@ def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask
     if not re.fullmatch(r"c\d+", picked) or int(picked[1:]) >= len(offered):
         return None, "the model chose no cell"
     cell = offered[int(picked[1:])]
+    geography = None
     if scope == "us":
         us = us_cell(cell, offered)
-        if us is None:
+        if us is None and split_by_place(cell, offered):
             reading = Reading("", "", "", "no_us_column", method="grid", cell=cell.label())
-            reading.reason = f"no U.S. column beside {' > '.join(cell.column)!r}"
+            reading.reason = f"the row is split by place, with no U.S. column beside {' > '.join(cell.column)!r}"
             return reading, reading.reason
-        cell = us
+        if us is None:
+            geography = "no_geographic_split"
+        cell = us or cell
     if check_cell(choice, cell, text, end)[0] == "accepted":
         cell = most_precise(cell, offered, choice, text, end)
     reading = Reading("", "", "", "error", method="grid", cell=cell.label())
@@ -453,25 +467,24 @@ def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask
     if reading.status == "accepted":
         reading.value = _figure(cell.text) * _SCALES[str(choice["unit"]).lower()]
         reading.currency = str(choice.get("currency") or "").upper() or None
+        reading.geography = geography
     return reading, reading.reason
 
 
 def read_exhibit(exhibit: dict, product: str, end: dt.date, label: str, *, get: Callable, ask: Callable,
                  scope: str = "worldwide") -> Reading:
     """Read one exhibit: its tables as a grid first, its text if that fails.
-    A U.S. question is answered from a grid only: a sentence or a whole-line
-    reading does not say which part of the world it covers."""
+    For a U.S. question, a grid row split by place without a U.S. column is
+    refused; a sentence or an unsplit row answers it labelled
+    `no_geographic_split`."""
     reading = Reading(exhibit["filer"], exhibit["cik"], exhibit["url"], "error")
     try:
         raw = get(exhibit["url"]).content
         text = filing_text(raw)
         grid_reading, grid_reason = read_grid(raw, text, product, end, label, ask, scope)
-        if grid_reading and (grid_reading.status == "accepted" or scope == "us"):
+        if grid_reading and (grid_reading.status in ("accepted", "no_us_column")):
             grid_reading.filer, grid_reading.cik, grid_reading.url = exhibit["filer"], exhibit["cik"], exhibit["url"]
             return grid_reading
-        if scope == "us":
-            reading.status, reading.reason = "no_us_column", f"no table row names the product: {grid_reason}"
-            return reading
         answer = ask(PROMPT.format(product=product, end=f"{calendar.month_name[end.month]} {end.day}, {end.year}",
                                    label=label, passages=passages(text, product)))
     except Exception as exc:  # one unreadable exhibit leaves the others to answer
@@ -490,6 +503,8 @@ def read_exhibit(exhibit: dict, product: str, end: dt.date, label: str, *, get: 
     if reading.status == "accepted":
         reading.value = float(answer["value"]) * _SCALES[str(answer["unit"]).lower()]
         reading.currency = str(answer.get("currency") or "").upper() or None
+        if scope == "us":
+            reading.geography = "no_geographic_split"
     return reading
 
 
@@ -554,4 +569,5 @@ def _settle(answer: EarningsAnswer, readings: list[Reading], issuer: str | None)
     chosen = accepted[0]
     answer.status, answer.value, answer.currency = "found", chosen.value, chosen.currency
     answer.filer, answer.url, answer.scope = chosen.filer, chosen.url, chosen.row_quote
+    answer.geography = chosen.geography
     return True

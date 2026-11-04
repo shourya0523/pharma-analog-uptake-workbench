@@ -238,7 +238,10 @@ def test_in_scope_swaps_in_the_tagged_us_part_or_declines():
     assert (in_scope(found, "us").value, in_scope(found, "us").scope) == (700, "us")
     assert in_scope(found, "worldwide").value == 1000
     bare = XbrlAnswer("found", "Calderon", "Q2 2023", value=1000)
-    assert (in_scope(bare, "us").status, in_scope(bare, "us").value) == ("no_us_part", None)
+    assert (in_scope(bare, "us").status, in_scope(bare, "us").value, in_scope(bare, "us").geography) == (
+        "found", 1000, "no_geographic_split")
+    abroad = XbrlAnswer("found", "Calderon", "Q2 2023", value=1000, by_geography={"country:DE": 300})
+    assert (in_scope(abroad, "us").status, in_scope(abroad, "us").value) == ("no_us_part", None)
 
 
 def test_a_us_question_is_answered_from_a_us_part_tagged_without_a_whole():

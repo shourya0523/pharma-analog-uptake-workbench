@@ -63,8 +63,9 @@ class QuarterResult:
     `status`: found | needs_review | not_found. `value` is in units of
     `currency`; `value_usd` converts it at the quarter's average H.10 rate.
     `route` names the route that answered; `match` carries a qualifier such as
-    `combined` (the line also covers a sibling the filer names) or
-    `single_product`.
+    `combined` (the line also covers a sibling the filer names),
+    `single_product`, or `no_geographic_split` (a U.S. question answered from
+    a line the filer reports with no place split).
     """
 
     status: str
@@ -117,6 +118,11 @@ def _with_aliases(read: Callable, product: str, period: str, end: dt.date, descr
             alt.identity = alias
             return alt
     return outcome
+
+
+def _label(match: str | None, geography: str | None) -> str | None:
+    """The answer's `match`, with a U.S. figure's no_geographic_split appended."""
+    return ",".join(x for x in (match, geography) if x) or None
 
 
 def _found(outcome: Any) -> bool:
@@ -196,7 +202,7 @@ def quarter_revenue(
                 issuer = result.issuer = named[0].filer
 
     # 1. XBRL
-    outcome = run("xbrl", lambda: _with_aliases(
+    outcome = xbrl_outcome = run("xbrl", lambda: _with_aliases(
         lambda name: xbrl(name, period, issuer, confirm=confirm, scope=scope, family=family),
         product, period, end, describe_aliases))
     if outcome is not None:
@@ -229,22 +235,27 @@ def quarter_revenue(
             return _answer(result, end, usd, value=outcome.value, currency=_currency_of(outcome.unit),
                            route=f"xbrl:{outcome.method}" if derived else ("xbrl:comparative" if comparative else "xbrl"),
                            plus_minus=outcome.plus_minus if derived else None,
-                           match=None if derived else outcome.match,
+                           match=_label(None if derived else outcome.match, getattr(outcome, "geography", None)),
                            source=(outcome.inputs[0].get("filing_url") if derived and outcome.inputs else
                                    getattr(outcome, "filing_url", None)),
                            evidence=None if derived else f"{outcome.concept} {outcome.member}",
                            identity=getattr(outcome, "identity", None))
 
-    # 2. Earnings releases; a U.S. question only from a table's U.S. column
+    # 2. Earnings releases; a U.S. question from a table's U.S. column, or from
+    # a line printed with no place split unless XBRL tagged the product's
+    # figure by place
     if scope == "us":
+        tagged_by_place = bool(getattr(xbrl_outcome, "by_geography", None))
         outcome = run("earnings", lambda: _with_aliases(
             lambda name: earnings(name, period, issuer, scope="us"), product, period, end, describe_aliases))
         if outcome is not None:
             _record(result, "earnings", outcome)
-            if _found(outcome):
+            unsplit = getattr(outcome, "geography", None) == "no_geographic_split"
+            if _found(outcome) and not (unsplit and tagged_by_place):
                 return _answer(result, end, usd, value=outcome.value, currency=outcome.currency,
                                route="earnings:later" if outcome.later else "earnings", source=outcome.url,
-                               evidence=outcome.scope, identity=getattr(outcome, "identity", None))
+                               evidence=outcome.scope, identity=getattr(outcome, "identity", None),
+                               match=getattr(outcome, "geography", None))
     if scope == "worldwide":
         outcome = run("earnings", lambda: _with_aliases(
             lambda name: earnings(name, period, issuer), product, period, end, describe_aliases))
