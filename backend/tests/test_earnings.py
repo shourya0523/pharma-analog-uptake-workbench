@@ -204,3 +204,25 @@ def test_a_us_question_takes_the_rows_us_column():
     answer = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=lambda p: {"cell": "c0", **GOOD},
                            later=False, scope="us")
     assert answer.status != "found" and answer.readings[0].status == "no_us_column"
+
+
+def test_a_us_line_label_answers_and_a_rounded_summary_takes_its_precise_twin():
+    from app.retrieval.earnings import is_us
+    from app.retrieval.grid import Cell
+
+    assert is_us(Cell(0, (), ("Calderon - U.S.",), ("Q2 2025",), "412"))
+    assert not is_us(Cell(0, (), ("Calderon - ex-U.S.",), ("Q2 2025",), "300"))
+    assert not is_us(Cell(0, (), ("Calderon - non-U.S.",), ("Q2 2025",), "300"))
+    release = (b"<p>(in millions)</p><table><tr><td></td><td>Q2 2025</td></tr>"
+               b"<tr><td>Calderon - U.S.</td><td>412</td></tr></table>"
+               b"<table><tr><td>(in millions)</td><td colspan='2'>Three Months Ended June 30,</td></tr>"
+               b"<tr><td></td><td colspan='2'>2025</td></tr><tr><td></td><td>U.S.</td><td>Total</td></tr>"
+               b"<tr><td>Calderon</td><td>412.2</td><td>712.4</td></tr></table>")
+    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": release})
+
+    def ask(prompt):
+        summary = next(line.split(":")[0] for line in prompt.splitlines() if line.endswith("= 412"))
+        return {"cell": summary, "unit": "millions", "currency": "USD", "kind": "product_sales"}
+
+    us = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False, scope="us")
+    assert us.value == 412.2e6

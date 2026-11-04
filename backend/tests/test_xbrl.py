@@ -360,3 +360,12 @@ def test_one_forms_member_does_not_answer_for_a_brand_whose_other_forms_are_tagg
     get = _fake_sec([("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm",
                       two_forms.replace(b"</table>", b"</table><p>Calderon</p>"))])
     assert first_pass("Calderon", "Q2 2023", "Acme Pharma", get=get).status == "several_members"
+
+
+def test_revenue_is_a_word_of_the_concept_not_letters_inside_it():
+    from app.retrieval.xbrl import is_revenue
+
+    usd = "iso4217:USD"
+    assert is_revenue("us-gaap:Revenues", usd) and is_revenue("us-gaap:SalesRevenueGoodsNet", usd)
+    assert is_revenue("acme:NetSales", usd) and is_revenue("acme:netproductsales", usd)
+    assert not is_revenue("us-gaap:ProceedsFromSaleAndMaturityOfAvailableForSaleSecurities", usd)

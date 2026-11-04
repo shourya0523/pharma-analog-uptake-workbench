@@ -372,18 +372,51 @@ def check_cell(choice: dict[str, Any], cell: Cell, exhibit_text: str, end: dt.da
 _US_COLUMN = re.compile(r"^(?:u\.\s?s\.?|us|united states)(?![a-z])", re.IGNORECASE)
 
 
+# A line label naming its U.S. part: "Calderon - U.S.", "Calderon (United
+# States)"; not "Calderon - ex-U.S." or "non-U.S.".
+_US_LINE = re.compile(r"(?<![a-z-])(?<!non-)(?<!ex-)(?:u\.\s?s\.|united states)(?![a-z])", re.IGNORECASE)
+
+
+def is_us(cell: Cell) -> bool:
+    """Whether the cell's own column or line label names the United States."""
+    return bool((cell.column and _US_COLUMN.match(cell.column[-1].strip()))
+                or (cell.row and _US_LINE.search(cell.row[-1])))
+
+
 def us_cell(cell: Cell, offered: list[Cell]) -> Cell | None:
-    """The cell holding `cell`'s U.S. part: itself if its own column names the
-    United States, else the cell in the same table and row whose column path
-    differs only in a last label naming it. None if the table prints no U.S.
-    column for the row."""
-    if cell.column and _US_COLUMN.match(cell.column[-1].strip()):
+    """The cell holding `cell`'s U.S. part: itself if its own column or line
+    label names the United States, else the cell in the same table and row
+    whose column path differs only in a last label naming it. None if the
+    table prints no U.S. part for the row."""
+    if is_us(cell):
         return cell
     for other in offered:
         if (other.table == cell.table and other.row == cell.row and other.column[:-1] == cell.column[:-1]
                 and other.column and _US_COLUMN.match(other.column[-1].strip())):
             return other
     return None
+
+
+def _decimals(text: str) -> int:
+    digits = re.sub(r"[^\d.]", "", text)
+    return len(digits.split(".")[1]) if "." in digits else 0
+
+
+def most_precise(cell: Cell, offered: list[Cell], choice: dict[str, Any], text: str, end: dt.date) -> Cell:
+    """The most precise printing of `cell`'s figure: a release that rounds a
+    figure in its summary often prints it to a decimal in a later table. A
+    twin is a cell that passes the same checks, covers the same part of the
+    world (U.S. or not), and rounds to `cell`'s figure at `cell`'s precision."""
+    value, places = _figure(cell.text), _decimals(cell.text)
+    best = cell
+    for other in offered:
+        figure = _figure(other.text)
+        if (figure is None or _decimals(other.text) <= _decimals(best.text) or is_us(other) != is_us(cell)
+                or abs(round(figure, places) - value) > 1e-9):
+            continue
+        if check_cell(choice, other, text, end)[0] == "accepted":
+            best = other
+    return best
 
 
 def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask: Callable,
@@ -411,6 +444,8 @@ def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask
             reading.reason = f"no U.S. column beside {' > '.join(cell.column)!r}"
             return reading, reading.reason
         cell = us
+    if check_cell(choice, cell, text, end)[0] == "accepted":
+        cell = most_precise(cell, offered, choice, text, end)
     reading = Reading("", "", "", "error", method="grid", cell=cell.label())
     reading.status, reading.reason = check_cell(choice, cell, text, end)
     reading.row_quote = " > ".join(cell.row) + " | " + " > ".join(cell.column) + " = " + cell.text

@@ -53,7 +53,12 @@ REQUEST_GAP_SECONDS = 0.15
 # A snapshot
 # of naming practice, not of any taxonomy: a filer naming its product revenue
 # otherwise is reported as no revenue fact.
-_REVENUE = re.compile(r"revenue|sales", re.IGNORECASE)
+# "Revenue" or "Sales" as a word of the concept's name: `NetSales`,
+# `SalesRevenueGoodsNet`, `Revenues`; not the letters inside
+# `AvailableForSaleSecurities`. A name written all in lower case has no word
+# boundaries to read, so any occurrence counts.
+_REVENUE = re.compile(r"Revenues?(?![a-z])|Sales(?![a-z])")
+_REVENUE_LOWER = re.compile(r"revenue|sales")
 _NOT_REVENUE = re.compile(
     r"cost|deferred|unearned|receivable|allowance|reserve|returns|percent"
     r"|royalt|collaborat|alliance|licens|milestone|performanceobligation|transactionprice"
@@ -372,7 +377,8 @@ def spans(start: str | None, end: str | None, period_end: dt.date, days: range) 
 def is_revenue(concept: str, unit: str | None) -> bool:
     """A monetary fact under a concept that reads as the filer's own sales."""
     name = concept.split(":")[-1]
-    return bool(_REVENUE.search(name)) and not _NOT_REVENUE.search(name) and (unit or "").startswith("iso4217:")
+    named = _REVENUE.search(name) if name != name.lower() else _REVENUE_LOWER.search(name)
+    return bool(named) and not _NOT_REVENUE.search(name) and (unit or "").startswith("iso4217:")
 
 
 def choose(
@@ -652,6 +658,9 @@ def in_scope(answer: XbrlAnswer, scope: str) -> XbrlAnswer:
         scoped.status, scoped.value = ("no_us_part" if answer.status == "found" else answer.status), None
     else:
         scoped.status, scoped.value = "found", us
+        if scoped.unit is None:
+            units = {c.get("unit") for c in answer.candidates if c.get("unit")}
+            scoped.unit = units.pop() if len(units) == 1 else None
     return scoped
 
 

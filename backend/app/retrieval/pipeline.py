@@ -204,6 +204,17 @@ def quarter_revenue(
         for c in getattr(outcome, "candidates", []) or []:
             if c.get("filer") and c.get("value") is not None:
                 result.alternatives.append({"route": "xbrl", **c})
+        if _found(outcome) and getattr(outcome, "match", None) == "combined":
+            # A combined member also covers a sibling; the issuer's release may
+            # print the product's own line, which is the exact answer.
+            own = run("earnings", lambda: earnings(product, period, issuer,
+                                                    **({"scope": scope} if scope != "worldwide" else {})))
+            if own is not None:
+                _record(result, "earnings", own)
+                if _found(own):
+                    return _answer(result, end, usd, value=own.value, currency=own.currency, route="earnings",
+                                   source=own.url, evidence=own.scope,
+                                   corroboration=f"xbrl:combined {outcome.value:,.0f}")
         if _found(outcome):
             derived = isinstance(outcome, Derived)
             if derived and scope == "worldwide":

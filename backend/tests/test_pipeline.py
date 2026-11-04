@@ -226,3 +226,12 @@ def test_a_form_the_issuer_prints_only_under_its_brand_is_read_from_that_line():
 def test_parent_names_are_the_shorter_leading_runs():
     assert parent_names("Calderon XR Pen") == ["Calderon XR", "Calderon"]
     assert parent_names("Calderon") == []
+
+
+def test_a_combined_member_gives_way_to_the_products_own_printed_line():
+    def xbrl(name, period, issuer, **kwargs):
+        return SimpleNamespace(status="found", value=1675e6, unit="iso4217:USD", match="combined", candidates=[],
+                               concept="c", member="m", filing_url="u", plus_minus=None)
+
+    result = quarter_revenue("Calderon", "Q2 2023", "Acme", xbrl=xbrl, earnings=_earnings_found, **BASE)
+    assert result.route == "earnings" and result.corroboration.startswith("xbrl:combined")
