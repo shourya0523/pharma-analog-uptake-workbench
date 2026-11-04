@@ -21,6 +21,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable
 
 from app.retrieval.earnings import _flat, passages
+from app.retrieval.gemini_search import QuotaExceeded
 from app.retrieval.single_product import filing_text
 from app.retrieval.xbrl import SEARCH_URL, sec_get
 
@@ -107,7 +108,9 @@ def timeline(product: str, years: range, *, get: Callable = sec_get, ask: Callab
             try:
                 text = filing_text(get(report["url"]).content)
                 answer = ask(ROLE_PROMPT.format(year=year, product=product, passages=passages(text, product)))
-            except Exception:  # an unreadable report leaves the others to answer
+            except Exception as exc:  # an unreadable report leaves the others to answer
+                if getattr(exc, "status_code", None) == 429:
+                    raise QuotaExceeded(str(exc)) from exc
                 roles.append(role)
                 continue
             quote = str(answer.get("quote") or "")

@@ -45,6 +45,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
+from app.retrieval.gemini_search import QuotaExceeded
 from app.retrieval.grid import Cell, cells
 from app.retrieval.single_product import filing_text
 from app.retrieval.xbrl import SEARCH_URL, names_issuer, quarter_end, sec_get
@@ -399,6 +400,9 @@ def read_exhibit(exhibit: dict, product: str, end: dt.date, label: str, *, get: 
         answer = ask(PROMPT.format(product=product, end=f"{calendar.month_name[end.month]} {end.day}, {end.year}",
                                    label=label, passages=passages(text, product)))
     except Exception as exc:  # one unreadable exhibit leaves the others to answer
+        if getattr(exc, "status_code", None) == 429:
+            # A spent quota answers every exhibit the same way; stop, do not decline.
+            raise QuotaExceeded(str(exc)) from exc
         reading.reason = f"{type(exc).__name__}: {exc}"
         return reading
     reading.method = "text"

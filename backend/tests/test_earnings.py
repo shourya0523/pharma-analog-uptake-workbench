@@ -149,3 +149,19 @@ def test_a_restated_comparative_column_is_refused():
                        b"<tr><td>Calderon</td><td>412.5</td></tr></table>")
     restated = {**GOOD, "row_quote": "Calderon 412.5", "period_labels": ["Three Months Ended June 30, 2025 (as restated)"]}
     assert check(restated, text, "Calderon", END)[0] == "restated_basis"
+
+
+def test_a_spent_quota_stops_the_reading_instead_of_declining():
+    import pytest
+
+    from app.retrieval.gemini_search import QuotaExceeded
+
+    class Spent(Exception):
+        status_code = 429
+
+    def ask(prompt):
+        raise Spent("Your project has exceeded its monthly spending cap.")
+
+    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": EXHIBIT})
+    with pytest.raises(QuotaExceeded):
+        read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False)

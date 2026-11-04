@@ -14,7 +14,7 @@ from __future__ import annotations
 from typing import Any, Callable
 
 from app.retrieval.derive import Derived
-from app.retrieval.gemini_search import ask_revenue
+from app.retrieval.gemini_search import QuotaExceeded, ask_revenue
 from app.retrieval.verify import verify_answer
 from app.retrieval.xbrl import quarter_end
 
@@ -29,6 +29,8 @@ def year_to_date_label(year: int, n: int) -> str:
 def _stated(product: str, label: str, issuer: str | None, ask: Callable, verify: Callable) -> dict[str, Any]:
     try:
         answer = ask(product, label, issuer)
+    except QuotaExceeded:
+        raise
     except Exception as exc:  # a failed search leaves this input missing, not the run broken
         return {"period": label, "value": None, "unit": "", "scaled": None, "currency": "", "source_url": None,
                 "source_quote": None, "verification": f"error: {type(exc).__name__}", "near_text": None}
