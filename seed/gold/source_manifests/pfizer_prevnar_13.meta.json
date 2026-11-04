@@ -1,0 +1,35 @@
+{
+  "drug_name": "Prevnar 13",
+  "generic_name": "pneumococcal 13-valent conjugate vaccine (diphtheria CRM197 protein)",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_prevnar_13_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (pneumococcal vaccine)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (suspension)",
+  "route_of_administration": "intramuscular",
+  "moa": "13-valent pneumococcal polysaccharide-CRM197 conjugate vaccine",
+  "moa_class": "pneumococcal_conjugate_vaccine",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e8c6b638-c22f-4c20-ba40-b9d5e85c9541",
+    "quote": "PREVNAR 13 (Pneumococcal 13-valent Conjugate Vaccine [Diphtheria CRM 197 Protein]) Suspension for intramuscular injection Initial U.S. Approval: 2010"
+  },
+  "launch_quarter": "2009Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000115752310003143/a6285704.htm",
+    "quote": "Prevnar/Prevenar 13, launched in Germany in late 2009 and in the U.S. in early 2010 with ongoing launches in other markets in the first quarter of 2010 and beyond, is our 13-valent pneumococcal conjugate vaccine for preventing invasive pneumococcal disease in infants and young children"
+  },
+  "series_start_reason": "Series starts 2010Q1, one quarter after the late-2009 German launch. Pfizer (which completed its acquisition of Wyeth, the developer, on October 15, 2009) first prints a 13-valent line in the first-quarter 2010 release ('PREVNAR/PREVENAR - 13*** | 286', prior-year column '-'); the fourth-quarter 2009 release (https://www.sec.gov/Archives/edgar/data/78003/000115752310000574/a6164666ex99.htm) prints only 'PREVNAR - 7***' (the 7-valent vaccine), so no 2009Q4 Prevnar 13 figure exists. The 2010 prior-year columns are '-' because, as the first-quarter 2010 release says, 'Since the acquisition of Wyeth was completed on October 15, 2009, legacy Wyeth operations are reflected in first-quarter 2010 results, but not in first-quarter 2009'; Prevnar 13 had no sales before the acquisition.",
+  "series_end_quarter": "2013Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The first-quarter 2013 release (2013-04-30) is the last of the run that prints Prevnar 13 on its own line ('Prevnar 13/Prevenar 13 | 846 | 945', with the 7-valent vaccine on a separate line 'Prevnar/Prevenar (7-valent) | 81 | 138'). From the second-quarter 2013 release (https://www.sec.gov/Archives/edgar/data/78003/000115752313003660/a50679919ex99.htm) through the fourth-quarter 2015 release Pfizer prints only a combined 'Prevnar/Prevenar family' line ('Prevnar/Prevenar family | 969 | 996'; its 2012Q2 comparative 996 against 916 for Prevnar 13 plus 84 for the 7-valent line in the 2012Q2 release shows it is the combined scope), and the 10-Qs of 2013Q2-2015Q3 print the same family line. A 'Prevnar/Prevenar 13' line returns from the first-quarter 2016 release to the second-quarter 2021 release and is then replaced by 'Prevnar family' (Prevnar 13 plus Prevnar 20), but 2013Q2-2014Q4 cannot be filled at the Prevnar 13 scope from any SEC document, so the contiguous own-line series ends at 2013Q1.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000078003 (Pfizer) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (93 filings, 2004-10-20 to 2026-11-03; this filter cannot see earnings releases filed before Item 2.02 existed, none of which matter here because every product below launched in 2006 or later) and fetched every document in each filing's index.json except the 8-K cover document and the R*.htm XBRL viewer pages; also fetched every 10-Q, 10-K and 10-K/A primary document filed 2012-01-01 to 2026-11-03.",
+    "Product rows: in each release's Exhibit 99, the first table row whose first cell begins with the product label and whose first figure cell (after any one-to-four-letter business-unit code cell, printed 2014-2015) is a number; Pfizer's first product table is the quarter table with the Worldwide block first (quarter, same quarter a year earlier). The quarter of a release is the calendar quarter ended before its filing date; a second release mapping to the same quarter would have aborted the build (none did). The 2006-2007 releases are plain-text exhibits and were read line by line (first line beginning with the product token followed by a figure).",
+    "Labels as printed: 'PREVNAR/PREVENAR - 13***' (2010Q1), 'Prevnar / Prevenar 13***' (2010Q2-2010Q4), 'Prevnar / Prevenar 13' (2011), 'Prevnar 13/Prevenar 13' (2012Q1-2013Q1).",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2010: quarters sum to 2416; twelve-month figure 2,416 (current column of the 2010Q4 release); 2011: quarters sum to 3657; twelve-month figure 3,657 (current column of the 2011Q4 release); 2012: quarters sum to 3718; twelve-month figure 3,718 (current column of the 2012Q4 release)"
+  ],
+  "commercial_start_quarter": "2010Q1"
+}

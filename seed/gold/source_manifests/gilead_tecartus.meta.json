@@ -1,0 +1,33 @@
+{
+  "drug_name": "Tecartus",
+  "generic_name": "brexucabtagene autoleucel",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_tecartus_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Relapsed or refractory mantle cell lymphoma; relapsed or refractory B-cell precursor acute lymphoblastic leukemia",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Gilead's worldwide product sales line, or the unlabelled total beneath its U.S., Europe and Other International / Rest of World lines); Kite Pharma, a Gilead company, markets the product",
+  "formulation": "cell suspension for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "CD19-directed genetically modified autologous CAR T-cell therapy",
+  "moa_class": "cd19_car_t",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/cellular-gene-therapy-products/tecartus-brexucabtagene-autoleucel",
+    "quote": "STN: BL 125703 Proper Name: brexucabtagene autoleucel Tradename: TECARTUS Manufacturer: Kite Pharmaceuticals, Inc. ... July 24, 2020 Approval Letter - TECARTUS"
+  },
+  "commercial_start_quarter": "2020Q3",
+  "launch_quarter": "2020Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/882095/000088209520000023/exhibit991earningspres.htm",
+    "quote": "Tecartus was approved by the United States Food and Drug Administration (\u201cFDA\u201d) during the third quarter 2020."
+  },
+  "series_start_reason": "Series starts 2020Q3, the U.S. launch quarter, read from the prior-year column of the third-quarter 2021 release (9) because the third-quarter 2020 release carries Tecartus inside 'Other' (footnote '(5) Includes Cayston, Hepsera, Sovaldi and Tecartus.'). The prior-year nine-months column (10) and the second-quarter 2021 release's prior-year Europe column (1) show 1 of European sales before 2020Q3; no filing prints that as a Tecartus quarter.",
+  "search_log": [
+    "Listed every Gilead Sciences (CIK 882095) filing via data.sec.gov/submissions incl. the older 'files' pages (all forms); earnings releases are the 8-K/8-K/A filings with item 2.02 from 2009, each exhibit resolved from index.json; plus every 10-Q and 10-K from 2009.",
+    "Every table row whose first cell starts with Cayston, Tecartus, Veklury, Zydelig or Yeztugo followed by a figure was extracted from all of those documents (scan.py); for a product printed as regional lines ('<product> \u2013 U.S.', '\u2013 Europe', '\u2013 Other International' / 'Rest of World', or from 2026 '<product> | U.S.' then 'Europe', 'Rest of World'), the figure is the unlabelled worldwide total line beneath them, never a sum computed here.",
+    "Each quarter is read from the release that reports it as current (filed in the month after quarter end; Q4 in January/February).",
+    "Tecartus rows: unlabelled total beneath 'Tecartus \u2013 U.S./Europe/Other International (Rest of World)' for 2020Q4-2025Q4; from 2026 the release prints 'Tecartus | U.S.', 'Europe', 'Rest of World' and an unlabelled total (equal to the Forms 10-Q for 2026Q1 and 2026Q2: 75 and 70).",
+    "Four-quarter sums 2021-2025: 176, 299, 371, 403, 343 against printed twelve-month figures 176, 299, 370, 403, 344. 2020: 9 + 34 = 43 against the printed twelve months 44 (includes the 1 before 2020Q3)."
+  ]
+}

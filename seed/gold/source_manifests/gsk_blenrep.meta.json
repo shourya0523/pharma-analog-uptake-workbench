@@ -1,0 +1,38 @@
+{
+  "drug_name": "Blenrep",
+  "generic_name": "belantamab mafodotin",
+  "manufacturer": "GSK",
+  "benchmark_identity": "gsk_blenrep_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (relapsed/refractory multiple myeloma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (GSK Total column: US + Europe + International)",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-BCMA antibody-drug conjugate (MMAF payload)",
+  "moa_class": "anti_bcma_antibody_drug_conjugate",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/761158s000lbl.pdf",
+    "quote": "Initial U.S. Approval: 2020",
+    "note": "Highlights of the original BLENREP (belantamab mafodotin-blmf) prescribing information, BLA 761158 (label 761158s000)."
+  },
+  "commercial_start_quarter": "2020Q3",
+  "launch_quarter": "2020Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000165495420011516/a4952d.htm",
+    "quote": "Blenrep for the treatment of patients with relapsed or refractory multiple myeloma was approved and launched in the US and Europe in Q3 2020 and reported sales of \u00a38 million."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1131399 (GSK plc) from data.sec.gov/submissions including the older 'files' pages. Results announcements selected as 6-Ks filed from 2020-07 with total size > 1 MB on the results dates (2020-07-29 ... 2026-10-28; from 2025 GSK furnishes > 1 MB buy-back 6-Ks daily, so results filings were picked by filing date and confirmed by content: each picked document prints the 'Total / US / Europe / International' turnover tables).",
+    "Product rows taken from the turnover-by-product tables whose header reads 'Total US Europe International' (columns \u00a3m, AER%, CER% per region; '\u00a3m' printed in the table's own header rows). Each table's caption ('Pharmaceuticals turnover \u2013 three months ended 30 September 2020', 'Specialty Medicines turnover \u2013 six months ended 30 June 2022', ...) decides quarter vs year-to-date; only 'three months ended' tables are used for quarters. A printed dash in the Total column is a nil (0). Quarters were summed against the six-month, nine-month and full-year tables of the same releases.",
+    "Blenrep was withdrawn from the US market in November 2022 and re-approved in 2025; GSK kept printing the line throughout, with a dash (nil) in 2024Q1, 2025Q1 and 2025Q3 and a negative (2) in 2024Q2 (returns), recorded as printed so the series stays contiguous.",
+    "Sum checks: 2020 9M: 0+0+8=8 vs printed 8 OK; 2020 FY: 0+0+8+25=33 vs printed 33 OK; 2021 H1: 21+21=42 vs printed 42 OK; 2021 9M: 21+21+25=67 vs printed 67 OK; 2021 FY: 21+21+25+22=89 vs printed 89 OK; 2022 H1: 25+30=55 vs printed 55 OK; 2022 9M: 25+30+36=91 vs printed 91 OK; 2022 FY: 25+30+36+27=118 vs printed 118 OK; 2023 H1: 11+9=20 vs printed 20 OK; 2023 9M: 11+9+10=30 vs printed 30 OK; 2023 FY: 11+9+10+6=36 vs printed 36 OK; 2024 H1: 0+-2=-2 vs printed -2 OK; 2024 9M: 0+-2+3=1 vs printed 1 OK; 2024 FY: 0+-2+3+1=2 vs printed 2 OK; 2025 H1: 0+4=4 vs printed 4 OK; 2025 9M: 0+4+0=4 vs printed 4 OK; 2025 FY: 0+4+0+13=17 vs printed 17 OK; 2026 H1: 23+36=59 vs printed 59 OK"
+  ],
+  "reviewed_anomalies": {
+    "2024Q1": "Blenrep was withdrawn from the US market in late 2022; GSK kept printing the line, and this quarter's nil or negative figure is what it printed. Checked at source and kept as printed.",
+    "2024Q2": "Blenrep was withdrawn from the US market in late 2022; GSK kept printing the line, and this quarter's nil or negative figure is what it printed. Checked at source and kept as printed.",
+    "2025Q1": "Blenrep was withdrawn from the US market in late 2022; GSK kept printing the line, and this quarter's nil or negative figure is what it printed. Checked at source and kept as printed.",
+    "2025Q3": "Blenrep was withdrawn from the US market in late 2022; GSK kept printing the line, and this quarter's nil or negative figure is what it printed. Checked at source and kept as printed."
+  }
+}

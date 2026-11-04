@@ -1,0 +1,36 @@
+{
+  "drug_name": "Inrebic",
+  "generic_name": "fedratinib",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_inrebic_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (myelofibrosis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Janus kinase 2 (JAK2) inhibitor",
+  "moa_class": "jak_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=212327",
+    "quote": "08/16/2019 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 212327, INREBIC FEDRATINIB HYDROCHLORIDE)"
+  },
+  "launch_quarter": "2019Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/816284/000081628419000046/a2019093010q.htm",
+    "quote": "In August 2019, the FDA approved INREBIC \u00ae (fedratinib) for the treatment of adult patients with intermediate-2 or high-risk primary or secondary (post-polycythemia) myelofibrosis (MF)."
+  },
+  "series_start_reason": "Series starts 2020Q1, two quarters after launch. Celgene (CIK 816284) launched Inrebic after its August 2019 approval; Celgene's third-quarter 2019 release (https://www.sec.gov/Archives/edgar/data/816284/000110465919058070/tm1921268d1_ex99-1.htm) prints an Inrebic heading with U.S. 2, International '-', Worldwide 2 for the quarter. Celgene filed no fourth-quarter 2019 release (its last filing with Item 2.02 is dated 2019-10-31; BMS completed the acquisition on November 20, 2019), and BMS's fourth-quarter 2019 release prints Inrebic 5 covering only the post-close weeks (footnote '(b) | includes celgene product revenues from november 20, 2019 through december 31, 2019'). 2019Q4 therefore has no full-quarter figure; because a series must be contiguous, the single Celgene quarter (2019Q3) is not joined and the series begins with BMS's first full quarter.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The fourth-quarter 2023 release (2024-02-02) is the last to print an Inrebic row. From the first-quarter 2024 release (https://www.sec.gov/Archives/edgar/data/14272/000001427224000094/q12024ex991-filing.htm) Inrebic is folded into an aggregate: '(a) Includes Nulojix, Onureg, Inrebic, Empliciti and royalty revenue'; no later release through 2026Q3 prints an Inrebic row.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000014272 (Bristol-Myers Squibb) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (105 filings, 2004-10-29 to 2026-10-29) and fetched every document in each filing's index.json except the cover document and R*.htm pages; product rows read from Exhibit 99.1 (the file name matching 'ex99.?1' or 'ex991'), whose first product table is the quarter table.",
+    "Row rule: first table row of the Exhibit 99.1 whose first cell begins with the product name and whose first figure cell is a number. 2015Q4-2022Q4 releases print worldwide quarter then same quarter a year earlier (2019Q4-2022Q4 also a summary table on the first page, which is the row read); from the 2023Q1 release the columns are U.S., Int'l, WW and the WW (third) figure is used.",
+    "Also listed CIK 0000816284 (Celgene) filings 2019-07-01 onward: 8-K Item 2.02 on 2019-07-30 and 2019-10-31, 10-Q 2019-07-30 and 2019-10-31; nothing with Item 2.02 after 2019-10-31.",
+    "Inrebic product row present in every BMS Exhibit 99.1 from 2019Q4 (partial, excluded) to 2023Q4.",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2020: quarters sum to 55; twelve-month figure 55 (current column of the 2020Q4 release); 2021: quarters sum to 74; twelve-month figure 74 (current column of the 2021Q4 release); 2022: quarters sum to 85; twelve-month figure 85 (current column of the 2022Q4 release); 2023: quarters sum to 110; twelve-month figure 110 (current column of the 2023Q4 release)"
+  ],
+  "commercial_start_quarter": "2020Q1"
+}

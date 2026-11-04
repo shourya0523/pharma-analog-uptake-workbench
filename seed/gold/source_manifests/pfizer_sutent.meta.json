@@ -1,0 +1,35 @@
+{
+  "drug_name": "Sutent",
+  "generic_name": "sunitinib malate",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_sutent_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (renal cell carcinoma / GIST)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Multi-targeted receptor tyrosine kinase inhibitor (VEGFR, PDGFR, KIT)",
+  "moa_class": "tyrosine_kinase_inhibitor",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021938",
+    "quote": "01/26/2006 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 021938, SUTENT SUNITINIB MALATE)"
+  },
+  "launch_quarter": "2006Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000127528706003681/pi6456ex99.txt",
+    "quote": "During the first half of 2006, Pfizer's oncology portfolio achieved robust growth in the U.S., driven by the successful introduction of Sutent in January 2006."
+  },
+  "series_start_reason": "Series starts at launch (U.S. introduction January 2006); the first-quarter 2006 release prints SUTENT 16 with a nil prior-year column.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The fourth-quarter 2023 release (2024-01-30) is the last to print a Sutent row. The first-quarter 2024 release (https://www.sec.gov/Archives/edgar/data/78003/000007800324000103/pfe-3312024xex99.htm) and every later release through 2026Q3 have no Sutent row.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000078003 (Pfizer) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (93 filings, 2004-10-20 to 2026-11-03; this filter cannot see earnings releases filed before Item 2.02 existed, none of which matter here because every product below launched in 2006 or later) and fetched every document in each filing's index.json except the 8-K cover document and the R*.htm XBRL viewer pages; also fetched every 10-Q, 10-K and 10-K/A primary document filed 2012-01-01 to 2026-11-03.",
+    "Product rows: in each release's Exhibit 99, the first table row whose first cell begins with the product label and whose first figure cell (after any one-to-four-letter business-unit code cell, printed 2014-2015) is a number; Pfizer's first product table is the quarter table with the Worldwide block first (quarter, same quarter a year earlier). The quarter of a release is the calendar quarter ended before its filing date; a second release mapping to the same quarter would have aborted the build (none did). The 2006-2007 releases are plain-text exhibits and were read line by line (first line beginning with the product token followed by a figure).",
+    "2006: 16 + 36 + 63 + 104 = 219, the twelve-month figure of the fourth-quarter 2006 plain-text release.",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2006: quarters sum to 219; twelve-month figure 219 (prior-year column of the 2007Q4 release); 2007: quarters sum to 581; twelve-month figure 581 (current column of the 2007Q4 release); 2008: quarters sum to 847; twelve-month figure 847 (current column of the 2008Q4 release); 2009: quarters sum to 964; twelve-month figure 964 (current column of the 2009Q4 release); 2010: quarters sum to 1066; twelve-month figure 1,066 (current column of the 2010Q4 release); 2011: quarters sum to 1187; twelve-month figure 1,187 (current column of the 2011Q4 release); 2012: quarters sum to 1236; twelve-month figure 1,236 (current column of the 2012Q4 release); 2013: quarters sum to 1204; twelve-month figure 1,204 (current column of the 2013Q4 release); 2014: quarters sum to 1175; twelve-month figure 1,174 (current column of the 2014Q4 release); 2015: quarters sum to 1120; twelve-month figure 1,120 (current column of the 2015Q4 release); 2016: quarters sum to 1095; twelve-month figure 1,095 (current column of the 2016Q4 release); 2017: quarters sum to 1081; twelve-month figure 1,081 (current column of the 2017Q4 release); 2018: quarters sum to 1049; twelve-month figure 1,049 (current column of the 2018Q4 release); 2019: quarters sum to 935; twelve-month figure 936 (current column of the 2019Q4 release); 2020: quarters sum to 819; twelve-month figure 819 (current column of the 2020Q4 release); 2021: quarters sum to 673; twelve-month figure 673 (current column of the 2021Q4 release); 2022: quarters sum to 346; twelve-month figure 347 (current column of the 2022Q4 release); 2023: quarters sum to 181; twelve-month figure 180 (current column of the 2023Q4 release)"
+  ],
+  "commercial_start_quarter": "2006Q1"
+}

@@ -1,0 +1,52 @@
+{
+  "drug_name": "Noxafil",
+  "generic_name": "posaconazole",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_noxafil_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Invasive fungal infections (prophylaxis and treatment)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Global column: U.S. plus International)",
+  "formulation": "oral suspension (later delayed-release tablets and injection)",
+  "route_of_administration": "oral",
+  "moa": "triazole antifungal; lanosterol 14-alpha-demethylase (CYP51) inhibitor",
+  "moa_class": "triazole_antifungal",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022003",
+    "quote": "09/15/2006 ORIG-1 Approval (NDA 022003, NOXAFIL POSACONAZOLE)"
+  },
+  "commercial_start_quarter": "2006Q1",
+  "launch_quarter": "2005Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000095012306000821/y16852exv99w1.htm",
+    "quote": "Gaining new product regulatory approvals and additional indications, including approvals for ASMANEX in the United States, NOXAFIL in the European Union (EU), TEMODAR for a first-line brain cancer indication in the United States and EU"
+  },
+  "series_start_reason": "Approved in the EU in the fourth quarter of 2005 (Schering-Plough's 2005-10-24 release reports the CHMP positive opinion; the 2006-01-30 release lists the EU approval among 2005 achievements); U.S. approval followed in September 2006. Schering-Plough's 2006 releases print no Noxafil line; its 2007 releases print the 2006 quarters (2, 3, 6, 10) as prior-year columns, so the series starts 2006Q1. Launch quarter set to the EU approval quarter, the earliest possible.",
+  "series_end_quarter": "2024Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck's Table 3a prints Noxafil through the fourth-quarter 2024 release (filed 2025-02-04); the first-quarter 2025 release prints no Noxafil line and does not mention the product.",
+  "joined_issuers": [
+    {
+      "issuer": "Schering-Plough",
+      "first_quarter": "2006Q1",
+      "last_quarter": "2009Q3"
+    },
+    {
+      "issuer": "Merck",
+      "first_quarter": "2010Q1",
+      "last_quarter": "2024Q4"
+    }
+  ],
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "2006Q1-2009Q3 from the worldwide net sales table of each Schering-Plough (CIK 310158) release Exhibit 99.1, current-quarter column (2006 quarters from the 2007 releases' prior-year columns).",
+    "Searched every Merck release exhibit, 10-Q and 10-K filed 2010-01 to 2011-03 for 'Noxafil' or 'posaconazole' in table rows and text: none prints a fourth-quarter 2009 Noxafil figure (Merck's 2010 releases have no Noxafil line; the 2011 releases print 2010 quarters as prior-year columns; the 2011 Form 10-K prints 2009 as 34, the post-merger November-December stub).",
+    "Quarter sums: 2006 21 vs 19 printed (rounding of four small figures), 2007 89 vs 89, 2008 150 vs 149; Merck era 2011-2016 within 1 of the 10-K full years (230, 258, 309, 402, 487, 595)."
+  ],
+  "unreported_quarters": {
+    "2009Q4": "Ownership change Schering-Plough to Merck (merger closed 3 November 2009): Schering-Plough filed no report for the quarter and no filing prints a full-quarter 2009Q4 Noxafil figure."
+  }
+}

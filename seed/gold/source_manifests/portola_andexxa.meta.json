@@ -1,0 +1,35 @@
+{
+  "drug_name": "Andexxa",
+  "generic_name": "andexanet alfa (coagulation factor Xa [recombinant], inactivated-zhzo)",
+  "therapeutic_area": "Cardiometabolic / Hematology",
+  "indication_area": "Hematology (reversal of factor Xa inhibitor anticoagulation in life-threatening bleeding)",
+  "revenue_scope": "United States",
+  "geography": "United States (Portola's 'Andexxa' row; European sales are printed separately as 'Ondexxya')",
+  "formulation": "lyophilised powder for intravenous injection",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant modified factor Xa decoy that binds factor Xa inhibitors",
+  "moa_class": "factor_xa_inhibitor_reversal_agent",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1269021/000156459018021022/ptla-10q_20180630.htm",
+    "quote": "We received approval for Andexxa and Bevyxxa in May 2018 and June 2017, respectively."
+  },
+  "commercial_start_quarter": "2018Q2",
+  "launch_quarter": "2018Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1269021/000156459018021022/ptla-10q_20180630.htm",
+    "quote": "To date, our source of product revenue has been from the U.S. sales of Andexxa and Bevyxxa, which we began shipping to customers in May 2018 and January 2018, respectively."
+  },
+  "manufacturer": "Portola Pharmaceuticals",
+  "benchmark_identity": "portola_andexxa_us_reported",
+  "series_end_quarter": "2020Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Alexion acquired Portola on 2 July 2020; Portola's last periodic report is the 10-Q for the quarter ended 31 March 2020 (0001628280-20-007433). The continuation (Alexion's U.S. row 2020Q3-2021Q1, AstraZeneca's US column 2021Q4-2024Q4) is staged as the joined series astrazeneca_andexxa (staging_joined).",
+  "notes": "Portola U.S. Andexxa net product revenue, USD (printed in thousands).",
+  "search_log": [
+    "Listed Portola Pharmaceuticals (CIK 1269021, 608 filings), Alexion Pharmaceuticals (CIK 899866) and AstraZeneca (CIK 901832) filings via data.sec.gov submissions; located documents with EDGAR full-text search for 'Andexxa' (Portola 2018-2020, Alexion 2020-2021, AstraZeneca 2020-2026).",
+    "Scope is U.S.: Portola prints no worldwide Andexxa line. Its 'Andexxa' row is U.S. sales (10-Q Q2 2018: 'our product revenue consists of the U.S. sales of Andexxa'), and from Q3 2019 European sales appear on a separate 'Ondexxya' row (2,775 thousand in Q3 2019); adding the two would be a sum of regions, so the U.S. row is the series.",
+    "Portola's Q4 releases print only total 'Product revenue, net' (Andexxa plus Bevyxxa) in tables; 2018Q4 is the release headline figure ($14.0 million; FY 2018 10-K row 23,995 less the Q3 2018 10-Q nine-month row 9,960 = 14,035 thousand) and 2019Q4 the preliminary release's U.S. figure (approximately $24 million; 10-K FY 2019 row 104,529 less nine months 80,326 = 24,203 thousand).",
+    "2019 check: 20,285 + 27,090 + 32,951 + 24,203 = 104,529 thousand, the FY 2019 10-K Andexxa row."
+  ]
+}

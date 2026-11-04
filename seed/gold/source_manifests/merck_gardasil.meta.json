@@ -1,0 +1,37 @@
+{
+  "drug_name": "Gardasil",
+  "generic_name": "human papillomavirus quadrivalent (types 6, 11, 16, 18) vaccine, recombinant",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_gardasil_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "HPV-related cervical, vulvar, vaginal, anal cancers and genital warts (prevention)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Global column: U.S. plus International)",
+  "formulation": "suspension for injection",
+  "route_of_administration": "intramuscular",
+  "moa": "recombinant L1 virus-like particle vaccine against HPV types 6, 11, 16 and 18",
+  "moa_class": "hpv_vlp_vaccine",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/186364/download",
+    "quote": "Initial U.S. Approval: 2006"
+  },
+  "commercial_start_quarter": "2006Q2",
+  "launch_quarter": "2006Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/64978/000095012306009283/y23350exv99w1.htm",
+    "quote": "sales for GARDASIL, which entered into distribution on June 19, were $10 million for the quarter."
+  },
+  "series_start_reason": null,
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck printed a 'Gardasil' line through the fourth-quarter 2014 release (filed 2015-02-04). From the first-quarter 2015 release (filed 2015-04-28) Table 3a prints only a combined 'Gardasil / Gardasil 9' line (Gardasil 9 was approved in December 2014), a different product definition that is not spliced on.",
+  "notes": "Sales recorded by Merck; excludes Sanofi Pasteur MSD joint-venture sales in Europe (the legacy releases print those in a separate Sanofi Pasteur-MSD table, which is not used).",
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "2006Q2-2006Q4 from footnote (1) to the VIRAL VACCINES line of the legacy Merck sales table ('Includes new vaccine sales: Gardasil $10m ...'); 2007Q1-2009Q3 legacy Merck quarterly sales table Global column (the Sanofi Pasteur-MSD table's GARDASIL line is a different, joint-venture figure and is skipped); 2009Q4 supplemental combined; 2010Q1-2014Q4 Table 3a.",
+    "Quarters sum to the printed full year within rounding of 1: 2006 235 vs 235; 2007 1,480 vs 1,481; 2008 1,403; 2009 1,118; 2010 989 vs 988; 2011 1,210 vs 1,209; 2012 1,631; 2013 1,832 vs 1,831; 2014 1,738."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "drug_name": "Skysona",
+  "generic_name": "elivaldogene autotemcel",
+  "manufacturer": "bluebird bio",
+  "benchmark_identity": "bluebird_skysona_us_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Early, active cerebral adrenoleukodystrophy (CALD)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "autologous CD34+ cell suspension for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Lentiviral vector gene therapy adding functional ABCD1 gene to autologous hematopoietic stem cells",
+  "moa_class": "lentiviral_gene_therapy",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/161665/download?attachment",
+    "quote": "Our STN: BL 125755/0 ACCELERATED BLA APPROVAL September 16, 2022 ... Effective this date, we have approved your BLA for elivaldogene autotemcel, according to the regulations for accelerated approval, 21 CFR 601.41."
+  },
+  "launch_quarter": "2023Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1293971/000129397124000037/blue-20231231.htm",
+    "quote": "Our revenues were derived from product revenues associated with the sale of SKYSONA and ZYNTEGLO in the United States for the year ended December 31, 2023. Our revenues were derived from product revenues associated with the sale of ZYNTEGLO in Germany for the year ended December 31, 2022."
+  },
+  "series_start_reason": "2023Q1 is the first quarter with SKYSONA revenue: the FY2023 Form 10-K prints the 2022 SKYSONA column as a dash, and the 2024Q1 Form 10-Q prints 2023Q1 as 2,296 thousand. SKYSONA was approved in September 2022; the first commercial revenue followed in 2023Q1.",
+  "series_end_quarter": "2025Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "bluebird bio filed its last periodic report, the Form 10-Q for the quarter ended March 31, 2025 (filed 2025-05-14), and then a Form 15 on 2025-06-12 (https://www.sec.gov/Archives/edgar/data/1293971/000119312525139516/d13380d1512g.htm) after its acquisition by Carlyle and SK Capital (Beacon Parent Holdings). No 2025Q2 report exists.",
+  "search_log": [
+    "Listed every filing for CIK 1293971 (bluebird bio) via data.sec.gov/submissions; fetched every 10-Q/10-K and every 8-K item 2.02 exhibit filed 2022-10 to 2025-06.",
+    "The earnings releases and the 2023 Forms 10-Q print only total product revenue; the by-therapy table with a SKYSONA row first appears in the 2024 filings (FY2023 10-K and 2024 10-Qs). 2023Q1-Q3 are therefore read from the prior-year columns of the 2024 10-Qs (direct_prior_year_column), and both fourth quarters are derived as full year less nine months. The 2023 nine-month total of the three prior-year quarters (2,296 + 2,657 + 7,430 = 12,383) equals the printed nine-months-2023 column, and 2024 (0 + 4,943 + 2,487 + 2,487 = 9,917) equals the FY2024 10-K.",
+    "Zero quarters (2024Q1, 2025Q1) are printed dashes in the SKYSONA row and are kept as 0.",
+    "Full-year check: none available.",
+    "Prior-year check: the prior-year comparative column of 4 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2023Q1",
+  "reviewed_anomalies": {
+    "2023Q4": "Printed nil or derived negative figure for a product with very few treated patients. Checked at source and kept as printed.",
+    "2024Q1": "Printed nil or derived negative figure for a product with very few treated patients. Checked at source and kept as printed.",
+    "2025Q1": "Printed nil or derived negative figure for a product with very few treated patients. Checked at source and kept as printed."
+  }
+}

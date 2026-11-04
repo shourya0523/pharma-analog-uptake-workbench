@@ -1,0 +1,31 @@
+{
+  "drug_name": "Exparel",
+  "generic_name": "bupivacaine liposome injectable suspension",
+  "manufacturer": "Pacira BioSciences",
+  "benchmark_identity": "pacira_exparel_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Postsurgical analgesia (local/regional anesthesia)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Pacira EXPAREL net product sales)",
+  "formulation": "liposomal injectable suspension",
+  "route_of_administration": "infiltration",
+  "moa": "Amide local anesthetic (sodium channel blocker) in multivesicular liposomes (DepoFoam) for extended release",
+  "moa_class": "local_anesthetic_sodium_channel_blocker",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022496",
+    "quote": "10/28/2011 ORIG-1 Approval (NDA 022496, EXPAREL BUPIVACAINE)"
+  },
+  "launch_quarter": "2012Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1396814/000110465912056332/a12-13989_110q.htm",
+    "quote": "We commercially launched EXPAREL in April 2012. As a result of our first commercial sale of EXPAREL, we triggered a $10.0 million payment obligation to Skyepharma Holding, Inc., or Skyepharma, in connection with the acquisition of our California"
+  },
+  "search_log": [
+    "Listed every filing for CIK 1396814 (Pacira BioSciences, formerly Pacira Pharmaceuticals) via data.sec.gov/submissions; fetched the exhibits of every 8-K/8-K/A with item 2.02 and every 10-Q/10-K filed 2012-04 to 2026-09.",
+    "2012Q2-2014Q3 (first to third quarters) from the 'EXPAREL' row of the MD&A net product sales table in each Form 10-Q (thousands); 2012Q4 and 2013Q4 derived as the Form 10-K full year less the 10-Q nine months; 2014Q4 onward from the 'EXPAREL' row ('EXPAREL net product sales' in the 2015Q1 release) of the net product sales table in each earnings release (8-K Exhibit 99.1, thousands). From 2019 the releases also print a 'Total EXPAREL / bupivacaine liposome injectable suspension net product sales' line that adds bulk bupivacaine liposome sales to partners; the EXPAREL line itself is used. Where an 8-K and an 8-K/A carry the same release (2020Q2), the figures are identical and the later filing is cited.",
+    "Full-year check: 2014: 34.401 + 44.914 + 50.219 + 58.993 = 188.527 vs 188.528 (full-year column of the Q4 quote); 2015: 55.951 + 56.977 + 59.729 + 67.194 = 239.851 vs 239.851 (full-year column of the Q4 quote); 2016: 63.752 + 65.753 + 64.869 + 71.428 = 265.802 vs 265.802 (full-year column of the Q4 quote); 2017: 67.701 + 69.773 + 66.78 + 78.651 = 282.905 vs 282.905 (full-year column of the Q4 quote); 2018: 74.034 + 80.43 + 82.226 + 94.422 = 331.112 vs 331.112 (full-year column of the Q4 quote); 2019: 90.615 + 98.868 + 101.456 + 116.939 = 407.878 vs 407.877 (full-year column of the Q4 quote); 2020: 101.269 + 73.046 + 113.714 + 125.309 = 413.338 vs 413.338 (full-year column of the Q4 quote); 2021: 114.678 + 130.059 + 121.926 + 139.852 = 506.515 vs 506.515 (full-year column of the Q4 quote); 2022: 129.205 + 137.007 + 132.642 + 138.045 = 536.899 vs 536.899 (full-year column of the Q4 quote); 2023: 130.408 + 135.127 + 128.667 + 143.918 = 538.120 vs 538.12 (full-year column of the Q4 quote); 2024: 132.43 + 136.852 + 132.004 + 147.676 = 548.962 vs 548.962 (full-year column of the Q4 quote); 2025: 136.529 + 142.917 + 139.902 + 155.782 = 575.130 vs 575.13 (full-year column of the Q4 quote).",
+    "Prior-year check: the prior-year comparative column of 51 quarterly quotes equals the figure recorded for that earlier quarter from its own filing; differences (printed rounding or restated comparatives; the current-period figure is kept): 2022Q2 prior-year column 130,058 vs 2021Q2 130059."
+  ],
+  "commercial_start_quarter": "2012Q2"
+}

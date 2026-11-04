@@ -1,0 +1,32 @@
+{
+  "drug_name": "Soliqua",
+  "generic_name": "insulin glargine and lixisenatide",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_soliqua_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Diabetes (type 2)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sanofi total net sales; line 'Soliqua' to 2022, 'Soliqua/iGlarLixi' from 2023, i.e. Soliqua in the US and Suliqua elsewhere)",
+  "formulation": "subcutaneous injection (prefilled pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Basal insulin analogue plus GLP-1 receptor agonist (fixed-ratio combination)",
+  "moa_class": "basal_insulin_glp1_ra_combination",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208673",
+    "quote": "11/21/2016 ORIG-1 Approval (NDA 208673, SOLIQUA 100/33)"
+  },
+  "commercial_start_quarter": "2017Q1",
+  "launch_quarter": "2017Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000119312517150279/d380206dex991.htm",
+    "quote": "Soliqua\u2122100/33, first once-daily fixed combination of Lantus \u00ae and lixisenatide for type-2 diabetes, launched in the U.S."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1121404 (Sanofi) from data.sec.gov/submissions including the older 'files' pages. Candidate results filings: every 6-K/6-K/A from 2009 on, filed 20 Jan-28 Feb, 15 Apr-12 May, 15 Jul-12 Aug or 15 Oct-12 Nov, with total filing size >= 250 KB; each candidate's index.json was read and every exhibit between 20 KB and 4 MB was fetched and searched for Multaq, Jevtana, Lemtrada, Soliqua, Zaltrap, Rezurock and Xenpozyme (XBRL R pages, the 20-F-style half-year XBRL documents and the 6-K cover pages excluded from selection).",
+    "Each candidate exhibit's quarter was read from the header of the net-sales tables that print the products (e.g. 'Q3 2010 net sales', 'Q2 2024 (\u20ac million)'); per quarter the exhibit with most product rows is the quarterly results press release. Header detection failed for 2009Q3/2009Q4 (header 'Millions of euros / 2009 Q3 net sales') and mislabelled the 2012Q2 release (its table header misprints 'Q2 2011 net sales'; the figures are the 2012 quarter, the year 2012 is in the release); those were set by hand, and for 2021Q1 and 2025Q3 Sanofi's own 6-K press release (pressreleaseq12021english.htm, pressreleaseq32025english.htm) was preferred over a later 6-K re-filing of the same release.",
+    "Row selection: the first table in the release that prints the product (the franchise summary 'Net sales (\u20ac million) / Qn YYYY / Change at CER', or from 2023/2024 the 'Qn YYYY (\u20ac million) / Total Sales / % CER / ... United States / Europe / Rest of World' table whose first column is the worldwide total). In 2016-2019 the appendix splits sales into 'Total GBUs' (excluding Emerging Markets) and 'Total Franchises' (worldwide); where a product prints only in that appendix (Multaq 2016Q1-2018Q2), the Total Franchises column is recorded. Units as declared beside each table: '\u20ac million' / 'millions of euros'.",
+    "Row label 'Soliqua \u00ae' (2017Q1-2022Q4) then 'Soliqua/iGlarLixi' (2023Q1 on, the same product under its EU name Suliqua and generic shorthand iGlarLixi); the 2022 and 2023 totals continue smoothly (55 in Q4 2022, 63 in Q1 2023).",
+    "Sum checks: 2017: 4+5+8+9=26 vs full-year 26 OK; 2018: 9+17+20+27=73 vs full-year 73 OK; 2019: 22+28+33+39=122 vs full-year 122 OK; 2020: 37+38+40+46=161 vs full-year 161 OK; 2021: 44+46+51+54=195 vs full-year 195 OK; 2022: 53+53+54+55=215 vs full-year 215 OK; 2023: 63+43+50+61=217 vs full-year 217 OK; 2024: 58+56+55+58=227 vs full-year 227 OK; 2025: 70+66+62+84=282 vs full-year 282 OK"
+  ]
+}

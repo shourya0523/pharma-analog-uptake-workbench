@@ -1,0 +1,36 @@
+{
+  "drug_name": "Tykerb",
+  "generic_name": "lapatinib",
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_tykerb_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (HER2-positive advanced or metastatic breast cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Tykerb in the US, Tyverb in the EU; row 'Tykerb' to 2008, 'Tyverb/Tykerb' from 2009)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Dual HER2/EGFR tyrosine kinase inhibitor",
+  "moa_class": "her2_egfr_tyrosine_kinase_inhibitor",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022059",
+    "quote": "03/13/2007 ORIG-1 Approval (NDA 022059, TYKERB LAPATINIB DITOSYLATE)"
+  },
+  "commercial_start_quarter": "2007Q1",
+  "launch_quarter": "2007Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000115697307000672/u52523-6k.htm",
+    "quote": "Tykerb, for breast cancer, launched in the USA in March"
+  },
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "GSK sold its oncology business to Novartis on 2 March 2015; GSK's Q1 2015 announcement (0001191638-15-000622) gives only a two-month oncology total ('Oncology sales for the first two months were \u00a3216 million') and no brand rows. Novartis (owner since March 2015) prints no Tykerb or Tyverb row in any quarterly interim report from Q1 2015 to Q3 2026 (scanned by script). The last row is GSK's Q4 2014 (42; 2014 171).",
+  "notes": "GSK plc worldwide turnover in GBP millions, Total column of the quarterly Pharmaceuticals turnover table (the same row prints USA, Europe and other-region columns). Novartis holds the product since March 2015 but never printed it, so the series is GSK's only.",
+  "search_log": [
+    "Listed GSK plc (CIK 1131399) filings via data.sec.gov submissions (6,852 filings, 6,139 of them 6-K); located the quarterly results announcements with EDGAR full-text search for 'Tykerb', 'Votrient' and 'Arzerra' (6-K hits 2007-2015 in the results windows; 39 documents fetched).",
+    "The quarter's figure is read from the Pharmaceuticals turnover table headed 'Three months ended ...' (the cumulative 'Six/Nine months ended' and 'Year ended' tables are skipped); the period comes from that heading. Re-filed copies (2008-05-06, 2012-05-02) are not cited; the earlier filing is.",
+    "GSK's Q1 2015 results announcement (6-K 0001191638-15-000622, gsk201505066k.htm) prints no oncology brand rows: 'Oncology sales for the first two months were \u00a3216 million', after the disposal of the oncology business to Novartis on 2 March 2015.",
+    "Tykerb checks: four quarters equal the year figure of GSK's Q4 announcement: 2007 51 (4+12+16+19), 2008 102, 2009 169, 2010 227, 2011 231, 2012 239, 2013 207, 2014 171.",
+    "Novartis (CIK 1114448) interim reports 2015-2026 searched by script for any table row starting 'Tykerb' or 'Tyverb': none."
+  ]
+}

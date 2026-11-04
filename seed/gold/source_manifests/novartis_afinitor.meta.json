@@ -1,0 +1,35 @@
+{
+  "drug_name": "Afinitor",
+  "generic_name": "everolimus",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_afinitor_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (advanced renal cell carcinoma, HR+ breast cancer, neuroendocrine tumours, TSC-associated tumours)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (row 'Afinitor', from Q4 2012 'Afinitor/Votubia')",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "mTOR (mammalian target of rapamycin) inhibitor",
+  "moa_class": "mtor_inhibitor",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022334",
+    "quote": "03/30/2009 ORIG-1 Approval (NDA 022334, AFINITOR EVEROLIMUS)"
+  },
+  "commercial_start_quarter": "2009Q1",
+  "launch_quarter": "2009Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000110465909043532/a09-18408_16k.htm",
+    "quote": "Afinitor (USD 12 million), an oral inhibitor of the mTOR pathway, was launched in the US after regulatory approval was granted in March"
+  },
+  "series_start_reason": "FDA approval 30 Mar 2009 and US launch after it; the Q1-Q3 2009 reports print no Afinitor row, so 2009Q1 (1), 2009Q2 (11) and 2009Q3 (26) are read from the prior-year columns of the Q1, Q2 and Q3 2010 reports (direct_prior_year_column). The Q4 2009 report also prints 1 for Q4 2008, before approval; that pre-approval figure is not included and the series starts in the approval quarter.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2024 interim report (6-K 0001370368-24-000017, a240423-99_2.htm) Novartis prints no Afinitor/Votubia row: the Oncology table lists Kisqali, Promacta/Revolade, Jakavi, Tafinlar + Mekinist, Tasigna, Pluvicto, Lutathera, Scemblix, Kymriah, Piqray/Vijoice, Fabhalta and 'Other'. The Q4 2023 report (0001370368-24-000007) is the last with the row (Q4 2023 97; FY 2023 408).",
+  "notes": "One Novartis line: 'Afinitor' to Q3 2012, 'Afinitor/Votubia' from Q4 2012 (Votubia is the EU brand name of everolimus for TSC indications); the renamed line's prior-year figure for Q4 2011 (133) equals the 'Afinitor' figure for that quarter. Worldwide; no regional split on the product table.",
+  "search_log": [
+    "Listed Novartis AG (CIK 1114448) filings via data.sec.gov submissions (recent plus older pages, all form types: 1,431 filings, 937 of them 6-K). Located quarterly results documents with EDGAR full-text search (efts.sec.gov) for each brand name (Exjade, Afinitor, Jadenu, Fabhalta, Piqray, Vijoice, Votrient, Tykerb, Arzerra, Signifor) over 2005-2026, restricted to 6-K hits filed in the results windows (Jan-Feb, Apr-May, Jul-Aug, Oct-Nov); 199 documents fetched (6-K bodies 2005-2011, EX-99.1/EX-99.2 from 2010). The union contains every quarterly report 2005Q4-2026Q3, since each prints an Exjade or Afinitor or Piqray row.",
+    "Rows extracted by script from every HTML table whose header row begins with 'Qn YYYY' (the quarter table), taking the row whose first cell starts with the brand; the first figure is the current quarter. Where two filings carry the same quarter (2010-2012 duplicates under accession prefixes 0001104659 and 0001370368) the EX-99.2 interim financial report or the 0001370368 filing is cited.",
+    "Afinitor checks: each year's four quarters equal the FY column of the Q4 report: 2009 70 (1+11+26+32, FY 2009 column of the Q4 2010 report), 2010 243, 2011 443, 2012 797, 2013 1,309, 2014 1,575, 2015 1,607, 2016 1,516, 2017 1,525, 2018 1,556, 2019 1,539, 2020 1,083, 2021 938, 2022 512, 2023 408."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "drug_name": "Cubicin",
+  "generic_name": "daptomycin",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_cubicin_us_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Complicated skin and skin-structure infections; S. aureus bacteraemia",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Cubist U.S. product revenues; Cubist sold Cubicin outside the U.S. only through distribution partners)",
+  "formulation": "lyophilised powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "cyclic lipopeptide antibacterial (calcium-dependent membrane depolarisation)",
+  "moa_class": "cyclic_lipopeptide_antibacterial",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021572",
+    "quote": "09/12/2003 ORIG-1 Approval (NDA 021572, CUBICIN DAPTOMYCIN)"
+  },
+  "commercial_start_quarter": "2003Q4",
+  "launch_quarter": "2003Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/912183/000110465904005926/a04-2919_1ex99d1.htm",
+    "quote": "These increases were driven by the hiring of a dedicated Cubist sales force, as well as increased marketing activities related to the launch of CUBICIN in November 2003."
+  },
+  "series_start_reason": null,
+  "series_end_quarter": "2020Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck's Table 3a prints Cubicin through the fourth-quarter 2020 release (filed 2021-02-04); the first-quarter 2021 release prints no Cubicin line and does not mention the product.",
+  "joined_issuers": [
+    {
+      "issuer": "Cubist Pharmaceuticals",
+      "first_quarter": "2003Q4",
+      "last_quarter": "2014Q3"
+    },
+    {
+      "issuer": "Merck",
+      "first_quarter": "2015Q1",
+      "last_quarter": "2020Q4"
+    }
+  ],
+  "notes": "Merck rows are the U.S. column of Table 3a. 2015Q1 covers January 21 to March 31, 2015 only (acquisition close).",
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "Cubist (CIK 912183): every earnings release Exhibit 99.1 2003-11 to 2014-10 and every 10-Q/10-K; the U.S. Cubicin line is 'Product revenues, net' (2003Q4-2005Q4; Cubist's only product, international nil in 2003-2004 and $80 thousand for 2005 per the Form 10-K for 2007), 'U.S. product revenues, net' (2007Q1-2011Q3; 2006 quarters from the 2007 releases' prior-year columns) and 'U.S. CUBICIN product revenues, net' (2011Q4 on, once Cubist also sold Entereg and later Dificid and Sivextro).",
+    "Quarters sum exactly to the twelve-month figure printed in each fourth-quarter release: 2004 58,559; 2005 113,514; 2006 189,512 (U.S.); 2007 285,059; 2008 414,681; 2009 523,972; 2010 599,601; 2011 698,837; 2012 809,200; 2013 907,978 (USD thousands).",
+    "Cubist's 8-Ks after 2014-10-21 (2014-10-22 to 2015-01-21) are personnel, CVR and merger-closing filings; none prints 2014Q4 revenue, and Cubist filed no Form 10-K for 2014. Merck's 2015 releases print 2014 Cubicin as Merck's own pre-acquisition sales (5-7 a quarter), a different figure."
+  ],
+  "unreported_quarters": {
+    "2014Q4": "Ownership change Cubist to Merck (acquisition closed 21 January 2015): Cubist filed no fourth-quarter 2014 release or 2014 Form 10-K, and Merck's 2015Q1 is a partial quarter, so no filing prints 2014Q4."
+  }
+}

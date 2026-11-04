@@ -1,0 +1,32 @@
+{
+  "drug_name": "Rylaze",
+  "generic_name": "asparaginase erwinia chrysanthemi (recombinant)-rywn",
+  "manufacturer": "Jazz Pharmaceuticals",
+  "therapeutic_area": "Oncology / Hematology",
+  "indication_area": "Oncology (acute lymphoblastic leukemia / lymphoblastic lymphoma, asparaginase hypersensitivity)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide as printed (line labelled Rylaze, Rylaze/Enrylaze from the 2024Q1 release)",
+  "formulation": "injection",
+  "route_of_administration": "intramuscular",
+  "moa": "Asparagine-depleting enzyme (recombinant Erwinia asparaginase)",
+  "moa_class": "asparaginase",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761179",
+    "quote": "BLA 761179, Company: JAZZ PHARMS, RYLAZE ASPARAGINASE ... 06/30/2021 ORIG-1 Approval N/A; Orphan"
+  },
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1232524/000123252421000044/a2q21financialpr.htm",
+    "quote": "Rylaze was launched and commercially available in the U.S. on July 15, 2021."
+  },
+  "search_log": [
+    "Listed every Jazz Pharmaceuticals (CIK 0001232524) filing via data.sec.gov/submissions (recent + older pages); took every 8-K/8-K/A filed 2020-07 to 2026-11 whose items include 2.02, 9.01 or 7.01 and fetched every non-primary .htm exhibit from each filing's index.json.",
+    "The product row was read from the first table of each quarterly release whose first cell starts with the brand (the 'Total revenues' table listing product sales, net by product); the current three-month column is the first figure. Unit is read from the table's own '(In thousands)' / '(In millions)' header: thousands through the 2025Q4 release, millions from the 2026Q1 release.",
+    "Each quarter's own release reports it as current; no prior-year columns used.",
+    "Line is 'Rylaze' through the 2023Q4 release and 'Rylaze/Enrylaze' from the 2024Q1 release (Enrylaze is the EU trade name); the 2024Q1 release prints the prior-year quarter as 85,927, equal to the 2023Q1 'Rylaze' figure, so the rename is one continuous line.",
+    "Full-year checks: 2022: 54.22 + 72.954 + 73.513 + 80.972 = 281.659 vs 281.659 (full-year column of the Q4 quote); 2023: 85.927 + 101.693 + 104.859 + 101.747 = 394.226 vs 394.226 (full-year column of the Q4 quote); 2024: 102.75 + 107.829 + 98.78 + 101.487 = 410.846 vs 410.846 (full-year column of the Q4 quote); 2025: 94.233 + 100.659 + 99.868 + 108.16 = 402.920 vs 402.92 (full-year column of the Q4 quote)"
+  ],
+  "benchmark_identity": "jazz_rylaze_worldwide_reported",
+  "commercial_start_quarter": "2021Q3"
+}

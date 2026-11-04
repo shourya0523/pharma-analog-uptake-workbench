@@ -1,0 +1,36 @@
+{
+  "drug_name": "Welireg",
+  "generic_name": "belzutifan",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_welireg_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "von Hippel-Lindau disease-associated tumours; advanced renal cell carcinoma",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Global column: U.S. plus International)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "hypoxia-inducible factor 2 alpha (HIF-2\u03b1) inhibitor",
+  "moa_class": "hif_2_alpha_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=215383",
+    "quote": "08/13/2021 ORIG-1 Approval (NDA 215383, WELIREG BELZUTIFAN)"
+  },
+  "commercial_start_quarter": "2022Q1",
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000031015822000003/mrk-20211231.htm",
+    "quote": "Welireg August 2021 FDA approved Welireg for adult patients with von Hippel-Lindau (VHL) disease who require therapy for associated RCC, central nervous system hemangioblastomas, or pancreatic neuroendocrine tumors, not requiring immediate surgery."
+  },
+  "series_start_reason": "Merck prints Welireg on its own line first in the first-quarter 2023 release and Form 10-Q; the 2023 releases carry the 2022 quarters as prior-year columns, so the series starts 2022Q1, two quarters after the August 2021 approval. 2021Q3-2021Q4 sales are printed in no Merck filing (2021-2022 releases, 10-Qs and 10-Ks scanned).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "Product rows from Table 3a ('Franchise / Key Product Sales', AMOUNTS IN MILLIONS) of every Merck earnings release Exhibit 99.2 filed 2010-02-16 to 2026-08-04 (CIK 310158).",
+    "Quarters sum to the printed full year within rounding (2023: 218 vs 218; 2024: 510 vs 509; 2025: 715 vs 716)."
+  ]
+}

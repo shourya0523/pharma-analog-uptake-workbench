@@ -1,0 +1,38 @@
+{
+  "drug_name": "Strattera",
+  "generic_name": "atomoxetine",
+  "manufacturer": "Eli Lilly",
+  "benchmark_identity": "lilly_strattera_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Attention-deficit hyperactivity disorder (ADHD)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Lilly's worldwide product revenue line; in Forms 10-Q/10-K the Total column, U.S. plus outside U.S.)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Selective norepinephrine reuptake inhibitor (non-stimulant)",
+  "moa_class": "norepinephrine_reuptake_inhibitor",
+  "first_approval_year": 2002,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021411",
+    "quote": "STRATTERA ATOMOXETINE HYDROCHLORIDE ... 11/26/2002 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "commercial_start_quarter": "2003Q1",
+  "launch_quarter": "2003Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/59478/000095013703002717/c76879e10vq.htm",
+    "quote": "Strattera was officially launched in January 2003."
+  },
+  "series_start_reason": "Series starts 2003Q1, the launch quarter ('Strattera was officially launched in January 2003'). The fourth-quarter 2003 release prints 2.6 for the three and twelve months of 2002 (pre-launch shipments after the November 26, 2002 approval); no filing reports that quarter as current, and it precedes the official launch, so it is not a row.",
+  "series_end_quarter": "2019Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Lilly's sec.gov filings print a Strattera revenue line through the FY2019 Form 10-K (https://www.sec.gov/Archives/edgar/data/59478/000005947820000057/lly-20191231x10xk.htm: 'Strattera | 30.8 | 211.7 | 242.5 | 450.8'). The Form 10-Q for the quarter ended March 31, 2020 (https://www.sec.gov/Archives/edgar/data/59478/000005947820000104/lly-3312020x10q.htm) lists under Neuroscience only 'Cymbalta', 'Zyprexa', 'Emgality' and 'Other Neuroscience | 20.2 | 60.5 | 80.7 | 19.3 | 88.2 | 107.6', and no later 10-Q, 10-K or earnings release on sec.gov prints a Strattera revenue row (scan of every Lilly 10-Q, 10-K and earnings exhibit to 2026-10-29). Whether Lilly's website workbook continued the line could not be checked (investor.lilly.com: Access Denied).",
+  "search_log": [
+    "Listed every Eli Lilly (CIK 59478) filing via data.sec.gov/submissions incl. the older 'files' pages (all forms). Earnings releases: every 8-K/8-K/A with item 2.02 from 2001, plus the 2003-2004 releases filed under items 9/12 and the two 2016 releases filed under item 9.01 only (2016-01-28, 2016-04-26), each exhibit resolved from the filing's index.json; plus every 10-Q and 10-K from 2002.",
+    "Every HTML table row (and plain-text line for .txt exhibits) whose first cell starts with Baqsimi, Effient, Jaypirca, Portrazza, Reyvow, Strattera or Cymbalta followed by a figure was extracted from all of those documents (scan.py in the work directory); narrative sentences were searched separately where no table row exists.",
+    "Each quarter is read from the earnings release that reports it as current (first table row: current quarter, prior-year quarter, then year-to-date); where the release prints no line for the product (no Q1 2006 release was filed on EDGAR; the Q1 2018 release has no product table; releases from 2019 list only selected products), from the Form 10-Q for that quarter (Total column = U.S. + outside U.S.); a fourth quarter with neither is the Form 10-K full year less the third-quarter 10-Q nine-month Total.",
+    "Every row was checked offline with verify_staged_manifests.check_row before writing; where a Q4 quote carries a twelve-month figure, the verifier checks the four quarters against it.",
+    "Lilly's website Financial Workbooks (investor.lilly.com) could not be checked: the host answers 'Access Denied' to this environment, so whether a workbook continued the product after the last sec.gov quarter is not known.",
+    "Strattera rows: releases for 2003Q2-2017Q4 and 2018Q2-2018Q4; plain-text release for 2003Q1; Forms 10-Q for 2006Q1, 2018Q1, 2019Q1-Q3; 2019Q4 = FY2019 10-K 242.5 less nine months 200.8.",
+    "Four-quarter sums: {'2003': 370.4, '2004': 666.7, '2005': 552.2, '2006': 579.0, '2007': 569.5, '2008': 579.5, '2009': 609.4, '2010': 576.8, '2011': 620.2, '2012': 621.4, '2013': 709.3, '2014': 738.6, '2015': 784.0, '2016': 854.7, '2017': 618.2, '2018': 450.8, '2019': 242.6}; each equals the full year printed in that year's Q4 release or 10-K within 0.1 (2003 370.4 vs 370.3, 2005 552.2 vs 552.1, 2007 569.5 vs 569.4, 2010 576.8 vs 576.7, 2011 620.2 vs 620.1, 2013 709.3 vs 709.2, 2014 738.6 vs 738.5)."
+  ]
+}

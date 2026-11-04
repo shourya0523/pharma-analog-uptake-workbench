@@ -1,0 +1,31 @@
+{
+  "drug_name": "Imcivree",
+  "generic_name": "setmelanotide",
+  "manufacturer": "Rhythm Pharmaceuticals",
+  "benchmark_identity": "rhythm_imcivree_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Rare genetic obesity (POMC, PCSK1, LEPR deficiency; Bardet-Biedl syndrome)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Rhythm product revenue, net; IMCIVREE is its only product)",
+  "formulation": "solution for subcutaneous injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Melanocortin-4 receptor (MC4R) agonist",
+  "moa_class": "mc4r_agonist",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=213793",
+    "quote": "11/25/2020 ORIG-1 Approval (NDA 213793, IMCIVREE SETMELANOTIDE ACETATE)"
+  },
+  "launch_quarter": "2021Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1649904/000162828026052533/rytm-20260630.htm",
+    "quote": "IMCIVREE became commercially available in the U.S. in the first quarter 2021."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1649904 (Rhythm Pharmaceuticals) via data.sec.gov/submissions (recent plus older 'files' pages); fetched the exhibits of every 8-K with item 2.02 and every 10-Q/10-K filed 2020-12 to 2026-09.",
+    "Rows read from the 'Product revenue, net' line of the condensed consolidated statements of operations in each quarterly earnings release (8-K Exhibit 99.1); the quarter is the one ended before the filing date and is confirmed by the prior-year comparative column. 2021Q1 (35 thousand) is the first quarter with product revenue: the 2022Q1 release prints its prior-year column as 35 and the 2021Q1 release prints 2020Q1 as a dash.",
+    "Full-year check: 2021: 0.035 + 0.274 + 1.028 + 1.817 = 3.154 vs 3.154 (full-year column of the Q4 quote); 2022: 1.498 + 2.312 + 4.284 + 8.79 = 16.884 vs 16.884 (full-year column of the Q4 quote); 2023: 11.469 + 19.221 + 22.504 + 24.234 = 77.428 vs 77.428 (full-year column of the Q4 quote); 2024: 25.967 + 29.078 + 33.251 + 41.83 = 130.126 vs 130.126 (full-year column of the Q4 quote); 2025: 37.718 + 48.502 + 51.298 + 57.253 = 194.771 vs 194.771 (full-year column of the Q4 quote).",
+    "Prior-year check: the prior-year comparative column of 18 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2021Q1"
+}

@@ -1,0 +1,32 @@
+{
+  "drug_name": "Camzyos",
+  "generic_name": "mavacamten",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_camzyos_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Cardiology (obstructive hypertrophic cardiomyopathy)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Cardiac myosin inhibitor",
+  "moa_class": "cardiac_myosin_inhibitor",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=214998",
+    "quote": "04/28/2022 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 214998, CAMZYOS MAVACAMTEN)"
+  },
+  "launch_quarter": "2022Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000001427222000164/q22022earningspresentati.htm",
+    "quote": "Continued growth for in-line products & strengthened momentum from New Product Portfolio; two new launches YTD with Opdualag & Camzyos"
+  },
+  "series_start_reason": "First quarter with a printed figure: the second-quarter 2022 release prints Camzyos $3 million (U.S. only) with a nil prior-year column; the first-quarter 2022 release has no Camzyos product row (FDA approval was April 28, 2022). Camzyos was developed by MyoKardia; BMS's fourth-quarter 2020 release reports 'Completes Acquisition of MyoKardia', before the 2022 approval, so no pre-acquisition sales exist and no issuer join is needed.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000014272 (Bristol-Myers Squibb) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (105 filings, 2004-10-29 to 2026-10-29) and fetched every document in each filing's index.json except the cover document and R*.htm pages; product rows read from Exhibit 99.1 (the file name matching 'ex99.?1' or 'ex991'), whose first product table is the quarter table.",
+    "Row rule: first table row of the Exhibit 99.1 whose first cell begins with the product name and whose first figure cell is a number. 2015Q4-2022Q4 releases print worldwide quarter then same quarter a year earlier (2019Q4-2022Q4 also a summary table on the first page, which is the row read); from the 2023Q1 release the columns are U.S., Int'l, WW and the WW (third) figure is used.",
+    "Camzyos product row present in every BMS Exhibit 99.1 from 2022Q2 to 2026Q2 (and in the 2026Q3 release).",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2023: quarters sum to 231; twelve-month figure 231 (current column of the 2023Q4 release); 2024: quarters sum to 602; twelve-month figure 602 (current column of the 2024Q4 release); 2025: quarters sum to 1068; twelve-month figure 1,068 (current column of the 2025Q4 release)"
+  ],
+  "commercial_start_quarter": "2022Q2"
+}

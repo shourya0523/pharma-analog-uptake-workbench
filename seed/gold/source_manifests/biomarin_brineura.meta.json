@@ -1,0 +1,30 @@
+{
+  "drug_name": "Brineura",
+  "generic_name": "cerliponase alfa",
+  "manufacturer": "BioMarin Pharmaceutical",
+  "therapeutic_area": "Rare Disease / Neurology",
+  "indication_area": "Rare disease (CLN2 disease, tripeptidyl peptidase 1 deficiency)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (BioMarin net product revenue)",
+  "formulation": "injection (intraventricular infusion)",
+  "route_of_administration": "intraventricular",
+  "moa": "Enzyme replacement therapy (recombinant human tripeptidyl peptidase 1)",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761052",
+    "quote": "BLA 761052, Company: BIOMARIN PHARM, BRINEURA CERLIPONASE ... 04/27/2017 ORIG-1 Approval N/A; Orphan"
+  },
+  "launch_quarter": "2017Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1048477/000156459017014906/bmrn-ex991_6.htm",
+    "quote": "The Company recorded its first commercial sales of Brineura in the second quarter of 2017 in the U.S. and Argentina and i n the third quarter of 2017 , both France and Germany had their first commercial sales."
+  },
+  "search_log": [
+    "Listed every BioMarin (CIK 0001048477) filing via data.sec.gov/submissions (recent + older pages): 352 8-K, 18 8-K/A, 83 10-Q, 27 10-K (all forms counted). Took every 8-K/8-K/A filed 2005-01 to 2026-11 whose items include 2.02, 9.01, 7.01 or 12 (or carry no item codes) and fetched every non-primary .htm exhibit via each filing's index.json; 10-Q/10-K primary documents fetched where a check needed them.",
+    "Each quarter is read from that quarter's own earnings release (filed in the month after quarter end), from the first table whose first cell starts with the brand; when two 8-Ks of one quarter carried the row, the earlier-filed release was used. Unit read from the table header or the nearest preceding unit statement: thousands in the releases filed 2006-02 and 2006-05, millions otherwise.",
+    "Full-year checks: 2018: 6.9 + 10.9 + 9.9 + 12.2 = 39.900 vs 39.9 (full-year column of the Q4 quote); 2019: 12.2 + 14.8 + 19.8 + 25.2 = 72.000 vs 72 (full-year column of the Q4 quote); 2020: 24 + 25.8 + 25.4 + 35 = 110.200 vs 110.2 (full-year column of the Q4 quote); 2021: 27.3 + 30.3 + 32.9 + 37.4 = 127.900 vs 128 (full-year column of the Q4 quote); 2022: 36.2 + 37.7 + 37.8 + 42.6 = 154.300 vs 154.3 (full-year column of the Q4 quote); 2023: 39.1 + 38.1 + 41 + 43.6 = 161.800 vs 161.9 (full-year column of the Q4 quote); 2024: 39 + 45.3 + 37 + 48 = 169.300 vs 169 (full-year column of the Q4 quote); 2025: 40 + 49 + 48 + 49 = 186.000 vs 186 (full-year column of the Q4 quote)"
+  ],
+  "benchmark_identity": "biomarin_brineura_worldwide_reported",
+  "commercial_start_quarter": "2017Q2"
+}

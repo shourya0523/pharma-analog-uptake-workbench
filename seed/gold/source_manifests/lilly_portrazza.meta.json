@@ -1,0 +1,38 @@
+{
+  "drug_name": "Portrazza",
+  "generic_name": "necitumumab",
+  "manufacturer": "Eli Lilly",
+  "benchmark_identity": "lilly_portrazza_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Metastatic squamous non-small cell lung cancer (first-line, with gemcitabine and cisplatin)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Lilly's worldwide product revenue line in the earnings release)",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-EGFR monoclonal antibody (IgG1)",
+  "moa_class": "egfr_antibody",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125547",
+    "quote": "Biologic License Application (BLA) : 125547 ... PORTRAZZA NECITUMUMAB 800MG/50ML ... 11/24/2015 ORIG-1 Approval"
+  },
+  "commercial_start_quarter": "2015Q4",
+  "launch_quarter": "2015Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/59478/000005947816000346/q116lillysalesandearningsp.htm",
+    "quote": "Portrazza launched in the U.S. in December 2015."
+  },
+  "series_start_reason": "Series starts 2015Q4, the launch quarter, read from the prior-year column of the fourth-quarter 2016 release (0.6, equal to the printed twelve months of 2015) because the fourth-quarter 2015 release prints no Portrazza row.",
+  "series_end_quarter": "2017Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Lilly's last Portrazza line is in the fourth-quarter 2017 release (https://www.sec.gov/Archives/edgar/data/59478/000005947818000028/q417lillysalesandearningsp.htm: 'Portrazza \u00ae | 2.1 | 3.8 | (44)% | 10.3 | 14.8 | (30)%'). The first-quarter 2018 release (https://www.sec.gov/Archives/edgar/data/59478/000005947818000133/q118lillysalesandearning.htm) carries no product revenue table, the second-quarter 2018 release's 'Selected Revenue Highlights' (https://www.sec.gov/Archives/edgar/data/59478/000005947818000186/q218lillysalesandearningsp.htm) list Cyramza, Lartruvo and Verzenio but not Portrazza, and no Lilly Form 10-Q or 10-K ever prints a Portrazza revenue row. Whether Lilly's website workbook printed the product could not be checked (investor.lilly.com: Access Denied).",
+  "search_log": [
+    "Listed every Eli Lilly (CIK 59478) filing via data.sec.gov/submissions incl. the older 'files' pages (all forms). Earnings releases: every 8-K/8-K/A with item 2.02 from 2001, plus the 2003-2004 releases filed under items 9/12 and the two 2016 releases filed under item 9.01 only (2016-01-28, 2016-04-26), each exhibit resolved from the filing's index.json; plus every 10-Q and 10-K from 2002.",
+    "Every HTML table row (and plain-text line for .txt exhibits) whose first cell starts with Baqsimi, Effient, Jaypirca, Portrazza, Reyvow, Strattera or Cymbalta followed by a figure was extracted from all of those documents (scan.py in the work directory); narrative sentences were searched separately where no table row exists.",
+    "Each quarter is read from the earnings release that reports it as current (first table row: current quarter, prior-year quarter, then year-to-date); where the release prints no line for the product (no Q1 2006 release was filed on EDGAR; the Q1 2018 release has no product table; releases from 2019 list only selected products), from the Form 10-Q for that quarter (Total column = U.S. + outside U.S.); a fourth quarter with neither is the Form 10-K full year less the third-quarter 10-Q nine-month Total.",
+    "Every row was checked offline with verify_staged_manifests.check_row before writing; where a Q4 quote carries a twelve-month figure, the verifier checks the four quarters against it.",
+    "Lilly's website Financial Workbooks (investor.lilly.com) could not be checked: the host answers 'Access Denied' to this environment, so whether a workbook continued the product after the last sec.gov quarter is not known.",
+    "Portrazza rows: releases for 2016Q1-2017Q4 (incl. the 9.01-only 8-K of 2016-04-26); 2015Q4 from the prior-year column of the 2016Q4 release.",
+    "Four-quarter sums: 2016 = 1.7 + 4.0 + 5.3 + 3.8 = 14.8 and 2017 = 3.6 + 2.3 + 2.3 + 2.1 = 10.3, equal to the twelve-month figures of the Q4 2016 and Q4 2017 releases."
+  ]
+}

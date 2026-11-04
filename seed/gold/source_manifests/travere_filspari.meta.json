@@ -1,0 +1,31 @@
+{
+  "drug_name": "Filspari",
+  "generic_name": "sparsentan",
+  "manufacturer": "Travere Therapeutics",
+  "benchmark_identity": "travere_filspari_us_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Nephrology (IgA nephropathy)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Travere net product sales of FILSPARI)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Dual endothelin type A and angiotensin II type 1 receptor antagonist",
+  "moa_class": "dual_endothelin_angiotensin_receptor_antagonist",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=216403",
+    "quote": "02/17/2023 ORIG-1 Approval (NDA 216403, FILSPARI SPARSENTAN)"
+  },
+  "launch_quarter": "2023Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1438533/000143853323000024/tvtx-20230331.htm",
+    "quote": "FILSPARI became commercially available in the U.S. beginning the week of February 27, 2023, and we are providing a comprehensive patient support program throughout the patient's treatment journey."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1438533 (Travere Therapeutics) via data.sec.gov/submissions; fetched the exhibits of every 8-K/8-K/A with item 2.02 and every 10-Q/10-K filed 2023-03 to 2026-09.",
+    "Rows read from the 'FILSPARI' line under 'Net product sales' in the consolidated statements of operations of each quarterly earnings release (8-K Exhibit 99.1; the 2025Q1 release is filed as an 8-K/A). The 2023Q1 release prints the prior-year column as a dash, so 2023Q1 is the first quarter of sales. The quarter is the one ended before the filing date and is confirmed by the prior-year comparative column.",
+    "Full-year check: 2023: 3.004 + 3.461 + 8.044 + 14.699 = 29.208 vs 29.208 (full-year column of the Q4 quote); 2024: 19.834 + 27.125 + 35.619 + 49.644 = 132.222 vs 132.222 (full-year column of the Q4 quote); 2025: 55.881 + 71.887 + 90.9 + 103.337 = 322.005 vs 322.005 (full-year column of the Q4 quote).",
+    "Prior-year check: the prior-year comparative column of 10 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2023Q1"
+}

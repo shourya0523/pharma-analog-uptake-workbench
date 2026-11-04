@@ -1,0 +1,31 @@
+{
+  "drug_name": "Nerlynx",
+  "generic_name": "neratinib",
+  "manufacturer": "Puma Biotechnology",
+  "benchmark_identity": "puma_nerlynx_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (HER2-positive breast cancer)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Puma product revenue, net; NERLYNX is its only product)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Irreversible pan-HER (EGFR/HER2/HER4) tyrosine kinase inhibitor",
+  "moa_class": "her2_tyrosine_kinase_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208051",
+    "quote": "07/17/2017 ORIG-1 Approval (NDA 208051, NERLYNX NERATINIB MALEATE)"
+  },
+  "launch_quarter": "2017Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1401667/000156459017023226/pbyi-10q_20170930.htm",
+    "quote": "The increase in product revenue, net was entirely attributable to the commercial launch of NERLYNX, our initial product, in July 2017."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1401667 (Puma Biotechnology) via data.sec.gov/submissions; fetched the exhibits of every 8-K with item 2.02 and every 10-Q/10-K filed 2017-08 to 2026-09.",
+    "Rows read from the 'Product revenue, net' line ('Revenue, net' in the first two releases) of the condensed consolidated statements of operations in each quarterly earnings release (8-K Exhibit 99.1, $ millions to one decimal as the releases print). The 2017Q3 release prints the prior-year quarter as a dash, so 2017Q3 is the first quarter of sales. The quarter is confirmed by the prior-year comparative column.",
+    "Full-year check: 2018: 36 + 50.8 + 52.6 + 61.1 = 200.500 vs 200.5 (full-year column of the Q4 quote); 2019: 45.6 + 53.8 + 53.5 + 58.7 = 211.600 vs 211.6 (full-year column of the Q4 quote); 2020: 48.6 + 48.8 + 49.3 + 50 = 196.700 vs 196.7 (full-year column of the Q4 quote); 2021: 45.8 + 48.9 + 43.4 + 51 = 189.100 vs 189.1 (full-year column of the Q4 quote); 2022: 40.7 + 51.3 + 54.3 + 53.7 = 200.000 vs 200 (full-year column of the Q4 quote); 2023: 46.8 + 51.6 + 51.6 + 53.2 = 203.200 vs 203.1 (full-year column of the Q4 quote); 2024: 40.3 + 44.4 + 56.1 + 54.4 = 195.200 vs 195.2 (full-year column of the Q4 quote); 2025: 43.1 + 49.2 + 51.9 + 59.9 = 204.100 vs 204.1 (full-year column of the Q4 quote).",
+    "Prior-year check: the prior-year comparative column of 32 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2017Q3"
+}

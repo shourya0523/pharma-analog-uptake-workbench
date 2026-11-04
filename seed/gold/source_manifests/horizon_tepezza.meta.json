@@ -1,0 +1,52 @@
+{
+  "drug_name": "Tepezza",
+  "generic_name": "teprotumumab-trbw",
+  "manufacturer": "Amgen",
+  "therapeutic_area": "Ophthalmology / Rare Disease",
+  "indication_area": "Thyroid eye disease",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Horizon net sales; Amgen U.S. + ROW TOTAL)",
+  "formulation": "lyophilized powder for injection (infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "Insulin-like growth factor-1 receptor (IGF-1R) inhibitor monoclonal antibody",
+  "moa_class": "igf1r_inhibitor_antibody",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761143",
+    "quote": "BLA 761143, Company: HORIZON THERAPEUTICS IRELAND, TEPEZZA TEPROTUMUMAB-TRBW ... 01/21/2020 ORIG-1 Approval N/A; Orphan"
+  },
+  "launch_quarter": "2020Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1492426/000119312520134292/d922833dex991.htm",
+    "quote": "The Company initiated the commercial launch of TEPEZZA shortly after obtaining FDA approval."
+  },
+  "unreported_quarters": {
+    "2023Q3": "Ownership change Horizon Therapeutics to Amgen; no figure for the quarter is published. Amgen completed the acquisition of Horizon on Oct. 6, 2023; Horizon's last periodic report is the Form 10-Q for the quarter ended June 30, 2023 (last earnings release 8-K filed 2023-08-08; Form 15-12G filed 2023-10-16), and Amgen's product sales tables start with the fourth quarter of 2023."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Horizon Therapeutics",
+      "first_quarter": "2020Q1",
+      "last_quarter": "2023Q2"
+    },
+    {
+      "issuer": "Amgen",
+      "first_quarter": "2023Q4",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "search_log": [
+    "[Horizon piece] Listed every Horizon Therapeutics plc / Horizon Pharma plc (CIK 0001492426) filing via data.sec.gov/submissions (recent + older pages): 217 8-K, 6 8-K/A, 37 10-Q, 12 10-K (all forms counted). Took every 8-K/8-K/A filed 2013-01 to 2023-10 whose items include 2.02, 9.01 or 7.01 and fetched every non-primary .htm exhibit via each filing's index.json.",
+    "[Horizon piece] Read the product row from the first table of each quarterly release whose first cell starts with the brand (net sales by product table, USD millions, current three-month column first). Where several 8-K exhibits of one quarter carried the brand (e.g. 2016-10-13 / 2016-12-22 acquisition exhibits with unrelated tables), only the quarterly earnings release (Form 8-K, figure below 10,000) was kept.",
+    "[Horizon piece] Horizon's last earnings release is for 2023Q2 (8-K filed 2023-08-08); it filed a Form 15-12G on 2023-10-16 after Amgen completed the acquisition on Oct. 6, 2023, and published no third-quarter 2023 results.",
+    "[Horizon piece] TEPEZZA approved Jan. 21, 2020; first row is the 2020Q1 release (23.5). 2021Q1 is 2.1 as printed (the release attributes it to a supply disruption).",
+    "[Amgen piece] Listed every Amgen (CIK 0000318154) filing via data.sec.gov/submissions; took every 8-K filed 2023-10 to 2026-11 whose items include 2.02, 9.01 or 7.01 and read the 'Product sales detail by product and geographic region' table ($Millions: U.S., ROW, TOTAL, prior-year TOTAL) of each quarterly release; the TOTAL column is used.",
+    "[Amgen piece] First Amgen quarter is 2023Q4 (Horizon products included from the Oct. 6, 2023 acquisition date per the release footnote); kept, as the quarter misses only Oct. 1-5.",
+    "Full-year checks: 2020: 23.5 + 165.9 + 286.9 + 343.7 = 820.000 vs 820 (full-year column of the Q4 quote); 2021: 2.1 + 453.3 + 616.4 + 589.6 = 1661.400 vs 1661.3 (full-year column of the Q4 quote); 2022: 501.5 + 479.8 + 490.9 + 493.5 = 1965.700 vs 1965.7 (full-year column of the Q4 quote)"
+  ],
+  "benchmark_identity": "horizon_tepezza_worldwide_reported",
+  "commercial_start_quarter": "2020Q1",
+  "reviewed_anomalies": {
+    "2021Q1": "Printed figure for a quarter in which Tepezza supply was disrupted. Checked at source and kept as printed."
+  }
+}

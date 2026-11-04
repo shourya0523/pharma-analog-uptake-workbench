@@ -511,3 +511,83 @@ R010,Respiratory / Allergy,,Kalydeco,ivacaftor,Added - replaces an incomplete re
 R011,Respiratory / Allergy,,Orkambi,lumacaftor/ivacaftor,Added - replaces an incomplete requested product
 R012,Respiratory / Allergy,,Symdeko,tezacaftor/ivacaftor,Added - replaces an incomplete requested product
 R013,Respiratory / Allergy,,Trikafta,elexacaftor/tezacaftor/ivacaftor and ivacaftor,Added - replaces an incomplete requested product
+R013,Cardiometabolic / Renal,,Camzyos,mavacamten,Added - replaces an incomplete requested product
+R014,Oncology,,Empliciti,elotuzumab,Added - replaces an incomplete requested product
+R015,Oncology,,Inrebic,fedratinib,Added - replaces an incomplete requested product
+R016,Oncology,,Opdualag,nivolumab and relatlimab-rmbw,Added - replaces an incomplete requested product
+R017,Neurology / Psychiatry,,Chantix,varenicline tartrate,Added - replaces an incomplete requested product
+R018,Oncology,,Elrexfio,elranatamab-bcmm,Added - replaces an incomplete requested product
+R019,Oncology,,Inlyta,axitinib,Added - replaces an incomplete requested product
+R020,Infectious Disease / Vaccines,,Paxlovid,nirmatrelvir tablets; ritonavir tablets (co-packaged),Added - replaces an incomplete requested product
+R021,Infectious Disease / Vaccines,,Prevnar 13,pneumococcal 13-valent conjugate vaccine (diphtheria CRM197 protein),Added - replaces an incomplete requested product
+R022,Oncology,,Sutent,sunitinib malate,Added - replaces an incomplete requested product
+R023,Infectious Disease / Vaccines,,Capvaxive,pneumococcal 21-valent conjugate vaccine,Added - replaces an incomplete requested product
+R024,Infectious Disease / Vaccines,,Cubicin,daptomycin,Added - replaces an incomplete requested product
+R025,Oncology,,Emend,"aprepitant (and fosaprepitant dimeglumine, Emend for injection)",Added - replaces an incomplete requested product
+R026,Infectious Disease / Vaccines,,Gardasil,"human papillomavirus quadrivalent (types 6, 11, 16, 18) vaccine, recombinant",Added - replaces an incomplete requested product
+R027,Infectious Disease / Vaccines,,Lagevrio,molnupiravir,Added - replaces an incomplete requested product
+R028,Infectious Disease / Vaccines,,Noxafil,posaconazole,Added - replaces an incomplete requested product
+R029,Infectious Disease / Vaccines,,Prevymis,letermovir,Added - replaces an incomplete requested product
+R030,Infectious Disease / Vaccines,,RotaTeq,"rotavirus vaccine, live, oral, pentavalent",Added - replaces an incomplete requested product
+R031,Cardiometabolic / Renal,,Vytorin,ezetimibe/simvastatin,Added - replaces an incomplete requested product
+R032,Oncology,,Welireg,belzutifan,Added - replaces an incomplete requested product
+R033,Infectious Disease / Vaccines,,Zostavax,zoster vaccine live,Added - replaces an incomplete requested product
+R034,Oncology,,Epkinly,epcoritamab-bysp,Added - replaces an incomplete requested product
+R035,GI / Liver / Women's Health / Urology,,Orilissa,elagolix,Added - replaces an incomplete requested product
+R036,Neurology / Psychiatry,,Qulipta,atogepant,Added - replaces an incomplete requested product
+R037,Respiratory / Allergy,,Cayston,aztreonam (inhalation solution),Added - replaces an incomplete requested product
+R038,Oncology,,Tecartus,brexucabtagene autoleucel,Added - replaces an incomplete requested product
+R039,Infectious Disease / Vaccines,,Veklury,remdesivir,Added - replaces an incomplete requested product
+R040,Oncology,,Zydelig,idelalisib,Added - replaces an incomplete requested product
+R041,Neurology / Psychiatry,,Cymbalta,duloxetine,Added - replaces an incomplete requested product
+R042,Cardiometabolic / Renal,,Effient,prasugrel,Added - replaces an incomplete requested product
+R043,Oncology,,Portrazza,necitumumab,Added - replaces an incomplete requested product
+R044,Neurology / Psychiatry,,Strattera,atomoxetine,Added - replaces an incomplete requested product
+R045,Rare Disease / Metabolic,,Kanuma,sebelipase alfa,Added - replaces an incomplete requested product
+R046,Rare Disease / Metabolic,,Strensiq,asfotase alfa,Added - replaces an incomplete requested product
+R047,Rare Disease / Neurology / Cardiology,,Amvuttra,vutrisiran,Added - replaces an incomplete requested product
+R048,Rare Disease / Hepatology,,Givlaari,givosiran,Added - replaces an incomplete requested product
+R049,Rare Disease / Neurology,,Onpattro,patisiran,Added - replaces an incomplete requested product
+R050,Rare Disease / Nephrology,,Oxlumo,lumasiran,Added - replaces an incomplete requested product
+R051,Rare Disease / Neurology,,Brineura,cerliponase alfa,Added - replaces an incomplete requested product
+R052,Rare Disease / Metabolic,,Naglazyme,galsulfase,Added - replaces an incomplete requested product
+R053,Rare Disease / Metabolic,,Palynziq,pegvaliase-pqpz,Added - replaces an incomplete requested product
+R054,Rare Disease / Metabolic,,Ravicti,glycerol phenylbutyrate,Added - replaces an incomplete requested product
+R055,Ophthalmology / Rare Disease,,Tepezza,teprotumumab-trbw,Added - replaces an incomplete requested product
+R056,Neurology,,Epidiolex,cannabidiol,Added - replaces an incomplete requested product
+R057,Oncology / Hematology,,Rylaze,asparaginase erwinia chrysanthemi (recombinant)-rywn,Added - replaces an incomplete requested product
+R058,Neurology / Sleep Medicine,,Xywav,"calcium, magnesium, potassium, and sodium oxybates",Added - replaces an incomplete requested product
+R059,Cardiometabolic / Renal,,Bystolic,nebivolol,Added - replaces an incomplete requested product
+R060,Oncology,,Tevimbra,tislelizumab-jsgr,Added - replaces an incomplete requested product
+R061,Rare Disease / Hematology,,Skysona,elivaldogene autotemcel,Added - replaces an incomplete requested product
+R062,Neurology / Psychiatry,,Exparel,bupivacaine liposome injectable suspension,Added - replaces an incomplete requested product
+R063,Oncology,,Tivdak,tisotumab vedotin-tftv,Added - replaces an incomplete requested product
+R064,Oncology,,Nerlynx,neratinib,Added - replaces an incomplete requested product
+R065,Rare Disease / Hematology,,Imcivree,setmelanotide,Added - replaces an incomplete requested product
+R066,Neurology / Psychiatry,,Qelbree,viloxazine,Added - replaces an incomplete requested product
+R067,Cardiometabolic / Renal,,Filspari,sparsentan,Added - replaces an incomplete requested product
+R068,Neurology / Psychiatry,,Hetlioz,tasimelteon,Added - replaces an incomplete requested product
+R069,Oncology,,Danyelza,naxitamab-gqgk,Added - replaces an incomplete requested product
+R070,Rare Disease / Oncology,,Koselugo,selumetinib,Added - replaces an incomplete requested product
+R071,Cardiometabolic / Renal,,Lokelma,sodium zirconium cyclosilicate,Added - replaces an incomplete requested product
+R072,Oncology,,Truqap,capivasertib,Added - replaces an incomplete requested product
+R073,Oncology,,Arzerra,ofatumumab,Added - replaces an incomplete requested product
+R074,Oncology,,Tykerb,lapatinib,Added - replaces an incomplete requested product
+R075,Oncology,,Afinitor,everolimus,Added - replaces an incomplete requested product
+R076,Rare Disease / Hematology,,Exjade,deferasirox,Added - replaces an incomplete requested product
+R077,Rare Disease / Hematology,,Fabhalta,iptacopan,Added - replaces an incomplete requested product
+R078,Oncology,,Piqray,alpelisib,Added - replaces an incomplete requested product
+R079,Oncology,,Votrient,pazopanib,Added - replaces an incomplete requested product
+R080,Cardiometabolic / Hematology,,Andexxa,"andexanet alfa (coagulation factor Xa [recombinant], inactivated-zhzo)",Added - replaces an incomplete requested product
+R081,Oncology,,Blenrep,belantamab mafodotin,Added - replaces an incomplete requested product
+R082,Oncology,,Ojjaara,momelotinib,Added - replaces an incomplete requested product
+R083,Infectious Disease / Vaccines,,Edurant,rilpivirine,Added - replaces an incomplete requested product
+R084,Infectious Disease / Vaccines,,Intelence,etravirine,Added - replaces an incomplete requested product
+R085,GI / Liver / Women's Health / Urology,,Olysio,simeprevir,Added - replaces an incomplete requested product
+R086,Oncology,,Jevtana,cabazitaxel,Added - replaces an incomplete requested product
+R087,Neurology / Psychiatry,,Lemtrada,alemtuzumab,Added - replaces an incomplete requested product
+R088,Cardiometabolic / Renal,,Multaq,dronedarone,Added - replaces an incomplete requested product
+R089,Immunology / Inflammation,,Rezurock,belumosudil,Added - replaces an incomplete requested product
+R090,Cardiometabolic / Renal,,Soliqua,insulin glargine and lixisenatide,Added - replaces an incomplete requested product
+R091,Rare Disease / Hematology,,Xenpozyme,olipudase alfa,Added - replaces an incomplete requested product
+R092,Oncology,,Zaltrap,ziv-aflibercept,Added - replaces an incomplete requested product

@@ -1,0 +1,36 @@
+{
+  "drug_name": "Lemtrada",
+  "generic_name": "alemtuzumab",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_lemtrada_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neurology (relapsing multiple sclerosis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sanofi total net sales for the product)",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-CD52 monoclonal antibody",
+  "moa_class": "anti_cd52_monoclonal_antibody",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/103948s5139lbl.pdf",
+    "quote": "Label for LEMTRADA: Approved 11/14/2014",
+    "note": "First approval of the LEMTRADA brand was the European Commission's in September 2013 (Sanofi Q4 2013 release, https://www.sec.gov/Archives/edgar/data/1121404/000110465914007021/a14-5194_1ex99d1.htm: 'Following its approval by the European Commission in September, Lemtrada ... was launched in Germany in October.'); the US approval (supplement to BLA 103948, alemtuzumab) is 11/14/2014."
+  },
+  "commercial_start_quarter": "2013Q4",
+  "launch_quarter": "2013Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000110465914007021/a14-5194_1ex99d1.htm",
+    "quote": "Following its approval by the European Commission in September, Lemtrada\u2122 (alemtuzumab, developed in collaboration with Bayer HealthCare to treat relapsing forms of multiple sclerosis) was launched in Germany in October. Fourth-quarter sales of the product were \u20ac2 million."
+  },
+  "series_end_quarter": "2022Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q1 2023 release (https://www.sec.gov/Archives/edgar/data/1121404/000112140423000010/pressreleaseq12023english.htm) prints no Lemtrada row (the word does not appear in it or in any later quarterly release found); its first table lists 'Dupixent, Aubagio, Myozyme / Lumizyme, Fabrazyme, Cerezyme, Eloctate, Alprolix, Aldurazyme, Nexviazyme / Nexviadyme, Jevtana, Sarclisa, Cablivi, Enjaymo'. Last Lemtrada row: Q4 2022, 17.",
+  "search_log": [
+    "Listed every filing for CIK 1121404 (Sanofi) from data.sec.gov/submissions including the older 'files' pages. Candidate results filings: every 6-K/6-K/A from 2009 on, filed 20 Jan-28 Feb, 15 Apr-12 May, 15 Jul-12 Aug or 15 Oct-12 Nov, with total filing size >= 250 KB; each candidate's index.json was read and every exhibit between 20 KB and 4 MB was fetched and searched for Multaq, Jevtana, Lemtrada, Soliqua, Zaltrap, Rezurock and Xenpozyme (XBRL R pages, the 20-F-style half-year XBRL documents and the 6-K cover pages excluded from selection).",
+    "Each candidate exhibit's quarter was read from the header of the net-sales tables that print the products (e.g. 'Q3 2010 net sales', 'Q2 2024 (\u20ac million)'); per quarter the exhibit with most product rows is the quarterly results press release. Header detection failed for 2009Q3/2009Q4 (header 'Millions of euros / 2009 Q3 net sales') and mislabelled the 2012Q2 release (its table header misprints 'Q2 2011 net sales'; the figures are the 2012 quarter, the year 2012 is in the release); those were set by hand, and for 2021Q1 and 2025Q3 Sanofi's own 6-K press release (pressreleaseq12021english.htm, pressreleaseq32025english.htm) was preferred over a later 6-K re-filing of the same release.",
+    "Row selection: the first table in the release that prints the product (the franchise summary 'Net sales (\u20ac million) / Qn YYYY / Change at CER', or from 2023/2024 the 'Qn YYYY (\u20ac million) / Total Sales / % CER / ... United States / Europe / Rest of World' table whose first column is the worldwide total). In 2016-2019 the appendix splits sales into 'Total GBUs' (excluding Emerging Markets) and 'Total Franchises' (worldwide); where a product prints only in that appendix (Multaq 2016Q1-2018Q2), the Total Franchises column is recorded. Units as declared beside each table: '\u20ac million' / 'millions of euros'.",
+    "Row label 'Lemtrada TM' / 'Lemtrada \u2122' (2013Q4-2014Q3, 2015Q2), 'Lemtrada \u00ae' otherwise. 2013: Q4 2 equals the 2013 figure, so Q4 2013 is the first quarter with sales.",
+    "Sum checks: 2014: 5+6+7+16=34 vs full-year 34 OK; 2015: 38+56+68+81=243 vs full-year 243 OK; 2016: 88+108+112+117=425 vs full-year 425 OK; 2017: 125+124+113+112=474 vs full-year 474 OK; 2018: 105+102+99+96=402 vs full-year 402 OK; 2019: 92+74+57+58=281 vs full-year 281 OK; 2020: 49+19+24+21=113 vs full-year 113 OK; 2021: 24+19+20+19=82 vs full-year 82 OK; 2022: 25+20+18+17=80 vs full-year 80 OK"
+  ]
+}

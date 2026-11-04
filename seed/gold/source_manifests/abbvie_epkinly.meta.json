@@ -1,0 +1,33 @@
+{
+  "drug_name": "Epkinly",
+  "generic_name": "epcoritamab-bysp",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_epkinly_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Relapsed or refractory diffuse large B-cell lymphoma; relapsed or refractory follicular lymphoma",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide as booked by AbbVie: Total of AbbVie's 'Epkinly' line, footnoted 'Epkinly U.S. revenues reflect profit sharing. International revenues reflect product revenues as well as profit sharing from certain international territories.' Genmab (co-developer) books U.S. and Japan product sales; this series is AbbVie's own reported revenue line, not end-market sales.",
+  "formulation": "solution for subcutaneous injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "CD20 x CD3 bispecific T-cell engaging antibody",
+  "moa_class": "cd20_cd3_bispecific_antibody",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761324",
+    "quote": "Biologic License Application (BLA) : 761324 Company: GENMAB US, INC. ... EPKINLY EPCORITAMAB-BYSP ... INJECTABLE;SUBCUTANEOUS ... 05/19/2023 ORIG-1 Approval"
+  },
+  "commercial_start_quarter": "2023Q3",
+  "launch_quarter": "2023Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115223000033/abbv-20230630.htm",
+    "quote": "In May 2023, AbbVie announced that the FDA approved Epkinly (epcoritamab) as the first and only bispecific antibody to treat adult patients with relapsed or refractory (R/R) DLBCL."
+  },
+  "series_start_reason": "Series starts 2023Q3, one quarter after the May 2023 U.S. approval: AbbVie's first Epkinly line is in the third-quarter 2023 release; the second-quarter 2024 release shows the 2023Q2 comparison only as a percentage.",
+  "search_log": [
+    "Listed every AbbVie (CIK 1551152) filing via data.sec.gov/submissions (all forms); earnings releases are the 8-K filings with item 2.02 from 2013 (exhibit 99.1 'abbv-YYYYMMDDxexhibit991'), each exhibit resolved from index.json; plus every 10-Q and 10-K from 2013. AbbVie's Forms 10-Q and 10-K print none of Duopa/Duodopa, Epkinly, Orilissa or Qulipta on a revenue line; the releases do.",
+    "Every table row whose first cell starts with Duopa, Duodopa, Epkinly, Orilissa or Qulipta followed by a figure was extracted (scan.py). The quarter is the first table of the release (three months); value_reported is its Total column (U.S. + Int'l.), printed by AbbVie.",
+    "AbbVie prints its own 'Epkinly' net revenue line (U.S., Int'l., Total) from the third-quarter 2023 release; the footnote letter after the name varies (c or d).",
+    "Epkinly rows: releases 2023Q3-2026Q2.",
+    "Four-quarter sums: 2024 = 146, 2025 = 271 (and 2023Q3 + Q4 = 31), each equal to the full-year Total in that year's fourth-quarter release."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "drug_name": "Oxlumo",
+  "generic_name": "lumasiran",
+  "manufacturer": "Alnylam Pharmaceuticals",
+  "benchmark_identity": "alnylam_oxlumo_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Nephrology",
+  "indication_area": "Rare disease (primary hyperoxaluria type 1)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (global net product revenues as printed by Alnylam)",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Hydroxyacid oxidase 1 (HAO1, glycolate oxidase)-directed small interfering RNA (GalNAc conjugate)",
+  "moa_class": "hao1_sirna",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=214103",
+    "quote": "NDA 214103, Company: ALNYLAM PHARMS INC, OXLUMO LUMASIRAN ... 11/23/2020 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan"
+  },
+  "commercial_start_quarter": "2020Q4",
+  "launch_quarter": "2020Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1178670/000115752321000536/a52420138ex991.htm",
+    "quote": "Achieved global net product revenues for the first quarter of 2021 of $9 million, representing strong initial demand in the first full quarter of the OXLUMO launch."
+  },
+  "search_log": [
+    "Listed every Alnylam (CIK 0001178670) filing via data.sec.gov/submissions (recent + older pages). Earnings releases were taken from every 8-K/8-K/A whose items include 2.02, 9.01 or 7.01 filed 2018-07 to 2026-11 (2024-2025 releases carry only Item 9.01, so an Item 2.02-only filter would have missed them); each filing's index.json was read and every non-primary .htm exhibit fetched.",
+    "Each release's HTML table rows were parsed; the product row was taken from the net product revenues table (first table whose first cell is the product name), current three-month column first. The quarter is the one the release reports (filed in the month after quarter end).",
+    "2025Q1: the 8-K release filed 2025-05-01 prints only 'Total TTR' and 'Total Rare' net product revenues, so the quarter is read from the Form 10-Q for the quarter ended March 31, 2025 (product heading followed by regional lines and a 'Total' line).",
+    "Units: every table used is headed '(In thousands ...)' and was checked programmatically; values converted to USD millions.",
+    "Full-year checks (quarters sum to the printed full year): 2021: 9.145 + 16.342 + 14.894 + 19.205 = 59.586 vs 59.586 (full-year column of the Q4 quote); 2022: 14.586 + 14.937 + 16.429 + 23.83 = 69.782 vs 69.782 (full-year column of the Q4 quote); 2023: 24.161 + 24.212 + 28.736 + 32.73 = 109.839 vs 109.839 (full-year column of the Q4 quote); 2024: 42.649 + 40.608 + 40.22 + 43.573 = 167.050 vs 167.05 (full-year column of the Q4 quote); 2025: 42.089 + 46.872 + 52.83 + 49.646 = 191.437 vs 191.437 (twelve-months table of the 2025Q4 release filed 2026-02-12)"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "drug_name": "Bystolic",
+  "generic_name": "nebivolol",
+  "manufacturer": "Allergan plc",
+  "benchmark_identity": "allergan_bystolic_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Cardiovascular (hypertension)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Forest Laboratories total Bystolic sales; U.S. and Canadian rights)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Beta-1 selective adrenergic receptor blocker with nitric-oxide-mediated vasodilation",
+  "moa_class": "beta_blocker",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021742",
+    "quote": "12/17/2007 ORIG-1 Approval (NDA 021742, BYSTOLIC NEBIVOLOL HYDROCHLORIDE)"
+  },
+  "launch_quarter": "2008Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/38074/000003807408000003/forest10qdec07.htm",
+    "quote": "Our salesforce launched the product on January 28, 2008."
+  },
+  "search_log": [
+    "Listed every filing for CIK 38074 (Forest Laboratories), CIK 1578845 (Actavis plc / Allergan plc) and CIK 1551152 (AbbVie) via data.sec.gov/submissions; fetched every Forest 10-Q/10-K and 8-K item 2.02 exhibit filed 2008-01 to 2014-07, every Actavis/Allergan 8-K item 2.02 exhibit filed 2014-10 to 2020-06 plus the 2020Q1 10-Q, and every AbbVie 8-K item 2.02 exhibit filed 2020-07 to 2026-09.",
+    "Forest prints Bystolic only in prose until its fiscal-2014 10-Qs: 2008Q2-2008Q4 are read from the fiscal-2009 10-Q MD&A (USD thousands; the releases of that year print whole dollars), 2009Q1-2014Q1 from the earnings-release sentence 'Sales of Bystolic ... were $X million' / 'Bystolic ... recorded sales of $X million' (USD millions). Forest's fiscal quarters end on calendar quarter ends (fiscal year ends March 31).",
+    "Forest fiscal-year checks (April-March) against Forest's own annual figures: FY2009 4.374 + 14.163 + 20.961 + 29.7 = 69.198 vs 69.2 (2009-04-21 release); FY2010 37.7 + 40.7 + 47.5 + 53.1 = 179.0 vs 178.9 (FY2010 10-K); FY2011 59.5 + 63.7 + 68.1 + 73.1 = 264.4 vs 264 (FY2011 10-K); FY2012 78.0 + 82.3 + 90.6 + 96.9 = 347.8 vs 347.8 (FY2012 10-K); FY2013 107.8 + 106.5 + 108.8 + 132.0 = 455.1 vs 455.092 (FY2013 10-K table); FY2014 126.0 + 130.0 + 130.7 + 142.9 = 529.6 vs 529.604 (FY2014 10-K table). The fiscal-2014 10-Q tables (125,984; 130,015; 130,741 thousand) agree with the release figures to rounding.",
+    "Full-year check: none available.",
+    "Prior-year check: the prior-year comparative column of 0 quarterly quotes equals the figure recorded for that earlier quarter from its own filing.",
+    "[joined piece] Listed every filing for CIK 38074 (Forest Laboratories), CIK 1578845 (Actavis plc / Allergan plc) and CIK 1551152 (AbbVie) via data.sec.gov/submissions; fetched every Forest 10-Q/10-K and 8-K item 2.02 exhibit filed 2008-01 to 2014-07, every Actavis/Allergan 8-K item 2.02 exhibit filed 2014-10 to 2020-06 plus the 2020Q1 10-Q, and every AbbVie 8-K item 2.02 exhibit filed 2020-07 to 2026-09.",
+    "[joined piece] The 2016 four-quarter sum (639.3) is 1.2 below the twelve-month 'Bystolic /Byvalson' figure of the 2016Q4 release (640.5): 2016Q1-Q3 were printed as 'Bystolic' before the line was redefined to include Byvalson in the 2016Q4 release, whose prior-period comparatives are restated on the new basis; the as-printed current-quarter figures are kept.",
+    "[joined piece] Actavis/Allergan rows read from the 'Bystolic' ('Bystolic /Byvalson' from 2016Q4) row of the product net revenues table in each quarterly release; where the table prints segment columns the Global/Total column is used (its value equals the sum of the printed segment columns, checked per row). The Allergan 8-K of 2016-10-06 (a recast schedule) and the duplicate exhibits filed on 2019-08-06 and 2019-11-05 alongside the earnings releases were set aside in favour of the earnings release exhibit.",
+    "[joined piece] Full-year check: 2015: 164.1 + 157.1 + 155.7 + 169.2 = 646.100 vs 646.1 (twelve-month row of the Q4 release v432339_ex99-1.htm); 2016: 164 + 150.7 + 164.4 + 160.2 = 639.300 vs 640.5 (twelve-month row of the Q4 release v458602_ex99-1.htm); 2017: 140.3 + 151.2 + 164.7 + 158.1 = 614.300 vs 614.4 (twelve-month row of the Q4 release tv484870_ex99-1.htm); 2018: 133.3 + 148.7 + 151.7 + 152.1 = 585.800 vs 585.8 (twelve-month row of the Q4 release tv511761_ex99-1.htm); 2019: 128.7 + 151 + 152.8 + 170.2 = 602.700 vs 602.7 (twelve-month row of the Q4 release d72547ex991.htm).",
+    "[joined piece] Prior-year check: the prior-year comparative column of 16 quarterly quotes equals the figure recorded for that earlier quarter from its own filing; differences (printed rounding or restated comparatives; the current-period figure is kept): 2017Q3 prior-year column 165.6 vs 2016Q3 164.4; 2018Q1 prior-year column 140.4 vs 2017Q1 140.3."
+  ],
+  "commercial_start_quarter": "2008Q2",
+  "series_end_quarter": "2020Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Allergan plc's last periodic report is the Form 10-Q for the quarter ended March 31, 2020 (filed 2020-05-07); AbbVie completed the acquisition on May 8, 2020 and Allergan filed Form 15-12B on 2020-05-21 (https://www.sec.gov/Archives/edgar/data/1578845/000119312520148719/d896295d1512b.htm). None of AbbVie's 46 earnings-release exhibits (8-K item 2.02) filed 2020-07 to 2026-09 prints a Bystolic row, so no issuer prints the product's own line after 2020Q1.",
+  "unreported_quarters": {
+    "2014Q2": "Ownership change Forest Laboratories to Actavis plc; no full-quarter figure is published. Actavis completed the acquisition of Forest on July 1, 2014; Forest filed no report for its fiscal quarter ended June 30, 2014 (its last periodic report is the fiscal-2014 Form 10-K/A of 2014-06-30, and it filed Form 15-12B on 2014-07-15, https://www.sec.gov/Archives/edgar/data/38074/000119312514268315/d759326d1512b.htm). Actavis's 2014Q2 release (8-K filed 2014-08-05) predates the acquisition and its 8-Ks of 2014-08-05 and 2014-09-30 print no Bystolic sales. The Forest-issued series therefore ends at 2014Q1 (fiscal 2014 fourth quarter, January-March 2014); Actavis plc / Allergan plc's own Bystolic line from 2014Q3 is staged separately as allergan_bystolic, and the two join across the unreported 2014Q2. | Continuation of forest_bystolic (Forest Laboratories, 2008Q2-2014Q1) after the change of ownership. Ownership change Forest Laboratories to Actavis plc; no full-quarter figure is published. Actavis completed the acquisition of Forest on July 1, 2014; Forest filed no report for its fiscal quarter ended June 30, 2014 (its last periodic report is the fiscal-2014 Form 10-K/A of 2014-06-30, and it filed Form 15-12B on 2014-07-15, https://www.sec.gov/Archives/edgar/data/38074/000119312514268315/d759326d1512b.htm). Actavis's 2014Q2 release (8-K filed 2014-08-05) predates the acquisition and its 8-Ks of 2014-08-05 and 2014-09-30 print no Bystolic sales. The Actavis/Allergan series therefore starts at 2014Q3, the first full quarter after the July 1, 2014 close; the launch-to-2014Q1 history is the Forest piece."
+  },
+  "series_start_reason": "Bystolic was launched on January 28, 2008, in Forest's fiscal fourth quarter (January-March 2008). Forest printed no Bystolic figure for that quarter: the April 2008 release mentions only launch expenses, and fiscal 2009 Bystolic sales of $69.2 million (2009-04-21 release) equal the four fiscal-2009 quarters (4.374 + 14.163 + 20.961 + 29.7), so the first printed quarter is 2008Q2 (April-June 2008), one quarter after launch.",
+  "joined_issuers": [
+    {
+      "issuer": "Forest Laboratories",
+      "first_quarter": "2008Q2",
+      "last_quarter": "2014Q1"
+    },
+    {
+      "issuer": "Allergan plc",
+      "first_quarter": "2014Q3",
+      "last_quarter": "2020Q1"
+    }
+  ]
+}

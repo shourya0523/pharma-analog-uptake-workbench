@@ -1,0 +1,50 @@
+{
+  "drug_name": "Epidiolex",
+  "generic_name": "cannabidiol",
+  "manufacturer": "Jazz Pharmaceuticals",
+  "therapeutic_area": "Neurology",
+  "indication_area": "Epilepsy (seizures of Lennox-Gastaut syndrome, Dravet syndrome, tuberous sclerosis complex)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. Epidiolex plus ex-U.S. Epidyolex as totalled by the issuer)",
+  "formulation": "oral solution",
+  "route_of_administration": "oral",
+  "moa": "Cannabinoid (plant-derived cannabidiol); mechanism of anticonvulsant effect not fully characterized",
+  "moa_class": "cannabidiol",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=210365",
+    "quote": "NDA 210365, Company: JAZZ PHARMS RES, EPIDIOLEX CANNABIDIOL ... 06/25/2018 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan"
+  },
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1351288/000156459019005037/gwph-10kt_20181231.htm",
+    "quote": "We launched Epidiolex on November 1, 2018 in the U.S. market"
+  },
+  "unreported_quarters": {
+    "2021Q2": "Ownership change GW Pharmaceuticals to Jazz Pharmaceuticals; no full-quarter figure is published. Jazz completed the GW acquisition on May 5, 2021; GW filed its last periodic report (10-Q for the quarter ended March 31, 2021) on 2021-05-03 and a Form 15 on 2021-05-17. Jazz's 2021Q2 release prints Epidiolex/Epidyolex of 109,481 thousand covering only May 5-June 30 ('This includes sales from May 5, 2021, the closing date of the GW Acquisition'), and its pro forma full-quarter figure is unaudited pro forma, not reported net sales, so 2021Q2 is excluded."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "GW Pharmaceuticals",
+      "first_quarter": "2018Q4",
+      "last_quarter": "2021Q1"
+    },
+    {
+      "issuer": "Jazz Pharmaceuticals",
+      "first_quarter": "2021Q3",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "search_log": [
+    "[GW piece] Listed every GW Pharmaceuticals (CIK 0001351288) filing via data.sec.gov/submissions: 123 6-K, 5 20-F, 2 20-F/A, 33 8-K, 7 10-Q, 3 10-K, 1 10-K/A, 1 10-KT (all forms counted). Fetched every 6-K/8-K/10-Q/10-K/10-KT/20-F document filed 2018-07 to 2021-06 (8-K exhibits via each filing's index.json).",
+    "[GW piece] GW changed its fiscal year end from September 30 to December 31 in 2018 (10-KT for October 1 - December 31, 2018) and filed 8-K/10-Q/10-K from then on. Its tables print only total 'Product net sales' (Epidiolex plus Sativex); the Epidiolex figure is printed in prose (10-Q/10-K MD&A 'consists of $X million in net sales of Epidiolex and $Y million in net sales of Sativex', and release highlights 'Total net product sales of Epidiolex of $X million'), which is what each row quotes.",
+    "[GW piece] 2019Q1-2019Q3: GW's own filings for those quarters print U.S. Epidiolex and ex-U.S. Epidyolex/early-access sales separately (e.g. Q3 2019 10-Q: '$86.1 million in net sales of Epidiolex in the United States, $1.9 million of Epidyolex sales outside of the United States'), never their total; the worldwide total is printed first as the prior-year comparative in the 2020 10-Qs, which the rows use (derivation direct_prior_year_column) rather than summing regions.",
+    "[GW piece] 2018Q3 and earlier: Epidiolex was launched in the U.S. on November 1, 2018 (10-KT), so 2018Q4 is the first quarter of sales.",
+    "[Jazz piece] Listed every Jazz Pharmaceuticals (CIK 0001232524) filing via data.sec.gov/submissions (recent + older pages); took every 8-K/8-K/A filed 2020-07 to 2026-11 whose items include 2.02, 9.01 or 7.01 and fetched every non-primary .htm exhibit from each filing's index.json.",
+    "[Jazz piece] The product row was read from the first table of each quarterly release whose first cell starts with the brand (the 'Total revenues' table listing product sales, net by product); the current three-month column is the first figure. Unit is read from the table's own '(In thousands)' / '(In millions)' header: thousands through the 2025Q4 release, millions from the 2026Q1 release.",
+    "[Jazz piece] Jazz line is 'Epidiolex/Epidyolex' (worldwide). Jazz consolidated GW from May 5, 2021, so 2021Q2 is a stub and excluded; the series resumes with the first full Jazz quarter 2021Q3.",
+    "Full-year checks: 2019: 34.7 + 69.2 + 88 + 104.5 = 296.400 vs 296.4 (GW Q4 2019 release: '$296.4 million for the full year'); 2020: 116.1 + 117.7 + 132.6 + 144.1 = 510.500 vs 510.5 (GW Q4 2020 release: '$510.5 million for the year ended December 31, 2020'); 2022: 157.893 + 175.289 + 196.218 + 206.998 = 736.398 vs 736.398 (full-year column of the Q4 quote); 2023: 188.909 + 202.226 + 213.711 + 240.622 = 845.468 vs 845.468 (full-year column of the Q4 quote); 2024: 198.716 + 247.102 + 251.558 + 275.047 = 972.423 vs 972.423 (full-year column of the Q4 quote); 2025: 217.737 + 251.73 + 302.608 + 287.122 = 1059.197 vs 1059.2 (full-year column of the Q4 quote)"
+  ],
+  "benchmark_identity": "jazz_epidiolex_worldwide_reported",
+  "commercial_start_quarter": "2018Q4"
+}

@@ -1,0 +1,31 @@
+{
+  "drug_name": "Palynziq",
+  "generic_name": "pegvaliase-pqpz",
+  "manufacturer": "BioMarin Pharmaceutical",
+  "therapeutic_area": "Rare Disease / Metabolic",
+  "indication_area": "Rare disease (phenylketonuria in adults)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (BioMarin net product revenue)",
+  "formulation": "injection (prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "PEGylated recombinant phenylalanine ammonia lyase (enzyme substitution therapy)",
+  "moa_class": "phenylalanine_ammonia_lyase",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761079",
+    "quote": "BLA 761079, Company: BIOMARIN PHARM, PALYNZIQ PEGVALIASE-PQPZ ... 05/24/2018 ORIG-1 Approval N/A; Orphan"
+  },
+  "launch_quarter": "2018Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1048477/000156459018025123/bmrn-ex991_6.htm",
+    "quote": "Palynziq: received approval from the Food and Drug Administration (FDA) in May 2018, with commercial sales launching in the third quarter of 2018."
+  },
+  "search_log": [
+    "Listed every BioMarin (CIK 0001048477) filing via data.sec.gov/submissions (recent + older pages): 352 8-K, 18 8-K/A, 83 10-Q, 27 10-K (all forms counted). Took every 8-K/8-K/A filed 2005-01 to 2026-11 whose items include 2.02, 9.01, 7.01 or 12 (or carry no item codes) and fetched every non-primary .htm exhibit via each filing's index.json; 10-Q/10-K primary documents fetched where a check needed them.",
+    "Each quarter is read from that quarter's own earnings release (filed in the month after quarter end), from the first table whose first cell starts with the brand; when two 8-Ks of one quarter carried the row, the earlier-filed release was used. Unit read from the table header or the nearest preceding unit statement: thousands in the releases filed 2006-02 and 2006-05, millions otherwise.",
+    "2018Q2 (approval May 24, 2018): the Q2 2018 release prints no Palynziq revenue row and the Q3 2018 release prints nine-month Palynziq revenue equal to the quarter (4.1), so the series starts 2018Q3.",
+    "Full-year checks: 2019: 12.3 + 18.8 + 24.1 + 31.7 = 86.900 vs 86.9 (full-year column of the Q4 quote); 2020: 34.6 + 40.7 + 46.1 + 49.6 = 171.000 vs 171 (full-year column of the Q4 quote); 2021: 54 + 59 + 60.7 + 63.8 = 237.500 vs 237.5 (full-year column of the Q4 quote); 2022: 54.9 + 61.6 + 66.2 + 72.3 = 255.000 vs 255 (full-year column of the Q4 quote); 2023: 62.4 + 74.9 + 78.9 + 87.8 = 304.000 vs 303.9 (full-year column of the Q4 quote); 2024: 75.7 + 88.3 + 91 + 100 = 355.000 vs 355 (full-year column of the Q4 quote); 2025: 93 + 106 + 109 + 125 = 433.000 vs 433 (full-year column of the Q4 quote)"
+  ],
+  "benchmark_identity": "biomarin_palynziq_worldwide_reported",
+  "commercial_start_quarter": "2018Q3"
+}

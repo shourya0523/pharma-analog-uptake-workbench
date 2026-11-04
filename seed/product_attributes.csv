@@ -542,3 +542,83 @@ Kalydeco,CFTR potentiator,cftr_potentiator,Oral,2012,Cystic fibrosis (CFTR gatin
 Orkambi,CFTR corrector (lumacaftor) plus potentiator (ivacaftor),cftr_corrector_potentiator_combination,Oral,2015,Cystic fibrosis (F508del homozygous),curated_reference,distinct_product
 Symdeko,CFTR corrector (tezacaftor) plus potentiator (ivacaftor),cftr_corrector_potentiator_combination,Oral,2018,Cystic fibrosis (F508del homozygous or tezacaftor/ivacaftor-responsive mutation),curated_reference,distinct_product
 Trikafta,"CFTR correctors (elexacaftor, tezacaftor) plus potentiator (ivacaftor)",cftr_corrector_potentiator_combination,Oral,2019,Cystic fibrosis (at least one F508del or responsive mutation),curated_reference,distinct_product
+Camzyos,Cardiac myosin inhibitor,cardiac_myosin_inhibitor,Oral,2022,Cardiology (obstructive hypertrophic cardiomyopathy),curated_reference,distinct_product
+Empliciti,SLAMF7-directed immunostimulatory monoclonal antibody,slamf7_antibody,Intravenous,2015,Oncology (multiple myeloma),curated_reference,distinct_product
+Inrebic,Janus kinase 2 (JAK2) inhibitor,jak_inhibitor,Oral,2019,Oncology (myelofibrosis),curated_reference,distinct_product
+Opdualag,PD-1 and LAG-3 blocking antibody fixed-dose combination,pd1_lag3_antibody_combination,Intravenous,2022,Oncology (melanoma),curated_reference,distinct_product
+Chantix,Alpha4beta2 nicotinic acetylcholine receptor partial agonist,nicotinic_receptor_partial_agonist,Oral,2006,Smoking cessation (nicotine dependence),curated_reference,distinct_product
+Elrexfio,BCMA x CD3 bispecific T-cell engaging antibody,bcma_cd3_bispecific_antibody,Subcutaneous,2023,Oncology (multiple myeloma),curated_reference,distinct_product
+Inlyta,VEGFR-1/2/3 tyrosine kinase inhibitor,tyrosine_kinase_inhibitor,Oral,2012,Oncology (advanced renal cell carcinoma),curated_reference,distinct_product
+Paxlovid,SARS-CoV-2 main protease (3CL protease) inhibitor boosted with ritonavir,sars_cov_2_protease_inhibitor,Oral,2023,Infectious disease (COVID-19 treatment),curated_reference,distinct_product
+Prevnar 13,13-valent pneumococcal polysaccharide-CRM197 conjugate vaccine,pneumococcal_conjugate_vaccine,Intramuscular,2010,Infectious disease (pneumococcal vaccine),curated_reference,distinct_product
+Sutent,"Multi-targeted receptor tyrosine kinase inhibitor (VEGFR, PDGFR, KIT)",tyrosine_kinase_inhibitor,Oral,2006,Oncology (renal cell carcinoma / GIST),curated_reference,distinct_product
+Capvaxive,21-valent pneumococcal polysaccharide-CRM197 conjugate vaccine,pneumococcal_conjugate_vaccine,Intramuscular,2024,Pneumococcal disease prevention (adults),curated_reference,distinct_product
+Cubicin,cyclic lipopeptide antibacterial (calcium-dependent membrane depolarisation),cyclic_lipopeptide_antibacterial,Intravenous,2003,Complicated skin and skin-structure infections; S. aureus bacteraemia,curated_reference,distinct_product
+Emend,substance P / neurokinin-1 (NK1) receptor antagonist,nk1_receptor_antagonist,Oral,2003,Chemotherapy-induced nausea and vomiting (prevention),curated_reference,distinct_product
+Gardasil,"recombinant L1 virus-like particle vaccine against HPV types 6, 11, 16 and 18",hpv_vlp_vaccine,Intramuscular,2006,"HPV-related cervical, vulvar, vaginal, anal cancers and genital warts (prevention)",curated_reference,distinct_product
+Lagevrio,ribonucleoside analogue prodrug (NHC) that induces lethal mutagenesis of the SARS-CoV-2 RNA,nucleoside_analog_antiviral,Oral,2021,"COVID-19 (mild-to-moderate, high-risk adults)",curated_reference,distinct_product
+Noxafil,triazole antifungal; lanosterol 14-alpha-demethylase (CYP51) inhibitor,triazole_antifungal,Oral,2006,Invasive fungal infections (prophylaxis and treatment),curated_reference,distinct_product
+Prevymis,CMV DNA terminase complex (pUL56) inhibitor,cmv_terminase_inhibitor,Oral,2017,CMV prophylaxis in transplant recipients,curated_reference,distinct_product
+RotaTeq,"live human-bovine reassortant rotavirus vaccine (G1-G4, P1A)",live_attenuated_rotavirus_vaccine,Oral,2006,Rotavirus gastroenteritis prevention (infants),curated_reference,distinct_product
+Vytorin,cholesterol absorption inhibitor (NPC1L1) plus HMG-CoA reductase inhibitor,cholesterol_absorption_inhibitor_statin_combination,Oral,2004,Hypercholesterolaemia,curated_reference,distinct_product
+Welireg,hypoxia-inducible factor 2 alpha (HIF-2α) inhibitor,hif_2_alpha_inhibitor,Oral,2021,von Hippel-Lindau disease-associated tumours; advanced renal cell carcinoma,curated_reference,distinct_product
+Zostavax,live attenuated varicella-zoster virus (Oka/Merck) vaccine,live_attenuated_zoster_vaccine,Subcutaneous,2006,"Herpes zoster (shingles) prevention, adults 50+",curated_reference,distinct_product
+Epkinly,CD20 x CD3 bispecific T-cell engaging antibody,cd20_cd3_bispecific_antibody,Subcutaneous,2023,Relapsed or refractory diffuse large B-cell lymphoma; relapsed or refractory follicular lymphoma,curated_reference,distinct_product
+Orilissa,Oral non-peptide gonadotropin-releasing hormone (GnRH) receptor antagonist,gnrh_receptor_antagonist,Oral,2018,Moderate to severe pain associated with endometriosis,curated_reference,distinct_product
+Qulipta,Oral calcitonin gene-related peptide (CGRP) receptor antagonist (gepant),cgrp_receptor_antagonist,Oral,2021,"Preventive treatment of migraine (episodic, later chronic)",curated_reference,distinct_product
+Cayston,Monobactam antibacterial (inhibits bacterial cell-wall synthesis),monobactam_antibacterial,Inhaled,2009,Cystic fibrosis patients with Pseudomonas aeruginosa (improvement of respiratory symptoms),curated_reference,distinct_product
+Tecartus,CD19-directed genetically modified autologous CAR T-cell therapy,cd19_car_t,Intravenous,2020,Relapsed or refractory mantle cell lymphoma; relapsed or refractory B-cell precursor acute lymphoblastic leukemia,curated_reference,distinct_product
+Veklury,SARS-CoV-2 RNA-dependent RNA polymerase inhibitor (nucleotide analogue prodrug),viral_rna_polymerase_inhibitor,Intravenous,2020,COVID-19,curated_reference,distinct_product
+Zydelig,Phosphatidylinositol 3-kinase delta (PI3K-delta) inhibitor,pi3k_delta_inhibitor,Oral,2014,Relapsed chronic lymphocytic leukemia (with rituximab); relapsed follicular B-cell NHL and SLL,curated_reference,distinct_product
+Cymbalta,Serotonin and norepinephrine reuptake inhibitor,serotonin_norepinephrine_reuptake_inhibitor,Oral,2004,Major depressive disorder; diabetic peripheral neuropathic pain; generalized anxiety disorder; fibromyalgia; chronic musculoskeletal pain,curated_reference,distinct_product
+Effient,P2Y12 ADP receptor antagonist (thienopyridine antiplatelet),p2y12_antagonist,Oral,2009,Acute coronary syndrome managed with percutaneous coronary intervention (reduction of thrombotic cardiovascular events),curated_reference,distinct_product
+Portrazza,Anti-EGFR monoclonal antibody (IgG1),egfr_antibody,Intravenous,2015,"Metastatic squamous non-small cell lung cancer (first-line, with gemcitabine and cisplatin)",curated_reference,distinct_product
+Strattera,Selective norepinephrine reuptake inhibitor (non-stimulant),norepinephrine_reuptake_inhibitor,Oral,2002,Attention-deficit hyperactivity disorder (ADHD),curated_reference,distinct_product
+Kanuma,Enzyme replacement therapy (recombinant human lysosomal acid lipase),enzyme_replacement_therapy,Intravenous,2015,Rare disease (lysosomal acid lipase deficiency),curated_reference,distinct_product
+Strensiq,Enzyme replacement therapy (bone-targeted recombinant tissue-nonspecific alkaline phosphatase),enzyme_replacement_therapy,Subcutaneous,2015,Rare disease (hypophosphatasia),curated_reference,distinct_product
+Amvuttra,Transthyretin-directed small interfering RNA (GalNAc conjugate),ttr_silencer_sirna,Subcutaneous,2022,Rare disease (hereditary transthyretin-mediated amyloidosis polyneuropathy; ATTR cardiomyopathy),curated_reference,distinct_product
+Givlaari,Aminolevulinate synthase 1 (ALAS1)-directed small interfering RNA (GalNAc conjugate),alas1_sirna,Subcutaneous,2019,Rare disease (acute hepatic porphyria),curated_reference,distinct_product
+Onpattro,Transthyretin-directed small interfering RNA (lipid nanoparticle formulation),ttr_silencer_sirna,Intravenous,2018,Rare disease (polyneuropathy of hereditary transthyretin-mediated amyloidosis),curated_reference,distinct_product
+Oxlumo,"Hydroxyacid oxidase 1 (HAO1, glycolate oxidase)-directed small interfering RNA (GalNAc conjugate)",hao1_sirna,Subcutaneous,2020,Rare disease (primary hyperoxaluria type 1),curated_reference,distinct_product
+Brineura,Enzyme replacement therapy (recombinant human tripeptidyl peptidase 1),enzyme_replacement_therapy,Intraventricular,2017,"Rare disease (CLN2 disease, tripeptidyl peptidase 1 deficiency)",curated_reference,distinct_product
+Naglazyme,Enzyme replacement therapy (recombinant N-acetylgalactosamine 4-sulfatase),enzyme_replacement_therapy,Intravenous,2005,"Rare disease (mucopolysaccharidosis VI, Maroteaux-Lamy syndrome)",curated_reference,distinct_product
+Palynziq,PEGylated recombinant phenylalanine ammonia lyase (enzyme substitution therapy),phenylalanine_ammonia_lyase,Subcutaneous,2018,Rare disease (phenylketonuria in adults),curated_reference,distinct_product
+Ravicti,"Nitrogen-binding prodrug (phenylbutyrate, converted to phenylacetate which conjugates glutamine for urinary excretion)",nitrogen_scavenger,Oral,2013,Urea cycle disorders,curated_reference,distinct_product
+Tepezza,Insulin-like growth factor-1 receptor (IGF-1R) inhibitor monoclonal antibody,igf1r_inhibitor_antibody,Intravenous,2020,Thyroid eye disease,curated_reference,distinct_product
+Epidiolex,Cannabinoid (plant-derived cannabidiol); mechanism of anticonvulsant effect not fully characterized,cannabidiol,Oral,2018,"Epilepsy (seizures of Lennox-Gastaut syndrome, Dravet syndrome, tuberous sclerosis complex)",curated_reference,distinct_product
+Rylaze,Asparagine-depleting enzyme (recombinant Erwinia asparaginase),asparaginase,Intramuscular,2021,"Oncology (acute lymphoblastic leukemia / lymphoblastic lymphoma, asparaginase hypersensitivity)",curated_reference,distinct_product
+Xywav,GABA-B and GHB receptor agonist (lower-sodium mixed-salt oxybate),oxybate,Oral,2020,Sleep disorders (cataplexy or excessive daytime sleepiness in narcolepsy; idiopathic hypersomnia),curated_reference,distinct_product
+Bystolic,Beta-1 selective adrenergic receptor blocker with nitric-oxide-mediated vasodilation,beta_blocker,Oral,2007,Cardiovascular (hypertension),curated_reference,distinct_product
+Tevimbra,Anti-PD-1 monoclonal antibody,pd1_inhibitor,Intravenous,2019,"Oncology (solid and hematologic; esophageal squamous cell carcinoma, NSCLC, cHL)",curated_reference,distinct_product
+Skysona,Lentiviral vector gene therapy adding functional ABCD1 gene to autologous hematopoietic stem cells,lentiviral_gene_therapy,Intravenous,2022,"Early, active cerebral adrenoleukodystrophy (CALD)",curated_reference,distinct_product
+Exparel,Amide local anesthetic (sodium channel blocker) in multivesicular liposomes (DepoFoam) for extended release,local_anesthetic_sodium_channel_blocker,Infiltration,2011,Postsurgical analgesia (local/regional anesthesia),curated_reference,distinct_product
+Tivdak,Tissue factor-directed antibody-drug conjugate (MMAE payload),antibody_drug_conjugate,Intravenous,2021,Oncology (recurrent or metastatic cervical cancer),curated_reference,distinct_product
+Nerlynx,Irreversible pan-HER (EGFR/HER2/HER4) tyrosine kinase inhibitor,her2_tyrosine_kinase_inhibitor,Oral,2017,Oncology (HER2-positive breast cancer),curated_reference,distinct_product
+Imcivree,Melanocortin-4 receptor (MC4R) agonist,mc4r_agonist,Subcutaneous,2020,"Rare genetic obesity (POMC, PCSK1, LEPR deficiency; Bardet-Biedl syndrome)",curated_reference,distinct_product
+Qelbree,Selective norepinephrine reuptake inhibitor (non-stimulant),norepinephrine_reuptake_inhibitor,Oral,2021,Psychiatry (ADHD),curated_reference,distinct_product
+Filspari,Dual endothelin type A and angiotensin II type 1 receptor antagonist,dual_endothelin_angiotensin_receptor_antagonist,Oral,2023,Nephrology (IgA nephropathy),curated_reference,distinct_product
+Hetlioz,Melatonin MT1/MT2 receptor agonist,melatonin_receptor_agonist,Oral,2014,Sleep disorders (Non-24-hour sleep-wake disorder; Smith-Magenis syndrome),curated_reference,distinct_product
+Danyelza,Anti-GD2 monoclonal antibody,anti_gd2_monoclonal_antibody,Intravenous,2020,Oncology (relapsed/refractory high-risk neuroblastoma),curated_reference,distinct_product
+Koselugo,MEK1/2 inhibitor,mek_inhibitor,Oral,2020,Rare Disease (neurofibromatosis type 1 plexiform neurofibromas),curated_reference,distinct_product
+Lokelma,Non-absorbed potassium-binding agent (selective cation exchanger),potassium_binder,Oral,2018,Nephrology / Cardiorenal (hyperkalaemia),curated_reference,distinct_product
+Truqap,AKT (protein kinase B) inhibitor,akt_inhibitor,Oral,2023,Oncology (HR+/HER2- advanced breast cancer with PIK3CA/AKT1/PTEN alterations),curated_reference,distinct_product
+Arzerra,Anti-CD20 monoclonal antibody,anti_cd20_mab,Intravenous,2009,Oncology / Hematology (chronic lymphocytic leukaemia),curated_reference,distinct_product
+Tykerb,Dual HER2/EGFR tyrosine kinase inhibitor,her2_egfr_tyrosine_kinase_inhibitor,Oral,2007,Oncology (HER2-positive advanced or metastatic breast cancer),curated_reference,distinct_product
+Afinitor,mTOR (mammalian target of rapamycin) inhibitor,mtor_inhibitor,Oral,2009,"Oncology (advanced renal cell carcinoma, HR+ breast cancer, neuroendocrine tumours, TSC-associated tumours)",curated_reference,distinct_product
+Exjade,Oral iron chelator,iron_chelator,Oral,2005,Hematology (chronic transfusional iron overload),curated_reference,distinct_product
+Fabhalta,Complement factor B inhibitor (alternative pathway),complement_factor_b_inhibitor,Oral,2023,"Hematology / Nephrology (paroxysmal nocturnal hemoglobinuria, C3G, IgA nephropathy)",curated_reference,distinct_product
+Piqray,Phosphatidylinositol 3-kinase alpha (PI3Kα) inhibitor,pi3k_inhibitor,Oral,2019,Oncology (HR+/HER2- PIK3CA-mutated advanced breast cancer),curated_reference,distinct_product
+Votrient,Multi-targeted VEGFR/PDGFR/c-KIT tyrosine kinase inhibitor,vegfr_tyrosine_kinase_inhibitor,Oral,2009,"Oncology (advanced renal cell carcinoma, soft tissue sarcoma)",curated_reference,distinct_product
+Andexxa,Recombinant modified factor Xa decoy that binds factor Xa inhibitors,factor_xa_inhibitor_reversal_agent,Intravenous,2018,Hematology (reversal of factor Xa inhibitor anticoagulation in life-threatening bleeding),curated_reference,distinct_product
+Blenrep,Anti-BCMA antibody-drug conjugate (MMAF payload),anti_bcma_antibody_drug_conjugate,Intravenous,2020,Oncology (relapsed/refractory multiple myeloma),curated_reference,distinct_product
+Ojjaara,JAK1/JAK2 and ACVR1 (ALK2) inhibitor,jak_inhibitor,Oral,2023,Oncology (myelofibrosis with anaemia),curated_reference,distinct_product
+Edurant,HIV-1 non-nucleoside reverse transcriptase inhibitor,nnrti,Oral,2011,Infectious disease (HIV),curated_reference,distinct_product
+Intelence,HIV-1 non-nucleoside reverse transcriptase inhibitor,nnrti,Oral,2008,Infectious disease (HIV),curated_reference,distinct_product
+Olysio,HCV NS3/4A protease inhibitor,hcv_ns3_4a_protease_inhibitor,Oral,2013,Hepatology (chronic hepatitis C),curated_reference,distinct_product
+Jevtana,Microtubule inhibitor (taxane),taxane_microtubule_inhibitor,Intravenous,2010,Oncology (metastatic castration-resistant prostate cancer),curated_reference,distinct_product
+Lemtrada,Anti-CD52 monoclonal antibody,anti_cd52_monoclonal_antibody,Intravenous,2013,Neurology (relapsing multiple sclerosis),curated_reference,distinct_product
+Multaq,Multichannel blocking antiarrhythmic (benzofuran derivative),antiarrhythmic_multichannel_blocker,Oral,2009,Cardiology (atrial fibrillation),curated_reference,distinct_product
+Rezurock,ROCK2 (Rho-associated coiled-coil kinase 2) inhibitor,rock2_inhibitor,Oral,2021,Transplant (chronic graft-versus-host disease),curated_reference,distinct_product
+Soliqua,Basal insulin analogue plus GLP-1 receptor agonist (fixed-ratio combination),basal_insulin_glp1_ra_combination,Subcutaneous,2016,Diabetes (type 2),curated_reference,distinct_product
+Xenpozyme,Recombinant acid sphingomyelinase (enzyme replacement therapy),enzyme_replacement_therapy,Intravenous,2022,Rare disease (acid sphingomyelinase deficiency),curated_reference,distinct_product
+Zaltrap,"VEGF trap (recombinant fusion protein binding VEGF-A, VEGF-B and PlGF)",vegf_inhibitor,Intravenous,2012,Oncology (metastatic colorectal cancer),curated_reference,distinct_product

@@ -1,0 +1,36 @@
+{
+  "drug_name": "Olysio",
+  "generic_name": "simeprevir",
+  "manufacturer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_olysio_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Hepatology (chronic hepatitis C)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (J&J WW row: US + Intl; line OLYSIO/SOVRIAD)",
+  "formulation": "oral capsule",
+  "route_of_administration": "oral",
+  "moa": "HCV NS3/4A protease inhibitor",
+  "moa_class": "hcv_ns3_4a_protease_inhibitor",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=205123",
+    "quote": "11/22/2013 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY (NDA 205123, OLYSIO)"
+  },
+  "commercial_start_quarter": "2013Q4",
+  "launch_quarter": "2013Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/200406/000020040614000010/a4q20138kexhibit9915.htm",
+    "quote": "Food and Drug Administration (FDA) granted approval of OLYSIO \u2122 (simeprevir) for combination treatment of chronic hepatitis C."
+  },
+  "series_start_reason": "Series starts at the 2013Q4 launch quarter. The 2013Q4 release prints no OLYSIO line; its quarter (23) is read from the prior-year column of the 2014Q4 schedule.",
+  "series_end_quarter": "2016Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 2017Q1 Exhibit 99.2 (https://www.sec.gov/Archives/edgar/data/200406/000020040617000020/a8k2017q1exhibit992o.htm) prints the infectious-disease lines 'EDURANT / RILPIVIRINE', 'PREZISTA / PREZCOBIX / REZOLSTA', 'OTHER INFECTIOUS DISEASES' and no OLYSIO line (the word does not appear in any 2017Q1-2026Q3 exhibit); the last OLYSIO quarter is 2016Q4 (OLYSIO / SOVRIAD WW 10 vs 44).",
+  "search_log": [
+    "Listed every filing for CIK 200406 (Johnson & Johnson) from data.sec.gov/submissions including the older 'files' pages (all forms). Earnings 8-Ks: the quarter->Exhibit 99.2 map was taken for 2008Q1-2026Q3 from 8-Ks with item 2.02 (and, before item codes, 8-Ks whose exhibits print a product schedule with WW rows); 2010Q2, 2010Q4, 2011Q2 and 2011Q3 were added by reading those 8-Ks' index.json (exhibit992o.htm, exhibit99152o4thqtr2010.htm, ninetyninetwoo.htm, exhibit992o3rdqtr2011.htm). All 75 exhibits were fetched in this run and each was checked to print 'Dollars in Millions'.",
+    "Each exhibit was parsed table by table: a single-cell row is a product line, the US / Intl / WW rows beneath it are its regions; the WW row is recorded. The first occurrence of a product in an exhibit is the quarter table (the quarter table precedes the six/nine/twelve-month table; confirmed against each table's own QUARTER vs MONTHS header where the header is in the table). A quarter whose own release prints no line for the product is read from the prior-year (second) column of the release a year later (derivation direct_prior_year_column).",
+    "Also scanned every 10-K and 10-Q primary document filed from 2013-04 to 2026-10 for the brand names (none prints a sales figure for these brands).",
+    "Line label 'OLYSIO/SOVRIAD' (2014) and 'OLYSIO / SOVRIAD' (2015-2016).",
+    "Sum checks: 2014: 354+831+796+321=2302 vs twelve-month 2302 OK; 2015: 234+264+79+44=621 vs twelve-month 621 OK; 2016: 32+43+21+10=106 vs twelve-month 106 OK"
+  ]
+}

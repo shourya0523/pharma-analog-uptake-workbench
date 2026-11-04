@@ -1,0 +1,33 @@
+{
+  "drug_name": "Veklury",
+  "generic_name": "remdesivir",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_veklury_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "COVID-19",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Gilead's worldwide product sales line, or the unlabelled total beneath its U.S., Europe and Other International / Rest of World lines)",
+  "formulation": "lyophilized powder / solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "SARS-CoV-2 RNA-dependent RNA polymerase inhibitor (nucleotide analogue prodrug)",
+  "moa_class": "viral_rna_polymerase_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=214787",
+    "quote": "VEKLURY REMDESIVIR 100MG/VIAL POWDER;INTRAVENOUS ... 10/22/2020 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "commercial_start_quarter": "2020Q3",
+  "launch_quarter": "2020Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/882095/000088209520000023/exhibit991earningspres.htm",
+    "quote": "Veklury generated $873 million in sales primarily in the United States during the third quarter 2020."
+  },
+  "series_start_reason": "Series starts 2020Q3, the first quarter with sales (the 2020 twelve-month figure 2,811 equals 873 + 1,938, so there were no earlier sales).",
+  "search_log": [
+    "Listed every Gilead Sciences (CIK 882095) filing via data.sec.gov/submissions incl. the older 'files' pages (all forms); earnings releases are the 8-K/8-K/A filings with item 2.02 from 2009, each exhibit resolved from index.json; plus every 10-Q and 10-K from 2009.",
+    "Every table row whose first cell starts with Cayston, Tecartus, Veklury, Zydelig or Yeztugo followed by a figure was extracted from all of those documents (scan.py); for a product printed as regional lines ('<product> \u2013 U.S.', '\u2013 Europe', '\u2013 Other International' / 'Rest of World', or from 2026 '<product> | U.S.' then 'Europe', 'Rest of World'), the figure is the unlabelled worldwide total line beneath them, never a sum computed here.",
+    "Each quarter is read from the release that reports it as current (filed in the month after quarter end; Q4 in January/February).",
+    "Veklury rows: the 'Veklury' line of the release's summary table of product sales for 2020Q3-2025Q4 (for 2020Q3 it equals the regional lines U.S. 785, Europe 60, Other International 28); for 2026Q1-2026Q2 the release prints 'Veklury | U.S.' then 'Europe', 'Rest of World' and an unlabelled total, which is used.",
+    "Four-quarter sums 2021-2025: 5,565, 3,905, 2,185, 1,798, 912 against printed twelve-month figures 5,565, 3,905, 2,184, 1,799, 911 (rounding of whole-million quarters)."
+  ]
+}

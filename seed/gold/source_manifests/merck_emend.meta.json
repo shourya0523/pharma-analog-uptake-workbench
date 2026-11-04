@@ -1,0 +1,36 @@
+{
+  "drug_name": "Emend",
+  "generic_name": "aprepitant (and fosaprepitant dimeglumine, Emend for injection)",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_emend_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Chemotherapy-induced nausea and vomiting (prevention)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Global column: U.S. plus International)",
+  "formulation": "capsule; powder for injection",
+  "route_of_administration": "oral",
+  "moa": "substance P / neurokinin-1 (NK1) receptor antagonist",
+  "moa_class": "nk1_receptor_antagonist",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021549",
+    "quote": "03/26/2003 ORIG-1 Approval (NDA 021549, EMEND APREPITANT)"
+  },
+  "commercial_start_quarter": "2003Q2",
+  "launch_quarter": "2003Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/64978/000095012303008323/y88382exv99w1.txt",
+    "quote": "MERCK LAUNCHES EMEND FOR THE PREVENTION OF HIGHLY EMETOGENIC CHEMOTHERAPY-INDUCED NAUSEA AND VOMITING"
+  },
+  "series_start_reason": null,
+  "series_end_quarter": "2020Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck's Table 3a prints an Emend line through the fourth-quarter 2020 release (filed 2021-02-04); the first-quarter 2021 release (filed 2021-04-29) and later releases print no Emend line and do not mention the product (text of both exhibits searched).",
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "2003Q2-2009Q3 from the legacy Merck (CIK 64978) quarterly worldwide sales table, Global column (the 2003Q2 release, an items 7/9 8-K filed 2003-07-21, is the first to print EMEND); 2009Q4 supplemental combined; 2010Q1-2020Q4 Table 3a.",
+    "Quarters sum to the printed full year within rounding of 1 for 2004-2008 and 2010-2020 (e.g. 2005 86 vs 87; 2010 376 vs 378 is the largest gap); 2009 sums to 316 against the supplemental combined full year 313, the legacy 2009Q1-Q3 figures as first printed being kept."
+  ]
+}

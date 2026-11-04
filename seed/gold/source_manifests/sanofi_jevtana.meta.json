@@ -1,0 +1,32 @@
+{
+  "drug_name": "Jevtana",
+  "generic_name": "cabazitaxel",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_jevtana_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (metastatic castration-resistant prostate cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sanofi total net sales for the product)",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Microtubule inhibitor (taxane)",
+  "moa_class": "taxane_microtubule_inhibitor",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=201023",
+    "quote": "06/17/2010 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY (NDA 201023, JEVTANA)"
+  },
+  "commercial_start_quarter": "2010Q3",
+  "launch_quarter": "2010Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000119312510239176/dex993.htm",
+    "quote": "This new anti-cancer agent was approved on June 17 by the FDA following a priority review and launched in the U.S. on July 19 for patients with metastatic hormone-refractory prostate cancer previously treated with a docetaxel-based therapy."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1121404 (Sanofi) from data.sec.gov/submissions including the older 'files' pages. Candidate results filings: every 6-K/6-K/A from 2009 on, filed 20 Jan-28 Feb, 15 Apr-12 May, 15 Jul-12 Aug or 15 Oct-12 Nov, with total filing size >= 250 KB; each candidate's index.json was read and every exhibit between 20 KB and 4 MB was fetched and searched for Multaq, Jevtana, Lemtrada, Soliqua, Zaltrap, Rezurock and Xenpozyme (XBRL R pages, the 20-F-style half-year XBRL documents and the 6-K cover pages excluded from selection).",
+    "Each candidate exhibit's quarter was read from the header of the net-sales tables that print the products (e.g. 'Q3 2010 net sales', 'Q2 2024 (\u20ac million)'); per quarter the exhibit with most product rows is the quarterly results press release. Header detection failed for 2009Q3/2009Q4 (header 'Millions of euros / 2009 Q3 net sales') and mislabelled the 2012Q2 release (its table header misprints 'Q2 2011 net sales'; the figures are the 2012 quarter, the year 2012 is in the release); those were set by hand, and for 2021Q1 and 2025Q3 Sanofi's own 6-K press release (pressreleaseq12021english.htm, pressreleaseq32025english.htm) was preferred over a later 6-K re-filing of the same release.",
+    "Row selection: the first table in the release that prints the product (the franchise summary 'Net sales (\u20ac million) / Qn YYYY / Change at CER', or from 2023/2024 the 'Qn YYYY (\u20ac million) / Total Sales / % CER / ... United States / Europe / Rest of World' table whose first column is the worldwide total). In 2016-2019 the appendix splits sales into 'Total GBUs' (excluding Emerging Markets) and 'Total Franchises' (worldwide); where a product prints only in that appendix (Multaq 2016Q1-2018Q2), the Total Franchises column is recorded. Units as declared beside each table: '\u20ac million' / 'millions of euros'.",
+    "2010: 41+41=82, the 2010 figure in the Q4 2010 release (the Q3 2010 release prints 41 for both Q3 and 9 months).",
+    "Sum checks: 2011: 48+48+45+47=188 vs full-year 188 OK; 2012: 54+65+56+60=235 vs full-year 235 OK; 2013: 52+54+59+66=231 vs full-year 231 OK; 2014: 66+66+67+74=273 vs full-year 273 OK; 2015: 77+82+78+84=321 vs full-year 321 OK; 2016: 90+88+88+92=358 vs full-year 358 OK; 2017: 97+100+90+99=386 vs full-year 386 OK; 2018: 99+103+106+114=422 vs full-year 422 OK; 2019: 111+126+119+128=484 vs full-year 484 OK; 2020: 138+133+134+131=536 vs full-year 536 OK; 2021: 126+114+105+110=455 vs full-year 455 OK; 2022: 98+105+101+87=391 vs full-year 391 OK; 2023: 79+97+67+77=320 vs full-year 320 OK; 2024: 68+73+72+77=290 vs full-year 290 OK; 2025: 75+66+62+60=263 vs full-year 263 OK"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "drug_name": "Ojjaara",
+  "generic_name": "momelotinib",
+  "manufacturer": "GSK",
+  "benchmark_identity": "gsk_ojjaara_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (myelofibrosis with anaemia)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (GSK Total column: US + Europe + International)",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "JAK1/JAK2 and ACVR1 (ALK2) inhibitor",
+  "moa_class": "jak_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=216873",
+    "quote": "09/15/2023 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD; Orphan (NDA 216873, OJJAARA)"
+  },
+  "commercial_start_quarter": "2023Q3",
+  "launch_quarter": "2023Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000165495423013668/a9554r.htm",
+    "quote": "GSK launched Ojjaara late in the quarter, with approval received for use in myelofibrosis patients with anaemia regardless of prior myelofibrosis therapy."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1131399 (GSK plc) from data.sec.gov/submissions including the older 'files' pages. Results announcements selected as 6-Ks filed from 2020-07 with total size > 1 MB on the results dates (2020-07-29 ... 2026-10-28; from 2025 GSK furnishes > 1 MB buy-back 6-Ks daily, so results filings were picked by filing date and confirmed by content: each picked document prints the 'Total / US / Europe / International' turnover tables).",
+    "Product rows taken from the turnover-by-product tables whose header reads 'Total US Europe International' (columns \u00a3m, AER%, CER% per region; '\u00a3m' printed in the table's own header rows). Each table's caption ('Pharmaceuticals turnover \u2013 three months ended 30 September 2020', 'Specialty Medicines turnover \u2013 six months ended 30 June 2022', ...) decides quarter vs year-to-date; only 'three months ended' tables are used for quarters. A printed dash in the Total column is a nil (0). Quarters were summed against the six-month, nine-month and full-year tables of the same releases.",
+    "Momelotinib came to GSK with Sierra Oncology (acquired 2022) before any approval, so there are no pre-GSK sales. Row label 'Ojjaara' (2023Q3-2024Q1), 'Ojjaara/Omjjara' (EU brand) from 2024Q2.",
+    "Sum checks: 2023 9M: 0+0+4=4 vs printed 4 OK; 2023 FY: 0+0+4+29=33 vs printed 33 OK; 2024 H1: 52+85=137 vs printed 137 OK; 2024 9M: 52+85+98=235 vs printed 235 OK; 2024 FY: 52+85+98+118=353 vs printed 353 OK; 2025 H1: 112+138=250 vs printed 250 OK; 2025 9M: 112+138+146=396 vs printed 396 OK; 2025 FY: 112+138+146+158=554 vs printed 554 OK; 2026 H1: 144+187=331 vs printed 331 OK"
+  ]
+}

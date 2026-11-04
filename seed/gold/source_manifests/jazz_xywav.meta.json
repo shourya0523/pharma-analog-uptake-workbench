@@ -1,0 +1,31 @@
+{
+  "drug_name": "Xywav",
+  "generic_name": "calcium, magnesium, potassium, and sodium oxybates",
+  "manufacturer": "Jazz Pharmaceuticals",
+  "therapeutic_area": "Neurology / Sleep Medicine",
+  "indication_area": "Sleep disorders (cataplexy or excessive daytime sleepiness in narcolepsy; idiopathic hypersomnia)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (as printed by Jazz)",
+  "formulation": "oral solution",
+  "route_of_administration": "oral",
+  "moa": "GABA-B and GHB receptor agonist (lower-sodium mixed-salt oxybate)",
+  "moa_class": "oxybate",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=212690",
+    "quote": "NDA 212690, Company: JAZZ, XYWAV CALCIUM OXYBATE; MAGNESIUM OXYBATE; POTASSIUM OXYBATE; SODIUM OXYBATE ... 07/21/2020 ORIG-1 Approval Type 2 - New Active Ingredient PRIORITY; Orphan"
+  },
+  "launch_quarter": "2020Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1232524/000123252420000070/a3q20financialpr.htm",
+    "quote": "On November 2, 2020, the company commenced its U.S. launch of Xywav"
+  },
+  "search_log": [
+    "Listed every Jazz Pharmaceuticals (CIK 0001232524) filing via data.sec.gov/submissions (recent + older pages); took every 8-K/8-K/A filed 2020-07 to 2026-11 whose items include 2.02, 9.01 or 7.01 and fetched every non-primary .htm exhibit from each filing's index.json.",
+    "The product row was read from the first table of each quarterly release whose first cell starts with the brand (the 'Total revenues' table listing product sales, net by product); the current three-month column is the first figure. Unit is read from the table's own '(In thousands)' / '(In millions)' header: thousands through the 2025Q4 release, millions from the 2026Q1 release.",
+    "Each quarter's own release reports it as current; no prior-year columns used.",
+    "Full-year checks: 2021: 75.416 + 124.164 + 153.063 + 182.654 = 535.297 vs 535.297 (full-year column of the Q4 quote); 2022: 186.08 + 235.025 + 255.936 + 281.384 = 958.425 vs 958.425 (full-year column of the Q4 quote); 2023: 277.761 + 326.564 + 331.633 + 337.019 = 1272.977 vs 1272.98 (full-year column of the Q4 quote); 2024: 315.3 + 368.472 + 388.466 + 400.964 = 1473.202 vs 1473.2 (full-year column of the Q4 quote); 2025: 344.804 + 415.321 + 431.41 + 465.451 = 1656.986 vs 1656.99 (full-year column of the Q4 quote)"
+  ],
+  "benchmark_identity": "jazz_xywav_worldwide_reported",
+  "commercial_start_quarter": "2020Q4"
+}

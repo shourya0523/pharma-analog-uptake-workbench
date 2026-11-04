@@ -1,0 +1,35 @@
+{
+  "drug_name": "Tevimbra",
+  "generic_name": "tislelizumab-jsgr",
+  "manufacturer": "BeiGene",
+  "benchmark_identity": "beigene_tevimbra_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid and hematologic; esophageal squamous cell carcinoma, NSCLC, cHL)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (BeiGene tislelizumab net product revenue; China-led)",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-PD-1 monoclonal antibody",
+  "moa_class": "pd1_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761232",
+    "quote": "03/13/2024 ORIG-1 Approval (BLA 761232, TEVIMBRA TISLELIZUMAB-JSGR)"
+  },
+  "first_approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1651308/000165130820000056/beigene2020q110-q.htm",
+    "quote": "In December 2019, our anti-PD-1 antibody tislelizumab received approval from the NMPA as a treatment for patients with classical Hodgkin's Lymphoma (\"cHL\") who have received at least two prior therapies and we launched tislelizumab in China in March 2020."
+  },
+  "launch_quarter": "2020Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1651308/000165130820000056/beigene2020q110-q.htm",
+    "quote": "Product revenue for tislelizumab reflects sales since its launch in China in March 2020, including launch inventory build at distributors."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1651308 (BeiGene, now BeOne Medicines) via data.sec.gov/submissions; fetched every 10-Q/10-K filed 2020-04 to 2026-09.",
+    "First to third quarters from the 'Tislelizumab' / 'TEVIMBRA' row of the product revenue, net by product table in each Form 10-Q (thousands of U.S. dollars); fourth quarters derived as the Form 10-K full year less the 10-Q nine months. first_approval_year is the December 2019 NMPA (China) approval, which preceded the March 2024 FDA approval cited in approval_evidence; first_approval_evidence quotes BeiGene's own statement. The 2020Q1 10-Q prints the prior-year quarter as a dash, so 2020Q1 (the March 2020 launch quarter) is the first quarter of sales.",
+    "Full-year check: none available.",
+    "Prior-year check: the prior-year comparative column of 17 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2020Q1"
+}

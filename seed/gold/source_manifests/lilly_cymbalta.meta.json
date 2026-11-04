@@ -1,0 +1,39 @@
+{
+  "drug_name": "Cymbalta",
+  "generic_name": "duloxetine",
+  "manufacturer": "Eli Lilly",
+  "benchmark_identity": "lilly_cymbalta_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Major depressive disorder; diabetic peripheral neuropathic pain; generalized anxiety disorder; fibromyalgia; chronic musculoskeletal pain",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Lilly's worldwide product revenue line; in Forms 10-Q/10-K the Total column, U.S. plus outside U.S.)",
+  "formulation": "delayed-release capsule",
+  "route_of_administration": "oral",
+  "moa": "Serotonin and norepinephrine reuptake inhibitor",
+  "moa_class": "serotonin_norepinephrine_reuptake_inhibitor",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021427",
+    "quote": "CYMBALTA DULOXETINE HYDROCHLORIDE ... CAPSULE, DELAYED REL PELLETS;ORAL ... 08/03/2004 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "commercial_start_quarter": "2004Q3",
+  "launch_quarter": "2004Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/59478/000095013404016493/c89319e10vq.htm",
+    "quote": "Cymbalta was launched in the U.S. in late August 2004 for treatment of depression and in September 2004 for the treatment of diabetic peripheral neuropathic pain."
+  },
+  "series_start_reason": "Series starts 2004Q3, the launch quarter; 2004Q3 and 2004Q4 are the figures printed in the narrative of the releases that report them (the product table adds a Cymbalta row from 2005Q1).",
+  "series_end_quarter": "2022Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Lilly's sec.gov filings print a Cymbalta revenue line through the FY2022 Form 10-K (https://www.sec.gov/Archives/edgar/data/59478/000005947823000082/lly-20221231.htm: 'Cymbalta | 33.7 | 249.6 | 283.3 | 581.5'). The Form 10-Q for the quarter ended March 31, 2023 (https://www.sec.gov/Archives/edgar/data/59478/000005947823000162/lly-20230331.htm) lists under Neuroscience only 'Emgality \u00ae | 108.7 | 45.6 | 154.3' and 'Other neuroscience | 35.8 | 170.4 | 206.2', where the Form 10-Q for the quarter ended September 30, 2022 had printed 'Cymbalta \u00ae | 7.8 | 54.9 | 62.7'; no later 10-Q, 10-K or earnings release on sec.gov prints a Cymbalta revenue row (scan to 2026-10-29). Whether Lilly's website workbook continued the line could not be checked (investor.lilly.com: Access Denied).",
+  "search_log": [
+    "Listed every Eli Lilly (CIK 59478) filing via data.sec.gov/submissions incl. the older 'files' pages (all forms). Earnings releases: every 8-K/8-K/A with item 2.02 from 2001, plus the 2003-2004 releases filed under items 9/12 and the two 2016 releases filed under item 9.01 only (2016-01-28, 2016-04-26), each exhibit resolved from the filing's index.json; plus every 10-Q and 10-K from 2002.",
+    "Every HTML table row (and plain-text line for .txt exhibits) whose first cell starts with Baqsimi, Effient, Jaypirca, Portrazza, Reyvow, Strattera or Cymbalta followed by a figure was extracted from all of those documents (scan.py in the work directory); narrative sentences were searched separately where no table row exists.",
+    "Each quarter is read from the earnings release that reports it as current (first table row: current quarter, prior-year quarter, then year-to-date); where the release prints no line for the product (no Q1 2006 release was filed on EDGAR; the Q1 2018 release has no product table; releases from 2019 list only selected products), from the Form 10-Q for that quarter (Total column = U.S. + outside U.S.); a fourth quarter with neither is the Form 10-K full year less the third-quarter 10-Q nine-month Total.",
+    "Every row was checked offline with verify_staged_manifests.check_row before writing; where a Q4 quote carries a twelve-month figure, the verifier checks the four quarters against it.",
+    "Lilly's website Financial Workbooks (investor.lilly.com) could not be checked: the host answers 'Access Denied' to this environment, so whether a workbook continued the product after the last sec.gov quarter is not known.",
+    "Cymbalta rows: release narrative for 2004Q3-Q4; release tables 2005Q1-2017Q4 (Form 10-Q for 2006Q1), 2018Q2-Q4, 2020Q1; Forms 10-Q for 2018Q1, 2019Q1-Q3, 2020Q2-Q3, 2021Q1-Q3, 2022Q1-Q3; Q4 of 2019-2022 = Form 10-K full year less third-quarter 10-Q nine months.",
+    "2010Q3 is the release figure 825.3; the Form 10-Q for that quarter prints a Total of 806.1 and the 2011Q3 release's prior-year column repeats 825.3. The release figure is kept because the four 2010 quarters then sum to the printed full year 3,480.7.",
+    "Four-quarter sums: {'2005': 679.8, '2006': 1316.4, '2007': 2102.8, '2008': 2697.1, '2009': 3074.7, '2010': 3480.8, '2011': 4161.5, '2012': 4994.2, '2013': 5084.4, '2014': 1614.8, '2015': 1027.6, '2016': 930.5, '2017': 757.2, '2018': 708.0, '2019': 725.4, '2020': 767.7, '2021': 581.4, '2022': 283.3}; each matches the full year printed in the Q4 release or 10-K within 0.2."
+  ]
+}

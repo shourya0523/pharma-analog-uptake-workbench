@@ -1,0 +1,33 @@
+{
+  "drug_name": "Amvuttra",
+  "generic_name": "vutrisiran",
+  "manufacturer": "Alnylam Pharmaceuticals",
+  "benchmark_identity": "alnylam_amvuttra_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Neurology / Cardiology",
+  "indication_area": "Rare disease (hereditary transthyretin-mediated amyloidosis polyneuropathy; ATTR cardiomyopathy)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (global net product revenues as printed by Alnylam)",
+  "formulation": "injection (prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Transthyretin-directed small interfering RNA (GalNAc conjugate)",
+  "moa_class": "ttr_silencer_sirna",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=215515",
+    "quote": "NDA 215515, Company: ALNYLAM PHARMS INC, AMVUTTRA VUTRISIRAN ... 06/13/2022 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD; Orphan"
+  },
+  "commercial_start_quarter": "2022Q3",
+  "launch_quarter": "2022Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1178670/000115752322000945/a52793912ex99_1.htm",
+    "quote": "We're excited to have initiated the U.S. launch and look forward to potential additional global approvals and subsequent rollout"
+  },
+  "search_log": [
+    "Listed every Alnylam (CIK 0001178670) filing via data.sec.gov/submissions (recent + older pages). Earnings releases were taken from every 8-K/8-K/A whose items include 2.02, 9.01 or 7.01 filed 2018-07 to 2026-11 (2024-2025 releases carry only Item 9.01, so an Item 2.02-only filter would have missed them); each filing's index.json was read and every non-primary .htm exhibit fetched.",
+    "Each release's HTML table rows were parsed; the product row was taken from the net product revenues table (first table whose first cell is the product name), current three-month column first. The quarter is the one the release reports (filed in the month after quarter end).",
+    "2025Q1: the 8-K release filed 2025-05-01 prints only 'Total TTR' and 'Total Rare' net product revenues, so the quarter is read from the Form 10-Q for the quarter ended March 31, 2025 (product heading followed by regional lines and a 'Total' line).",
+    "Units: every table used is headed '(In thousands ...)' and was checked programmatically; values converted to USD millions.",
+    "Full-year checks (quarters sum to the printed full year): 2023: 101.768 + 132.136 + 148.68 + 175.254 = 557.838 vs 557.838 (full-year column of the Q4 quote); 2024: 195.241 + 230.109 + 258.59 + 286.51 = 970.450 vs 970.45 (full-year column of the Q4 quote); 2025: 309.992 + 491.953 + 685.303 + 826.588 = 2313.836 vs 2313.84 (twelve-months table of the 2025Q4 release filed 2026-02-12)",
+    "2022Q2 (approval June 13, 2022): the Q2 2022 release prints no AMVUTTRA product revenue (net product revenues are for ONPATTRO, GIVLAARI and OXLUMO); first AMVUTTRA row is in the Q3 2022 release, so the series starts 2022Q3."
+  ]
+}

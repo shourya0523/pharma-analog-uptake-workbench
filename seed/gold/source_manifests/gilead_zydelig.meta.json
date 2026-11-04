@@ -1,0 +1,37 @@
+{
+  "drug_name": "Zydelig",
+  "generic_name": "idelalisib",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_zydelig_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Relapsed chronic lymphocytic leukemia (with rituximab); relapsed follicular B-cell NHL and SLL",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Gilead's worldwide product sales line, or the unlabelled total beneath its U.S., Europe and Other International / Rest of World lines)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Phosphatidylinositol 3-kinase delta (PI3K-delta) inhibitor",
+  "moa_class": "pi3k_delta_inhibitor",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=205858",
+    "quote": "ZYDELIG IDELALISIB ... TABLET;ORAL ... 07/23/2014 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "commercial_start_quarter": "2014Q3",
+  "launch_quarter": "2014Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/882095/000088209514000047/exhibit991earningspressrel.htm",
+    "quote": "Zydelig | 5,862 | \u2014 | 5,862 | \u2014 (first Zydelig sales line in Gilead's product sales table, three and nine months ended September 30, 2014, USD thousands)",
+    "note": "FDA approval on July 23, 2014; the second-quarter 2014 Form 10-Q describes 'pre-launch activities for Zydelig', so the first sales quarter is 2014Q3."
+  },
+  "series_start_reason": "Series starts 2014Q3, the first quarter with sales (USD thousands in that release; millions from the fourth-quarter 2014 release).",
+  "series_end_quarter": "2021Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Gilead's last Zydelig lines are in the fourth-quarter 2021 release (https://www.sec.gov/Archives/edgar/data/882095/000088209522000003/exhibit991earningspressrel.htm). From the first-quarter 2022 release (https://www.sec.gov/Archives/edgar/data/882095/000088209522000010/exhibit991earningspressrel.htm) the product is inside 'Other (7) \u2013 U.S. | 26 | 38', footnote '(7) Includes Cayston, Jyseleca, Ranexa and Zydelig.'; the Forms 10-K for 2022-2025 print Zydelig only in the patent-expiry table and no later 10-Q or release prints a Zydelig revenue line.",
+  "search_log": [
+    "Listed every Gilead Sciences (CIK 882095) filing via data.sec.gov/submissions incl. the older 'files' pages (all forms); earnings releases are the 8-K/8-K/A filings with item 2.02 from 2009, each exhibit resolved from index.json; plus every 10-Q and 10-K from 2009.",
+    "Every table row whose first cell starts with Cayston, Tecartus, Veklury, Zydelig or Yeztugo followed by a figure was extracted from all of those documents (scan.py); for a product printed as regional lines ('<product> \u2013 U.S.', '\u2013 Europe', '\u2013 Other International' / 'Rest of World', or from 2026 '<product> | U.S.' then 'Europe', 'Rest of World'), the figure is the unlabelled worldwide total line beneath them, never a sum computed here.",
+    "Each quarter is read from the release that reports it as current (filed in the month after quarter end; Q4 in January/February).",
+    "Zydelig rows: single 'Zydelig' line in the releases for 2014Q3-2018Q1; unlabelled total beneath 'Zydelig \u2013 U.S./Europe/Other International' for 2018Q2-2021Q4.",
+    "Four-quarter sums 2015-2021: 132, 168, 149, 133, 103, 72, 62, each equal to the twelve-month column printed in that year's Q4 release; 2014Q3 (5.862) + 2014Q4 (17) = 22.9 against the printed full year 23."
+  ]
+}

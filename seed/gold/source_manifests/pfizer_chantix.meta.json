@@ -1,0 +1,41 @@
+{
+  "drug_name": "Chantix",
+  "generic_name": "varenicline tartrate",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_chantix_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Smoking cessation (nicotine dependence)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Alpha4beta2 nicotinic acetylcholine receptor partial agonist",
+  "moa_class": "nicotinic_receptor_partial_agonist",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021928",
+    "quote": "05/10/2006 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 021928, CHANTIX VARENICLINE TARTRATE)"
+  },
+  "launch_quarter": "2006Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000127528706005252/pf7535ex99.txt",
+    "quote": "Early market acceptance of Chantix (which will be called Champix outside the U.S.) has been very strong since its U.S. launch in August 2006, making it the leading product in the smoking-cessation prescription market in share and volume only four weeks post-launch."
+  },
+  "series_start_reason": "Series starts at launch (U.S. launch August 2006). The second-quarter 2006 release has no Chantix row; the third-quarter 2006 release prints CHANTIX/CHAMPIX 33 for the quarter and 33 for the nine months.",
+  "series_end_quarter": "2022Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The fourth-quarter 2022 release (2023-01-31) is the last to print a Chantix/Champix row ('\u2014 | (11)': nil for the quarter; the third-quarter 2021 release refers to 'the Chantix recall and pause in global shipments'). The first-quarter 2023 release (https://www.sec.gov/Archives/edgar/data/78003/000162828023014759/pfe-04022023xex99.htm) and every later release through 2026Q3 have no Chantix row.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000078003 (Pfizer) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (93 filings, 2004-10-20 to 2026-11-03; this filter cannot see earnings releases filed before Item 2.02 existed, none of which matter here because every product below launched in 2006 or later) and fetched every document in each filing's index.json except the 8-K cover document and the R*.htm XBRL viewer pages; also fetched every 10-Q, 10-K and 10-K/A primary document filed 2012-01-01 to 2026-11-03.",
+    "Product rows: in each release's Exhibit 99, the first table row whose first cell begins with the product label and whose first figure cell (after any one-to-four-letter business-unit code cell, printed 2014-2015) is a number; Pfizer's first product table is the quarter table with the Worldwide block first (quarter, same quarter a year earlier). The quarter of a release is the calendar quarter ended before its filing date; a second release mapping to the same quarter would have aborted the build (none did). The 2006-2007 releases are plain-text exhibits and were read line by line (first line beginning with the product token followed by a figure).",
+    "Label 'CHANTIX/' over 'CHAMPIX' on two lines in the 2006-2007 plain-text exhibits (row_label CHAMPIX), 'CHANTIX / CHAMPIX', 'Chantix / Champix' and 'Chantix/Champix' afterwards. 2006: 33 + 68 = 101, the twelve-month figure in the fourth-quarter 2006 release.",
+    "2021Q3-2022Q4 values are near nil or negative as printed (third-quarter 2021 release: 'the Chantix recall and pause in global shipments'); kept as printed.",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2007: quarters sum to 883; twelve-month figure 883 (current column of the 2007Q4 release); 2008: quarters sum to 846; twelve-month figure 846 (current column of the 2008Q4 release); 2009: quarters sum to 700; twelve-month figure 700 (current column of the 2009Q4 release); 2010: quarters sum to 755; twelve-month figure 755 (current column of the 2010Q4 release); 2011: quarters sum to 720; twelve-month figure 720 (current column of the 2011Q4 release); 2012: quarters sum to 670; twelve-month figure 670 (current column of the 2012Q4 release); 2013: quarters sum to 648; twelve-month figure 648 (current column of the 2013Q4 release); 2014: quarters sum to 647; twelve-month figure 647 (current column of the 2014Q4 release); 2015: quarters sum to 670; twelve-month figure 671 (current column of the 2015Q4 release); 2016: quarters sum to 842; twelve-month figure 842 (current column of the 2016Q4 release); 2017: quarters sum to 998; twelve-month figure 997 (current column of the 2017Q4 release); 2018: quarters sum to 1085; twelve-month figure 1,085 (current column of the 2018Q4 release); 2019: quarters sum to 1107; twelve-month figure 1,107 (current column of the 2019Q4 release); 2020: quarters sum to 919; twelve-month figure 919 (current column of the 2020Q4 release); 2021: quarters sum to 397; twelve-month figure 398 (current column of the 2021Q4 release); 2022: quarters sum to 7; twelve-month figure 8 (current column of the 2022Q4 release)"
+  ],
+  "commercial_start_quarter": "2006Q3",
+  "reviewed_anomalies": {
+    "2021Q3": "Pfizer paused Chantix distribution in 2021 (recall); the near-nil or negative figure is what it printed. Checked at source and kept as printed.",
+    "2021Q4": "Pfizer paused Chantix distribution in 2021 (recall); the near-nil or negative figure is what it printed. Checked at source and kept as printed.",
+    "2022Q4": "Pfizer paused Chantix distribution in 2021 (recall); the near-nil or negative figure is what it printed. Checked at source and kept as printed."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "drug_name": "Qelbree",
+  "generic_name": "viloxazine",
+  "manufacturer": "Supernus Pharmaceuticals",
+  "benchmark_identity": "supernus_qelbree_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Psychiatry (ADHD)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Supernus net product sales)",
+  "formulation": "extended-release capsule",
+  "route_of_administration": "oral",
+  "moa": "Selective norepinephrine reuptake inhibitor (non-stimulant)",
+  "moa_class": "norepinephrine_reuptake_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=211964",
+    "quote": "04/02/2021 ORIG-1 Approval (NDA 211964, QELBREE VILOXAZINE HYDROCHLORIDE)"
+  },
+  "launch_quarter": "2021Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1356576/000135657621000082/supn-20210630.htm",
+    "quote": "At the end of May 2021, we launched Qelbree for the treatment of attention-deficit hyperactivity disorder (ADHD) in pediatric patients 6 to 17 years of age. Net product sales for the second quarter of 2021 were $0.3 million."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1356576 (Supernus Pharmaceuticals) via data.sec.gov/submissions; fetched the exhibits of every 8-K/8-K/A with item 2.02 and every 10-Q/10-K filed 2021-07 to 2026-09.",
+    "First to third quarters are read from the 'Qelbree' line of the net product sales table in each Form 10-Q (thousands, as the filing states); fourth quarters from the 'Qelbree' line of the Q4 earnings release (8-K Exhibit 99.1, $ millions to one decimal), because the 10-K prints only the full year. Units differ by row and are recorded per row in source_unit.",
+    "Full-year check: 2022: 8.283 + 11.099 + 18.326 + 23.6 = 61.308 vs 61.3 (full-year column of the Q4 quote); 2023: 25.782 + 30.977 + 37.081 + 46.4 = 140.240 vs 140.2 (full-year column of the Q4 quote); 2024: 45.104 + 59.395 + 62.359 + 74.4 = 241.258 vs 241.3 (full-year column of the Q4 quote); 2025: 64.745 + 77.547 + 81.416 + 81 = 304.708 vs 304.7 (full-year column of the Q4 quote).",
+    "Prior-year check: the prior-year comparative column of 17 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2021Q2"
+}

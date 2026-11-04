@@ -1,0 +1,49 @@
+{
+  "drug_name": "Strensiq",
+  "generic_name": "asfotase alfa",
+  "manufacturer": "AstraZeneca",
+  "therapeutic_area": "Rare Disease / Metabolic",
+  "indication_area": "Rare disease (hypophosphatasia)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Alexion net product sales; AstraZeneca World product sales)",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Enzyme replacement therapy (bone-targeted recombinant tissue-nonspecific alkaline phosphatase)",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125513",
+    "quote": "BLA 125513, Company: ALEXION PHARM, STRENSIQ ASFOTASE ALFA ... 10/23/2015 ORIG-1 Approval N/A; Orphan"
+  },
+  "launch_quarter": "2015Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/899866/000089986615000189/alxn9301510q.htm",
+    "quote": "The increase was primarily due to an increase in advertising costs to support the global launches of Strensiq and Kanuma and professional services to support the continuing growth of the company."
+  },
+  "series_start_reason": "Series starts 2015Q3, the first quarter with Strensiq sales (357 thousand; approvals in Japan and the EU preceded the U.S. approval of October 23, 2015, per the Q3 2015 release: 'Strensiq was also approved in the European Union, Japan and Canada').",
+  "unreported_quarters": {
+    "2021Q3": "Ownership change Alexion Pharmaceuticals to AstraZeneca; no full-quarter figure is published. AstraZeneca completed the acquisition of Alexion on 21 July 2021 and consolidated it from that date, so its third-quarter 2021 figure covers 21 July-30 September only; Alexion's last report is the 8-K of 2021-07-20 for the second quarter (Form 15-12G filed 2021-08-02). The first full AstraZeneca quarter is 2021Q4."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Alexion Pharmaceuticals",
+      "first_quarter": "2015Q3",
+      "last_quarter": "2021Q2"
+    },
+    {
+      "issuer": "AstraZeneca",
+      "first_quarter": "2021Q4",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "search_log": [
+    "[Alexion piece] Listed every Alexion (CIK 0000899866) filing via data.sec.gov/submissions (recent + older pages): 259 8-K, 8 8-K/A, 75 10-Q, 25 10-K (all forms counted). Took every 8-K/8-K/A filed 2015-07 to 2021-08 whose items include 2.02, 9.01 or 7.01 and fetched every non-primary .htm exhibit via each filing's index.json; the Item 2.02 8-K of 2021-07-20 has no exhibit, so its primary document was read.",
+    "[Alexion piece] Row read from the first table of each quarterly release whose first cell is the brand or 'Total <brand>' (net product sales by product; worldwide total line), current three-month column first. Unit from the table header: thousands in the releases filed 2015-10 to 2016-10, millions from the 2016Q4 release (filed 2017-02-16) on.",
+    "[Alexion piece] 2021Q2 is from Alexion's 8-K of 2021-07-20 (revenue table in the body of the report, 'subject to our customary internal quarterly close procedures'), filed one day before AstraZeneca completed the acquisition; Form 15-12G filed 2021-08-02, so no 10-Q for the quarter exists.",
+    "[AstraZeneca piece] Listed every AstraZeneca (CIK 0000901832) filing via data.sec.gov/submissions: 1,620 6-K, 6 6-K/A, 24 20-F (all forms counted). Fetched the primary document of every 6-K filed 2021-10 to 2026-08 in the results months (Feb, Apr, May, Jul, Oct, Nov); the quarterly results announcements are the documents larger than 300 kB (one per quarter, 2021-11-12 to 2026-07-27).",
+    "[AstraZeneca piece] Each announcement prints year-to-date and quarter product-sales-by-region tables; the quarter table is the one used (World $m column). 2021Q3 (Alexion consolidated from 21 July 2021) is a stub and is not delivered.",
+    "Full-year checks: 2016: 33.242 + 45.141 + 60.531 + 71 = 209.914 vs 210 (full-year column of the Q4 quote); 2017: 74 + 83 + 87 + 95.6 = 339.600 vs 339.8 (full-year column of the Q4 quote); 2018: 110.7 + 125.1 + 113.2 + 126.1 = 475.100 vs 475.1 (full-year column of the Q4 quote); 2019: 130.1 + 141.3 + 154.3 + 166.8 = 592.500 vs 592.5 (full-year column of the Q4 quote); 2020: 172.2 + 184.3 + 189.4 + 185.9 = 731.800 vs 731.8 (full-year column of the Q4 quote); 2022: 208 + 242 + 237 + 272 = 959.000 vs 958 (AZ FY 2022 announcement, Strensiq FY $m 958); 2023: 262 + 300 + 285 + 305 = 1152.000 vs 1152 (AZ FY 2023 announcement, FY 1,152); 2024: 313 + 340 + 343 + 420 = 1416.000 vs 1416 (AZ FY 2024 announcement, FY 1,416); 2025: 352 + 395 + 441 + 490 = 1678.000 vs 1678 (AZ FY 2025 announcement, FY 1,678)"
+  ],
+  "benchmark_identity": "alexion_strensiq_worldwide_reported",
+  "commercial_start_quarter": "2015Q3"
+}

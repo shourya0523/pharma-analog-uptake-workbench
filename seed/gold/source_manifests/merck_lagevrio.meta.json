@@ -1,0 +1,36 @@
+{
+  "drug_name": "Lagevrio",
+  "generic_name": "molnupiravir",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_lagevrio_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "COVID-19 (mild-to-moderate, high-risk adults)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Global column: U.S. plus International)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "ribonucleoside analogue prodrug (NHC) that induces lethal mutagenesis of the SARS-CoV-2 RNA",
+  "moa_class": "nucleoside_analog_antiviral",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/news-events/press-announcements/coronavirus-covid-19-update-fda-authorizes-additional-oral-antiviral-treatment-covid-19-certain",
+    "quote": "Food and Drug Administration issued an emergency use authorization (EUA) for Merck's molnupiravir for the treatment of mild-to-moderate coronavirus disease (COVID-19)"
+  },
+  "commercial_start_quarter": "2021Q4",
+  "launch_quarter": "2021Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000031015822000003/mrk-20211231.htm",
+    "quote": "In December 2021, the FDA granted EUA for molnupiravir."
+  },
+  "series_start_reason": "Series starts 2021Q4, the first quarter with sales: Merck's fourth-quarter 2021 release prints the product as 'Molnupiravir' (from the first-quarter 2022 release on, 'Lagevrio'). No approval-holder FDA application exists (U.S. supply is under EUA); the approval year is the 2021 EUA.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "Product rows from Table 3a ('Franchise / Key Product Sales', AMOUNTS IN MILLIONS) of every Merck earnings release Exhibit 99.2 filed 2010-02-16 to 2026-08-04 (CIK 310158); label 'Molnupiravir' in 4Q 2021, 'Lagevrio' thereafter.",
+    "Four quarters of 2022-2025 sum to the full-year figure in each fourth-quarter release's year-to-date table within rounding (2022: 5,685 vs 5,684; 2023: 1,428; 2024: 964; 2025: 380)."
+  ]
+}

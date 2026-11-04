@@ -1,0 +1,35 @@
+{
+  "drug_name": "Zaltrap",
+  "generic_name": "ziv-aflibercept",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_zaltrap_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (metastatic colorectal cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sanofi total net sales for the product)",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "VEGF trap (recombinant fusion protein binding VEGF-A, VEGF-B and PlGF)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125418",
+    "quote": "08/03/2012 ORIG-1 Approval (BLA 125418, ZALTRAP)"
+  },
+  "commercial_start_quarter": "2012Q3",
+  "launch_quarter": "2012Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000119312512434995/d430209dex991.htm",
+    "quote": "Zaltrap \u00ae was launched at the end of August in the U.S. and reached sales of \u20ac7 million."
+  },
+  "series_end_quarter": "2019Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q1 2020 release (https://www.sec.gov/Archives/edgar/data/1121404/000119312520121046/d889738dex991.htm) prints the Oncology table 'Jevtana, Fasturtec, Libtayo, Sarclisa, Total Oncology' and contains no Zaltrap row (the word does not appear in that release); later releases fold it into 'Total others related to Regeneron (mainly Libtayo and Zaltrap)'. Last Zaltrap row: Q4 2019, 26.",
+  "search_log": [
+    "Listed every filing for CIK 1121404 (Sanofi) from data.sec.gov/submissions including the older 'files' pages. Candidate results filings: every 6-K/6-K/A from 2009 on, filed 20 Jan-28 Feb, 15 Apr-12 May, 15 Jul-12 Aug or 15 Oct-12 Nov, with total filing size >= 250 KB; each candidate's index.json was read and every exhibit between 20 KB and 4 MB was fetched and searched for Multaq, Jevtana, Lemtrada, Soliqua, Zaltrap, Rezurock and Xenpozyme (XBRL R pages, the 20-F-style half-year XBRL documents and the 6-K cover pages excluded from selection).",
+    "Each candidate exhibit's quarter was read from the header of the net-sales tables that print the products (e.g. 'Q3 2010 net sales', 'Q2 2024 (\u20ac million)'); per quarter the exhibit with most product rows is the quarterly results press release. Header detection failed for 2009Q3/2009Q4 (header 'Millions of euros / 2009 Q3 net sales') and mislabelled the 2012Q2 release (its table header misprints 'Q2 2011 net sales'; the figures are the 2012 quarter, the year 2012 is in the release); those were set by hand, and for 2021Q1 and 2025Q3 Sanofi's own 6-K press release (pressreleaseq12021english.htm, pressreleaseq32025english.htm) was preferred over a later 6-K re-filing of the same release.",
+    "Row selection: the first table in the release that prints the product (the franchise summary 'Net sales (\u20ac million) / Qn YYYY / Change at CER', or from 2023/2024 the 'Qn YYYY (\u20ac million) / Total Sales / % CER / ... United States / Europe / Rest of World' table whose first column is the worldwide total). In 2016-2019 the appendix splits sales into 'Total GBUs' (excluding Emerging Markets) and 'Total Franchises' (worldwide); where a product prints only in that appendix (Multaq 2016Q1-2018Q2), the Total Franchises column is recorded. Units as declared beside each table: '\u20ac million' / 'millions of euros'.",
+    "2012Q3 is printed only in the Q3 2012 release text ('reached sales of \u20ac7 million'); its table rows begin in Q4 2012. 2012: 7+18=25, the 2012 figure in the Q4 2012 release.",
+    "Sum checks: 2013: 11+14+13+15=53 vs full-year 53 OK; 2014: 16+15+18+20=69 vs full-year 69 OK; 2015: 20+20+19+18=77 vs full-year 77 OK; 2016: 17+17+16+15=65 vs full-year 65 OK; 2017: 16+18+19+22=75 vs full-year 75 OK; 2018: 22+24+22+23=91 vs full-year 91 OK; 2019: 22+23+26+26=97 vs full-year 97 OK"
+  ]
+}

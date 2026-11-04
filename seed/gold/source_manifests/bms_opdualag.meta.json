@@ -1,0 +1,32 @@
+{
+  "drug_name": "Opdualag",
+  "generic_name": "nivolumab and relatlimab-rmbw",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_opdualag_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (melanoma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "PD-1 and LAG-3 blocking antibody fixed-dose combination",
+  "moa_class": "pd1_lag3_antibody_combination",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761234",
+    "quote": "03/18/2022 ORIG-1 Approval (BLA 761234, OPDUALAG NIVOLUMAB;RELATLIMAB-RMBW)"
+  },
+  "launch_quarter": "2022Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000001427222000112/q12022earningspresentati.htm",
+    "quote": "Opdualag (launched in U.S. March 18, 2022) \u2022 3rd approved I-O agent \u2022 $3M inventory build in Q1 2022"
+  },
+  "series_start_reason": "First quarter with a printed figure: the first-quarter 2022 release prints Opdualag $6 million with no prior-year figure (approval and U.S. launch March 18, 2022).",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000014272 (Bristol-Myers Squibb) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (105 filings, 2004-10-29 to 2026-10-29) and fetched every document in each filing's index.json except the cover document and R*.htm pages; product rows read from Exhibit 99.1 (the file name matching 'ex99.?1' or 'ex991'), whose first product table is the quarter table.",
+    "Row rule: first table row of the Exhibit 99.1 whose first cell begins with the product name and whose first figure cell is a number. 2015Q4-2022Q4 releases print worldwide quarter then same quarter a year earlier (2019Q4-2022Q4 also a summary table on the first page, which is the row read); from the 2023Q1 release the columns are U.S., Int'l, WW and the WW (third) figure is used.",
+    "Opdualag product row present in every BMS Exhibit 99.1 from 2022Q1 to 2026Q2 (and in the 2026Q3 release).",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2022: quarters sum to 252; twelve-month figure 252 (current column of the 2022Q4 release); 2023: quarters sum to 627; twelve-month figure 627 (current column of the 2023Q4 release); 2024: quarters sum to 928; twelve-month figure 928 (current column of the 2024Q4 release); 2025: quarters sum to 1185; twelve-month figure 1,185 (current column of the 2025Q4 release)"
+  ],
+  "commercial_start_quarter": "2022Q1"
+}

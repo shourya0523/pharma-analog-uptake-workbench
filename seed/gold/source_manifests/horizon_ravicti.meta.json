@@ -1,0 +1,53 @@
+{
+  "drug_name": "Ravicti",
+  "generic_name": "glycerol phenylbutyrate",
+  "manufacturer": "Horizon Therapeutics",
+  "therapeutic_area": "Rare Disease / Metabolic",
+  "indication_area": "Urea cycle disorders",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide as printed (predominantly U.S.)",
+  "formulation": "oral liquid",
+  "route_of_administration": "oral",
+  "moa": "Nitrogen-binding prodrug (phenylbutyrate, converted to phenylacetate which conjugates glutamine for urinary excretion)",
+  "moa_class": "nitrogen_scavenger",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=203284",
+    "quote": "NDA 203284, Company: HORIZON THERAP US, RAVICTI GLYCEROL PHENYLBUTYRATE ... 02/01/2013 ORIG-1 Approval Type 2 - New Active Ingredient STANDARD; Orphan"
+  },
+  "launch_quarter": "2013Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1386858/000119312513211024/d535089dex991.htm",
+    "quote": "RAVICTI net sales were $0.8 million for the first quarter of 2013, representing orders received by patients post-approval. The FDA granted approval of RAVICTI on February 1, 2013."
+  },
+  "series_end_quarter": "2023Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Horizon's last quarterly release is for 2023Q2 (8-K filed 2023-08-08; Form 15-12G filed 2023-10-16 after Amgen completed the acquisition on Oct. 6, 2023). Amgen's product sales detail table prints no RAVICTI line in any quarterly release from the fourth quarter of 2023 (filed 2024-02-06) through the third quarter of 2026 (filed 2026-11-03); its Horizon-derived lines are TEPEZZA, KRYSTEXXA and UPLIZNA.",
+  "unreported_quarters": {
+    "2015Q2": "Ownership change Hyperion Therapeutics to Horizon; no full-quarter figure is published. Horizon acquired Hyperion on May 7, 2015; Hyperion's last periodic report is the Form 10-Q for the quarter ended March 31, 2015, and Horizon's 2015Q2 release prints RAVICTI 19.0 covering only May 7-June 30 (footnote 'RAVICTI and BUPHENYL were acquired on May 7, 2015'), so 2015Q2 is excluded."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Hyperion Therapeutics",
+      "first_quarter": "2013Q1",
+      "last_quarter": "2015Q1"
+    },
+    {
+      "issuer": "Horizon Therapeutics",
+      "first_quarter": "2015Q3",
+      "last_quarter": "2023Q2"
+    }
+  ],
+  "search_log": [
+    "[Hyperion piece] Listed every Hyperion Therapeutics (CIK 0001386858) filing via data.sec.gov/submissions: 44 8-K, 3 8-K/A, 8 10-Q, 1 10-Q/A, 3 10-K, 2 10-K/A. Fetched every 8-K exhibit (items 2.02/9.01/7.01) filed 2013-01 to 2015-08 and every 10-Q/10-K primary document filed 2013-2015.",
+    "[Hyperion piece] Hyperion's statement of operations prints RAVICTI plus BUPHENYL (acquired May 31, 2013) as one 'Product revenue, net' line. RAVICTI is printed on its own line in the 10-Q notes table for 2014Q2, 2014Q3 and 2015Q1 (thousands, used) and in each quarterly release's revenue discussion (used for 2013Q1-2014Q1 and 2014Q4, where the 10-Q has no product table).",
+    "[Hyperion piece] 2014Q2 (31,553) includes previously deferred revenue recognized in the quarter, as printed (release: '$31.6 million of RAVICTI recognized in the quarter including $11.7 million of previously deferred revenue').",
+    "[Horizon piece] Listed every Horizon Therapeutics plc / Horizon Pharma plc (CIK 0001492426) filing via data.sec.gov/submissions (recent + older pages): 217 8-K, 6 8-K/A, 37 10-Q, 12 10-K (all forms counted). Took every 8-K/8-K/A filed 2013-01 to 2023-10 whose items include 2.02, 9.01 or 7.01 and fetched every non-primary .htm exhibit via each filing's index.json.",
+    "[Horizon piece] Read the product row from the first table of each quarterly release whose first cell starts with the brand (net sales by product table, USD millions, current three-month column first). Where several 8-K exhibits of one quarter carried the brand (e.g. 2016-10-13 / 2016-12-22 acquisition exhibits with unrelated tables), only the quarterly earnings release (Form 8-K, figure below 10,000) was kept.",
+    "[Horizon piece] Horizon's last earnings release is for 2023Q2 (8-K filed 2023-08-08); it filed a Form 15-12G on 2023-10-16 after Amgen completed the acquisition on Oct. 6, 2023, and published no third-quarter 2023 results.",
+    "[Amgen check] [Amgen piece] Listed every Amgen (CIK 0000318154) filing via data.sec.gov/submissions; took every 8-K filed 2023-10 to 2026-11 whose items include 2.02, 9.01 or 7.01 and read the 'Product sales detail by product and geographic region' table ($Millions: U.S., ROW, TOTAL, prior-year TOTAL) of each quarterly release; the TOTAL column is used. No RAVICTI row in any of them.",
+    "Full-year checks: 2013: 0.8 + 6.2 + 9.8 + 14.3 = 31.100 vs 31.236 (Hyperion 10-K 2014 notes table: RAVICTI 31,236 thousand for 2013 (prior-year column)); 2014: 15.5 + 31.553 + 22.057 + 26.3 = 95.410 vs 95.4 (Hyperion 10-K 2014 notes table: RAVICTI 95,400 thousand for the year); 2016: 37.1 + 39.4 + 42.2 + 32.9 = 151.600 vs 151.5 (full-year column of the Q4 quote); 2017: 43.9 + 47.2 + 50.9 + 51.9 = 193.900 vs 193.9 (full-year column of the Q4 quote); 2018: 49.1 + 57 + 60.4 + 60.2 = 226.700 vs 226.6 (full-year column of the Q4 quote); 2019: 49.9 + 50.4 + 60 + 68.5 = 228.800 vs 228.8 (full-year column of the Q4 quote); 2020: 61.2 + 65.6 + 64.6 + 70.2 = 261.600 vs 261.6 (full-year column of the Q4 quote); 2021: 72.8 + 68.4 + 76.2 + 74.4 = 291.800 vs 291.9 (full-year column of the Q4 quote); 2022: 78.3 + 75.7 + 84.3 + 87.5 = 325.800 vs 325.6 (full-year column of the Q4 quote)"
+  ],
+  "benchmark_identity": "horizon_ravicti_worldwide_reported",
+  "commercial_start_quarter": "2013Q1"
+}

@@ -1,0 +1,35 @@
+{
+  "drug_name": "Exjade",
+  "generic_name": "deferasirox",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_exjade_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hematology (chronic transfusional iron overload)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (row 'Exjade', from Q2 2015 'Exjade/Jadenu')",
+  "formulation": "tablet for oral suspension (Jadenu film-coated tablet in the same line from 2015)",
+  "route_of_administration": "oral",
+  "moa": "Oral iron chelator",
+  "moa_class": "iron_chelator",
+  "first_approval_year": 2005,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021882",
+    "quote": "11/02/2005 ORIG-1 Approval (NDA 021882, EXJADE DEFERASIROX)"
+  },
+  "commercial_start_quarter": "2005Q4",
+  "launch_quarter": "2005Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000110465906028115/a06-10526_16k.htm",
+    "quote": "Oncology sales climbed 10% (+15% lc) from ongoing growth for Gleevec/Glivec and Femara as well as the launch of the iron chelator Exjade following US approval in November 2005."
+  },
+  "series_start_reason": "FDA approval 2 Nov 2005. The Q4 2005 and Q1 2006 reports print no Exjade row; 2005Q4 (2) is read from the prior-year column of the Q4 2006 report and 2006Q1 (19) from the prior-year column of the Q1 2007 report (direct_prior_year_column). The first own-quarter row is Q2 2006 (31).",
+  "series_end_quarter": "2022Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2023 interim report (6-K 0001370368-23-000046, a230425-99_2.htm) Novartis prints no Exjade/Jadenu row: the Hematology table lists Promacta/Revolade, Tasigna, Jakavi, Kymriah, Scemblix, Adakveo and 'Other'. The Q4 2022 report (0001370368-23-000008) is the last with the row (Q4 2022 61; FY 2022 323).",
+  "notes": "One Novartis line for deferasirox: 'Exjade' to Q1 2015, 'Exjade/Jadenu' from Q2 2015 (Jadenu, the film-coated deferasirox tablet, FDA-approved March 2015, is sold in the same line from then on); the Q2 2015 report's prior-year figure (244 for Q2 2014) equals the 'Exjade' figure. Treated as one product line because both brands are the same molecule printed by the issuer as one row; Jadenu is never printed on its own row. Worldwide; no regional split on the product table.",
+  "search_log": [
+    "Listed Novartis AG (CIK 1114448) filings via data.sec.gov submissions (recent plus older pages, all form types: 1,431 filings, 937 of them 6-K). Located quarterly results documents with EDGAR full-text search (efts.sec.gov) for each brand name (Exjade, Afinitor, Jadenu, Fabhalta, Piqray, Vijoice, Votrient, Tykerb, Arzerra, Signifor) over 2005-2026, restricted to 6-K hits filed in the results windows (Jan-Feb, Apr-May, Jul-Aug, Oct-Nov); 199 documents fetched (6-K bodies 2005-2011, EX-99.1/EX-99.2 from 2010). The union contains every quarterly report 2005Q4-2026Q3, since each prints an Exjade or Afinitor or Piqray row.",
+    "Rows extracted by script from every HTML table whose header row begins with 'Qn YYYY' (the quarter table), taking the row whose first cell starts with the brand; the first figure is the current quarter. Where two filings carry the same quarter (2010-2012 duplicates under accession prefixes 0001104659 and 0001370368) the EX-99.2 interim financial report or the 0001370368 filing is cited.",
+    "Exjade checks: four quarters equal the FY column of the Q4 report: 2006 143 (19+31+43+50), 2007 357, 2009 652, 2010 762, 2011 850, 2012 870, 2013 893, 2014 926, 2015 917, 2016 956, 2017 1,059, 2018 1,099, 2019 975, 2020 653, 2021 563, 2022 323."
+  ]
+}

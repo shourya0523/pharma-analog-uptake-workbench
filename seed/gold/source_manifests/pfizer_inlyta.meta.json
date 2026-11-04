@@ -1,0 +1,32 @@
+{
+  "drug_name": "Inlyta",
+  "generic_name": "axitinib",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_inlyta_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (advanced renal cell carcinoma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "VEGFR-1/2/3 tyrosine kinase inhibitor",
+  "moa_class": "tyrosine_kinase_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=202324",
+    "quote": "01/27/2012 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 202324, INLYTA AXITINIB)"
+  },
+  "launch_quarter": "2012Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000115752312002789/a50269079.htm",
+    "quote": "Operational revenues were favorably impacted by the growth of Sutent, as well as the launches of Inlyta and Xalkori in the U.S."
+  },
+  "series_start_reason": "Series starts at launch (2012Q1, approval January 27, 2012). Pfizer's 2012 releases and 10-Qs print no Inlyta revenue row, so 2012Q1-2012Q4 are read from the prior-year columns of the 2013Q1-2013Q4 releases (7, 17, 29, 47); they sum to 100, the FY2012 prior-year twelve-month figure in the fourth-quarter 2013 release.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000078003 (Pfizer) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (93 filings, 2004-10-20 to 2026-11-03; this filter cannot see earnings releases filed before Item 2.02 existed, none of which matter here because every product below launched in 2006 or later) and fetched every document in each filing's index.json except the 8-K cover document and the R*.htm XBRL viewer pages; also fetched every 10-Q, 10-K and 10-K/A primary document filed 2012-01-01 to 2026-11-03.",
+    "Product rows: in each release's Exhibit 99, the first table row whose first cell begins with the product label and whose first figure cell (after any one-to-four-letter business-unit code cell, printed 2014-2015) is a number; Pfizer's first product table is the quarter table with the Worldwide block first (quarter, same quarter a year earlier). The quarter of a release is the calendar quarter ended before its filing date; a second release mapping to the same quarter would have aborted the build (none did). The 2006-2007 releases are plain-text exhibits and were read line by line (first line beginning with the product token followed by a figure).",
+    "Inlyta row present in every Pfizer release from 2013Q1 to 2026Q2 (and 2026Q3).",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2012: quarters sum to 100; twelve-month figure 100 (prior-year column of the 2013Q4 release); 2013: quarters sum to 319; twelve-month figure 319 (current column of the 2013Q4 release); 2014: quarters sum to 410; twelve-month figure 410 (current column of the 2014Q4 release); 2015: quarters sum to 430; twelve-month figure 430 (current column of the 2015Q4 release); 2016: quarters sum to 401; twelve-month figure 401 (current column of the 2016Q4 release); 2017: quarters sum to 340; twelve-month figure 339 (current column of the 2017Q4 release); 2018: quarters sum to 298; twelve-month figure 298 (current column of the 2018Q4 release); 2019: quarters sum to 477; twelve-month figure 477 (current column of the 2019Q4 release); 2020: quarters sum to 787; twelve-month figure 787 (current column of the 2020Q4 release); 2021: quarters sum to 1002; twelve-month figure 1,002 (current column of the 2021Q4 release); 2022: quarters sum to 1003; twelve-month figure 1,003 (current column of the 2022Q4 release); 2023: quarters sum to 1036; twelve-month figure 1,036 (current column of the 2023Q4 release); 2024: quarters sum to 978; twelve-month figure 978 (current column of the 2024Q4 release); 2025: quarters sum to 923; twelve-month figure 923 (current column of the 2025Q4 release)"
+  ],
+  "commercial_start_quarter": "2012Q1"
+}

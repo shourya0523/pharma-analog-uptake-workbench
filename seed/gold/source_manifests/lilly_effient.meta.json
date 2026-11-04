@@ -1,0 +1,39 @@
+{
+  "drug_name": "Effient",
+  "generic_name": "prasugrel",
+  "manufacturer": "Eli Lilly",
+  "benchmark_identity": "lilly_effient_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Acute coronary syndrome managed with percutaneous coronary intervention (reduction of thrombotic cardiovascular events)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Lilly's worldwide product revenue line; in Forms 10-Q/10-K the Total column, U.S. plus outside U.S.); Lilly's revenue for Effient, co-promoted with Daiichi Sankyo",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "P2Y12 ADP receptor antagonist (thienopyridine antiplatelet)",
+  "moa_class": "p2y12_antagonist",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022307",
+    "quote": "EFFIENT PRASUGREL HYDROCHLORIDE ... TABLET;ORAL ... 07/10/2009 ORIG-1 Approval Type 1 - New Molecular Entity",
+    "note": "The European Commission approved the product (as Efient) in February 2009 (Lilly 10-K for 2008: 'Prasugrel was approved for marketing by the European Commission under the tradename Efient in February 2009.'); first_approval_year is that year."
+  },
+  "commercial_start_quarter": "2009Q3",
+  "launch_quarter": "2009Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/59478/000095013709003504/c50875e10vq.htm",
+    "quote": "Prasugrel was approved for marketing by the European Commission under the tradename Efient \u00ae in February 2009, and the initial sales were recorded in the first quarter of 2009."
+  },
+  "series_start_reason": "Series starts 2009Q3, two quarters after the first (European) sales in 2009Q1: the first figure Lilly prints is 'Worldwide Effient sales were $22.6 million in the third quarter of 2009' (U.S. launch in early August 2009). No filing prints 2009Q1 or 2009Q2 Effient sales; the FY2009 figure of $27.0 million (fourth-quarter 2009 release) less 22.6 and 3.8 implies 0.6 before 2009Q3. Quarters 2009Q3-2011Q4 are the figures of the releases' Effient paragraph; Lilly's product table adds an Effient row from 2012Q1.",
+  "series_end_quarter": "2018Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Lilly's last worldwide Effient figure on sec.gov is the Form 10-Q for the quarter ended September 30, 2018 (https://www.sec.gov/Archives/edgar/data/59478/000005947818000256/lly-9302018x10q.htm: 'Effient | 30.2 | 15.1 | 45.3'). The FY2018 Form 10-K (https://www.sec.gov/Archives/edgar/data/59478/000005947819000082/lly-20181231x10xk.htm) has no Effient row in its 2018 revenue-by-product table; its segment note prints only U.S. and outside-U.S. full-year figures in separate columns ('Effient | 68.1 | 340.1 | 465.6 | 54.1 | 48.8 | 69.6': U.S. 2018/2017/2016, then outside U.S.) and no worldwide total, so 2018Q4 cannot be read without summing regions. The 2019 Forms 10-Q list Cialis and 'Other | 41.5 | 72.0 | 113.4' with no Effient row, and no later filing prints one. Whether Lilly's website workbook continued the line could not be checked (investor.lilly.com: Access Denied).",
+  "search_log": [
+    "Listed every Eli Lilly (CIK 59478) filing via data.sec.gov/submissions incl. the older 'files' pages (all forms). Earnings releases: every 8-K/8-K/A with item 2.02 from 2001, plus the 2003-2004 releases filed under items 9/12 and the two 2016 releases filed under item 9.01 only (2016-01-28, 2016-04-26), each exhibit resolved from the filing's index.json; plus every 10-Q and 10-K from 2002.",
+    "Every HTML table row (and plain-text line for .txt exhibits) whose first cell starts with Baqsimi, Effient, Jaypirca, Portrazza, Reyvow, Strattera or Cymbalta followed by a figure was extracted from all of those documents (scan.py in the work directory); narrative sentences were searched separately where no table row exists.",
+    "Each quarter is read from the earnings release that reports it as current (first table row: current quarter, prior-year quarter, then year-to-date); where the release prints no line for the product (no Q1 2006 release was filed on EDGAR; the Q1 2018 release has no product table; releases from 2019 list only selected products), from the Form 10-Q for that quarter (Total column = U.S. + outside U.S.); a fourth quarter with neither is the Form 10-K full year less the third-quarter 10-Q nine-month Total.",
+    "Every row was checked offline with verify_staged_manifests.check_row before writing; where a Q4 quote carries a twelve-month figure, the verifier checks the four quarters against it.",
+    "Lilly's website Financial Workbooks (investor.lilly.com) could not be checked: the host answers 'Access Denied' to this environment, so whether a workbook continued the product after the last sec.gov quarter is not known.",
+    "Effient rows: release narrative ('[Worldwide] Effient sales were $X million in the ... quarter') for 2009Q3-2011Q4; release tables 2012Q1-2017Q4; Forms 10-Q for 2018Q1-Q3.",
+    "Four-quarter sums: {'2010': 115.0, '2011': 302.4, '2012': 457.1, '2013': 508.8, '2014': 522.2, '2015': 523.0, '2016': 535.2, '2017': 388.9}. 2010 = 115.0 and 2011 = 302.4 match the narrative full years 115.0 and 302.5; 2012-2017 match the twelve-month columns of the Q4 releases within 0.1."
+  ]
+}

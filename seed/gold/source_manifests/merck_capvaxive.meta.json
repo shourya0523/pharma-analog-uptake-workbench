@@ -1,0 +1,36 @@
+{
+  "drug_name": "Capvaxive",
+  "generic_name": "pneumococcal 21-valent conjugate vaccine",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_capvaxive_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Pneumococcal disease prevention (adults)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Global column: U.S. plus International)",
+  "formulation": "suspension for injection",
+  "route_of_administration": "intramuscular",
+  "moa": "21-valent pneumococcal polysaccharide-CRM197 conjugate vaccine",
+  "moa_class": "pneumococcal_conjugate_vaccine",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/capvaxive",
+    "quote": "June 17, 2024 Approval Letter - CAPVAXIVE"
+  },
+  "commercial_start_quarter": "2024Q3",
+  "launch_quarter": "2024Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000110465924112841/tm2426878d1_ex99-1.htm",
+    "quote": "Sales growth in the third quarter of 2024 was primarily due to increased usage of KEYTRUDA globally, contributions from new launches, including WINREVAIR and CAPVAXIVE, and strong growth in Merck's Animal Health business."
+  },
+  "series_start_reason": "FDA approval June 17, 2024; the second-quarter 2025 release prints the 2Q 2024 Capvaxive column as nil, and the third-quarter 2024 release names Capvaxive among new launches. Merck's 2024 releases and 10-Qs print no Capvaxive line, so 2024Q3 and 2024Q4 are read from the prior-year columns of the third- and fourth-quarter 2025 releases; the line is printed as current from the first-quarter 2025 release.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "Product rows from Table 3a ('Franchise / Key Product Sales', AMOUNTS IN MILLIONS) of every Merck earnings release Exhibit 99.2 filed 2010-02-16 to 2026-08-04 (CIK 310158).",
+    "2025 quarters sum to 759, the full-year figure in the fourth-quarter 2025 release; 2024Q3 + 2024Q4 = 97, the 2024 figure printed in the Form 10-K for 2025 ('Capvaxive | 759 | 97')."
+  ]
+}

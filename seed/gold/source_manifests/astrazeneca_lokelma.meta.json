@@ -1,0 +1,32 @@
+{
+  "manufacturer": "AstraZeneca",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (World column)",
+  "drug_name": "Lokelma",
+  "generic_name": "sodium zirconium cyclosilicate",
+  "benchmark_identity": "astrazeneca_lokelma_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Nephrology / Cardiorenal (hyperkalaemia)",
+  "formulation": "powder for oral suspension",
+  "route_of_administration": "oral",
+  "moa": "Non-absorbed potassium-binding agent (selective cation exchanger)",
+  "moa_class": "potassium_binder",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=207078",
+    "quote": "05/18/2018 ORIG-1 Approval (NDA 207078, LOKELMA SODIUM ZIRCONIUM CYCLOSILICATE)"
+  },
+  "commercial_start_quarter": "2019Q3",
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000165495419001546/a9540p.htm",
+    "quote": "Lokelma's launch programme recently began in Scandinavia. It was approved in the EU in 2018 for the treatment of hyperkalaemia"
+  },
+  "series_start_reason": "Approved EU (March 2018) and US (May 2018); the launch programme began in the Nordic region in late 2018 (Q3 2018 announcement: 'Lokelma's launch programme recently began in the Nordic region'; FY 2019 announcement 'Lokelma Product Sales of $14m in the year (FY 2018: $nil)') and in the US in 2019 (H1 2019 announcement: 'Lokelma Product Sales of $2m, predominantly in the US, where Lokelma was recently launched'). The H1 2019 figure is printed only in text and no announcement prints a Q1 or Q2 2019 table row; the first table row is Q3 2019 (4; YTD 6), three quarters after the launch quarter.",
+  "notes": "AstraZeneca Product Sales, World column of the quarter's regional Product Sales table.",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 901832) filings via data.sec.gov submissions (2,057 filings, 1,620 of them 6-K). Located every quarterly results announcement 2018-2026 with EDGAR full-text search for 'Tagrisso' (present in every results document since 2016) plus brand-name searches; 118 documents fetched.",
+    "The quarter's figure is the first (World) figure of the brand row in the regional 'Product Sales year-on-year analysis' table for the quarter; the table's period is read from its header (2019-2020) or from the table title / the sentence above it ('The Q2 2025 information in respect of the three months ended 30 June 2025 ...'). In the H1 2025 document both regional tables carry the header 'For the half year ended 30 June'; the second is titled 'Table 24 ... Q2 2025' and its figures equal H1 less Q1 (e.g. Lokelma 328 - 153 = 175), so it is cited as the quarter.",
+    "Lokelma checks: annual sums of the quarters against the FY tables: 2020 77 vs 76, 2021 175, 2022 289, 2023 412, 2024 543 vs 542, 2025 698 (differences are rounding of the quarterly figures). 2019: Q3+Q4 = 12 against FY 14, the 2 being the H1 2019 text figure."
+  ]
+}

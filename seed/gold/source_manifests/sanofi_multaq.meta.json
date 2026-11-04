@@ -1,0 +1,32 @@
+{
+  "drug_name": "Multaq",
+  "generic_name": "dronedarone",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_multaq_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Cardiology (atrial fibrillation)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sanofi total net sales for the product)",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "Multichannel blocking antiarrhythmic (benzofuran derivative)",
+  "moa_class": "antiarrhythmic_multichannel_blocker",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022425",
+    "quote": "07/01/2009 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY (NDA 022425, MULTAQ)"
+  },
+  "commercial_start_quarter": "2009Q3",
+  "launch_quarter": "2009Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000119312509220134/dex993.htm",
+    "quote": "Launch of Multaq \u00ae in the United States on target; positive opinion from the CHMP in Europe, and approval in Canada and Switzerland"
+  },
+  "search_log": [
+    "Listed every filing for CIK 1121404 (Sanofi) from data.sec.gov/submissions including the older 'files' pages. Candidate results filings: every 6-K/6-K/A from 2009 on, filed 20 Jan-28 Feb, 15 Apr-12 May, 15 Jul-12 Aug or 15 Oct-12 Nov, with total filing size >= 250 KB; each candidate's index.json was read and every exhibit between 20 KB and 4 MB was fetched and searched for Multaq, Jevtana, Lemtrada, Soliqua, Zaltrap, Rezurock and Xenpozyme (XBRL R pages, the 20-F-style half-year XBRL documents and the 6-K cover pages excluded from selection).",
+    "Each candidate exhibit's quarter was read from the header of the net-sales tables that print the products (e.g. 'Q3 2010 net sales', 'Q2 2024 (\u20ac million)'); per quarter the exhibit with most product rows is the quarterly results press release. Header detection failed for 2009Q3/2009Q4 (header 'Millions of euros / 2009 Q3 net sales') and mislabelled the 2012Q2 release (its table header misprints 'Q2 2011 net sales'; the figures are the 2012 quarter, the year 2012 is in the release); those were set by hand, and for 2021Q1 and 2025Q3 Sanofi's own 6-K press release (pressreleaseq12021english.htm, pressreleaseq32025english.htm) was preferred over a later 6-K re-filing of the same release.",
+    "Row selection: the first table in the release that prints the product (the franchise summary 'Net sales (\u20ac million) / Qn YYYY / Change at CER', or from 2023/2024 the 'Qn YYYY (\u20ac million) / Total Sales / % CER / ... United States / Europe / Rest of World' table whose first column is the worldwide total). In 2016-2019 the appendix splits sales into 'Total GBUs' (excluding Emerging Markets) and 'Total Franchises' (worldwide); where a product prints only in that appendix (Multaq 2016Q1-2018Q2), the Total Franchises column is recorded. Units as declared beside each table: '\u20ac million' / 'millions of euros'.",
+    "2009: Q3 13 + Q4 12 = 25, the 2009 net sales figure in the Q4 2009 release (13 is also the 9-month figure in the Q3 2009 release, so 2009Q3 is the first quarter with sales).",
+    "Sum checks: 2010: 24+39+46+63=172 vs full-year 172 OK; 2011: 63+68+66+64=261 vs full-year 261 OK; 2012: 63+64+65+63=255 vs full-year 255 OK; 2013: 62+69+67+71=269 vs full-year 269 OK; 2014: 73+66+76+75=290 vs full-year 290 OK; 2015: 83+87+86+85=341 vs full-year 341 OK; 2016: 86+84+89+94=353 vs full-year 353 OK; 2017: 98+83+81+77=339 vs full-year 339 OK; 2018: 79+83+93+95=350 vs full-year 350 OK; 2019: 79+82+87+99=347 vs full-year 347 OK; 2020: 81+73+79+79=312 vs full-year 312 OK; 2021: 72+79+79+99=329 vs full-year 329 OK; 2022: 87+91+101+104=383 vs full-year 383 OK; 2023: 84+80+93+87=344 vs full-year 344 OK; 2024: 78+84+72+77=311 vs full-year 311 OK; 2025: 81+79+78+76=314 vs full-year 314 OK"
+  ]
+}

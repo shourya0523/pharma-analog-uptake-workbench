@@ -1,0 +1,37 @@
+{
+  "drug_name": "Cayston",
+  "generic_name": "aztreonam (inhalation solution)",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_cayston_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Cystic fibrosis patients with Pseudomonas aeruginosa (improvement of respiratory symptoms)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Gilead's stated Cayston sales; the United States and certain countries of Europe)",
+  "formulation": "lyophilized powder for inhalation solution (with Altera nebulizer)",
+  "route_of_administration": "inhaled",
+  "moa": "Monobactam antibacterial (inhibits bacterial cell-wall synthesis)",
+  "moa_class": "monobactam_antibacterial",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=050814",
+    "quote": "CAYSTON AZTREONAM 75MG/VIAL FOR SOLUTION;INHALATION ... 02/22/2010 ORIG-1 Approval Type 3 - New Dosage Form",
+    "note": "first_approval_year 2009 is the European conditional marketing authorization (Gilead 10-K for 2009: 'In September 2009, the European Commission granted conditional marketing authorization for Cayston for patients with CF aged 18 years and older.'); the FDA record is the 2010 U.S. approval."
+  },
+  "commercial_start_quarter": "2010Q1",
+  "launch_quarter": "2010Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/882095/000119312511212453/d10q.htm",
+    "quote": "Also, Cayston sales in the United States contributed $18.5 million to our second quarter 2011 product sales, an increase of 98% over the same period in 2010 as Cayston launched in the first quarter of 2010."
+  },
+  "series_start_reason": "Series starts 2010Q1, the launch quarter. Gilead's product tables never carry a Cayston line; every row is the product's own figure stated in a sentence of the release or Form 10-Q (2010Q1 from the prior-year comparison in the first-quarter 2011 release).",
+  "series_end_quarter": "2011Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Gilead's last Cayston figure is in the third-quarter 2011 release (https://www.sec.gov/Archives/edgar/data/882095/000119312511284200/d248092dex991.htm: 'Sales of Cayston were $23.6 million for the third quarter of 2011'). The fourth-quarter 2011 release (https://www.sec.gov/Archives/edgar/data/882095/000119312512036780/d291114dex991.htm) states only 'Sales of other products were $151.1 million for the fourth quarter of 2011 ... and included AmBisome ..., Hepsera ..., Emtriva ... and Cayston', and later filings name Cayston only inside 'Other' (e.g. first-quarter 2022 release footnote '(7) Includes Cayston, Jyseleca, Ranexa and Zydelig.').",
+  "search_log": [
+    "Listed every Gilead Sciences (CIK 882095) filing via data.sec.gov/submissions incl. the older 'files' pages (all forms); earnings releases are the 8-K/8-K/A filings with item 2.02 from 2009, each exhibit resolved from index.json; plus every 10-Q and 10-K from 2009.",
+    "Every table row whose first cell starts with Cayston, Tecartus, Veklury, Zydelig or Yeztugo followed by a figure was extracted from all of those documents (scan.py); for a product printed as regional lines ('<product> \u2013 U.S.', '\u2013 Europe', '\u2013 Other International' / 'Rest of World', or from 2026 '<product> | U.S.' then 'Europe', 'Rest of World'), the figure is the unlabelled worldwide total line beneath them, never a sum computed here.",
+    "Each quarter is read from the release that reports it as current (filed in the month after quarter end; Q4 in January/February).",
+    "Cayston has no table row in any Gilead release, 10-Q or 10-K (the only 'Cayston' rows are the patent-expiry tables of the Forms 10-K); the narrative of every 2009-2012 release, 10-Q and 10-K was searched for sentences stating a Cayston sales figure (sent.py / grepall.py).",
+    "2010: 2.9 + 10.5 + 14.7 + 19.4 = 47.5, equal to the full year stated in the fourth-quarter 2010 release."
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "drug_name": "Onpattro",
+  "generic_name": "patisiran",
+  "manufacturer": "Alnylam Pharmaceuticals",
+  "benchmark_identity": "alnylam_onpattro_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Neurology",
+  "indication_area": "Rare disease (polyneuropathy of hereditary transthyretin-mediated amyloidosis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (global net product revenues as printed by Alnylam)",
+  "formulation": "lipid complex injection (concentrate for infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "Transthyretin-directed small interfering RNA (lipid nanoparticle formulation)",
+  "moa_class": "ttr_silencer_sirna",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=210922",
+    "quote": "NDA 210922, Company: ALNYLAM PHARMS INC, ONPATTRO PATISIRAN ... 08/10/2018 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan"
+  },
+  "commercial_start_quarter": "2018Q3",
+  "launch_quarter": "2018Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1178670/000156459018028070/alny-10q_20180930.htm",
+    "quote": "We received approval of ONPATTRO from the United States Food and Drug Administration, or FDA, on August 10, 2018 and began commercializing and generating product revenues in the United States in August 2018"
+  },
+  "search_log": [
+    "Listed every Alnylam (CIK 0001178670) filing via data.sec.gov/submissions (recent + older pages). Earnings releases were taken from every 8-K/8-K/A whose items include 2.02, 9.01 or 7.01 filed 2018-07 to 2026-11 (2024-2025 releases carry only Item 9.01, so an Item 2.02-only filter would have missed them); each filing's index.json was read and every non-primary .htm exhibit fetched.",
+    "Each release's HTML table rows were parsed; the product row was taken from the net product revenues table (first table whose first cell is the product name), current three-month column first. The quarter is the one the release reports (filed in the month after quarter end).",
+    "2025Q1: the 8-K release filed 2025-05-01 prints only 'Total TTR' and 'Total Rare' net product revenues, so the quarter is read from the Form 10-Q for the quarter ended March 31, 2025 (product heading followed by regional lines and a 'Total' line).",
+    "Units: every table used is headed '(In thousands ...)' and was checked programmatically; values converted to USD millions.",
+    "Full-year checks (quarters sum to the printed full year): 2019: 26.291 + 38.231 + 46.066 + 55.799 = 166.387 vs 166.387 (full-year column of the Q4 quote); 2020: 66.664 + 66.535 + 82.516 + 90.366 = 306.081 vs 306.081 (full-year column of the Q4 quote); 2021: 101.951 + 113.839 + 120.317 + 138.63 = 474.737 vs 474.737 (full-year column of the Q4 quote); 2022: 137.009 + 153.428 + 144.95 + 122.221 = 557.608 vs 557.608 (full-year column of the Q4 quote); 2023: 102.493 + 91.458 + 81.589 + 79.006 = 354.546 vs 354.546 (full-year column of the Q4 quote); 2024: 69.217 + 77.244 + 50.293 + 56.103 = 252.857 vs 252.857 (full-year column of the Q4 quote); 2025: 49.489 + 52.538 + 39.075 + 31.687 = 172.789 vs 172.789 (twelve-months table of the 2025Q4 release filed 2026-02-12)",
+    "2018Q3-2019Q3: ONPATTRO was the only marketed product, so the release's 'Product revenues, net' line is ONPATTRO (Q1 2019 10-Q: 'we recorded product revenues, net of $26.3 million, which consisted of commercial sales of ONPATTRO'); the 2019Q4 release's ONPATTRO row prints 2018Q4 as 12,075, equal to the 2018Q4 'Product revenues, net' line."
+  ]
+}

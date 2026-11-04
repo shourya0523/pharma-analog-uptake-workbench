@@ -1,0 +1,37 @@
+{
+  "drug_name": "Arzerra",
+  "generic_name": "ofatumumab",
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_arzerra_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology / Hematology (chronic lymphocytic leukaemia)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-CD20 monoclonal antibody",
+  "moa_class": "anti_cd20_mab",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125326",
+    "quote": "10/26/2009 ORIG-1 Approval (BLA 125326, ARZERRA OFATUMUMAB)"
+  },
+  "commercial_start_quarter": "2010Q1",
+  "launch_quarter": "2009Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000095012309054040/u07800e6vk.htm",
+    "quote": "In the last two weeks, we have received US approvals for Cervarix, Votrient and Arzerra."
+  },
+  "series_start_reason": "FDA approval 26 Oct 2009 (2009Q4). GSK's Q4 2009 announcement (0000950123-10-008661) prints no Arzerra turnover row; the first row is Q1 2010 (5). No GSK document states a launch date in words; launch_quarter is the US approval quarter, one quarter before the first printed row.",
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "GSK sold its oncology business (Arzerra included) to Novartis on 2 March 2015; GSK's Q1 2015 announcement (0001191638-15-000622) prints no brand rows. Novartis prints Arzerra only in pipeline tables (Q1 2015 to Q1 2018 reports), never a sales row. The last row is GSK's Q4 2014 (12; 2014 54).",
+  "notes": "GSK plc worldwide turnover in GBP millions, Total column of the quarterly Pharmaceuticals turnover table (the same row prints USA, Europe and other-region columns).",
+  "search_log": [
+    "Listed GSK plc (CIK 1131399) filings via data.sec.gov submissions (6,852 filings, 6,139 of them 6-K); located the quarterly results announcements with EDGAR full-text search for 'Tykerb', 'Votrient' and 'Arzerra' (6-K hits 2007-2015 in the results windows; 39 documents fetched).",
+    "The quarter's figure is read from the Pharmaceuticals turnover table headed 'Three months ended ...' (the cumulative 'Six/Nine months ended' and 'Year ended' tables are skipped); the period comes from that heading. Re-filed copies (2008-05-06, 2012-05-02) are not cited; the earlier filing is.",
+    "GSK's Q1 2015 results announcement (6-K 0001191638-15-000622, gsk201505066k.htm) prints no oncology brand rows: 'Oncology sales for the first two months were \u00a3216 million', after the disposal of the oncology business to Novartis on 2 March 2015.",
+    "Arzerra checks: 2010 31 (5+8+9+9), 2011 44, 2012 60, 2013 75, 2014 54, each equal to the year figure of the Q4 announcement.",
+    "Novartis interim reports 2015-2026 searched by script: 'Arzerra' rows are pipeline entries only."
+  ]
+}

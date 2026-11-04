@@ -1,0 +1,36 @@
+{
+  "drug_name": "RotaTeq",
+  "generic_name": "rotavirus vaccine, live, oral, pentavalent",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_rotateq_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Rotavirus gastroenteritis prevention (infants)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Global column: U.S. plus International)",
+  "formulation": "oral solution",
+  "route_of_administration": "oral",
+  "moa": "live human-bovine reassortant rotavirus vaccine (G1-G4, P1A)",
+  "moa_class": "live_attenuated_rotavirus_vaccine",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/75718/download",
+    "quote": "Initial U.S. Approval: 2006"
+  },
+  "commercial_start_quarter": "2006Q1",
+  "launch_quarter": "2006Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/64978/000095012306003031/y18212e10vk.htm",
+    "quote": "On February 3, 2006, Merck announced the approval by the FDA of RotaTeq."
+  },
+  "series_start_reason": "FDA approval February 2006. Merck's 2006 releases print RotaTeq only in footnote (1) to the viral vaccines line ('Includes new vaccine sales: ... RotaTeq $31m ...', from the second quarter); the first quarter 2006 is read from the prior-year column of the first-quarter 2007 Form 10-Q (2.2).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "2006Q2-2006Q4 from the footnote to the legacy Merck sales table; 2007Q1-2009Q3 from the legacy Merck (CIK 64978) quarterly sales table Global column; 2009Q4 supplemental combined Global 4Q; 2010Q1-2026Q2 Merck Table 3a.",
+    "Quarters sum to the printed full year within rounding of 1 in every year 2007-2025 (e.g. 2008: 664 vs 665; 2009: 522 vs 522 supplemental combined; 2024: 711 vs 711); 2006: 164.2 vs 163 printed in the 2006 footnote."
+  ]
+}

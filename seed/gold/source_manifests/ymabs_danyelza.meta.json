@@ -1,0 +1,34 @@
+{
+  "drug_name": "Danyelza",
+  "generic_name": "naxitamab-gqgk",
+  "manufacturer": "Y-mAbs Therapeutics",
+  "benchmark_identity": "ymabs_danyelza_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (relapsed/refractory high-risk neuroblastoma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Y-mAbs net product revenue; DANYELZA is its only product)",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-GD2 monoclonal antibody",
+  "moa_class": "anti_gd2_monoclonal_antibody",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761171",
+    "quote": "11/25/2020 ORIG-1 Approval (BLA 761171, DANYELZA NAXITAMAB-GQGK)"
+  },
+  "launch_quarter": "2021Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1722964/000155837021006293/ymab-20210331x10q.htm",
+    "quote": "The Company launched DANYELZA in February 2021 and recorded $5.4 million in net revenues for the three months ended March 31, 2021."
+  },
+  "series_end_quarter": "2025Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Y-mAbs was acquired by SERB Pharmaceuticals through a tender offer: its 8-K of 2025-09-16 (items 2.01, 3.01, 5.01) reports completion of the merger, Form 25-NSE was filed 2025-09-16 and Form 15-12G on 2025-09-26 (https://www.sec.gov/Archives/edgar/data/1722964/000110465925093587/tm2525998d10_1512g.htm). Its last periodic report is the Form 10-Q for the quarter ended June 30, 2025 (filed 2025-08-08); no 2025Q3 report exists.",
+  "search_log": [
+    "Listed every filing for CIK 1722964 (Y-mAbs Therapeutics) via data.sec.gov/submissions; fetched the exhibits of every 8-K with item 2.02 and every 10-Q/10-K filed 2020-11 to 2025-12.",
+    "Rows read from the 'Product revenue, net' / 'Net product revenue' line of the condensed consolidated statements of operations in each quarterly earnings release (8-K Exhibit 99.1, thousands). The FY2021 Form 10-K prints 2020 product revenue as a dash, so 2021Q1 is the first quarter of sales. 2021Q4 is derived (the 2021Q4 release prints only full-year columns). The quarter of each release is confirmed by the prior-year comparative column.",
+    "Full-year check: 2022: 10.486 + 9.797 + 12.537 + 16.447 = 49.267 vs 49.267 (full-year column of the Q4 quote); 2023: 20.251 + 20.751 + 19.954 + 23.363 = 84.319 vs 84.319 (full-year column of the Q4 quote); 2024: 19.431 + 22.798 + 18.461 + 24.495 = 85.185 vs 85.185 (full-year column of the Q4 quote).",
+    "Prior-year check: the prior-year comparative column of 14 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2021Q1"
+}

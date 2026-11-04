@@ -1,0 +1,31 @@
+{
+  "manufacturer": "AstraZeneca",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (World column)",
+  "drug_name": "Koselugo",
+  "generic_name": "selumetinib",
+  "benchmark_identity": "astrazeneca_koselugo_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Oncology",
+  "indication_area": "Rare Disease (neurofibromatosis type 1 plexiform neurofibromas)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "MEK1/2 inhibitor",
+  "moa_class": "mek_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=213756",
+    "quote": "04/10/2020 ORIG-1 Approval (NDA 213756, KOSELUGO SELUMETINIB SULFATE)"
+  },
+  "commercial_start_quarter": "2020Q2",
+  "launch_quarter": "2020Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000165495420008163/a5880uv2.htm",
+    "quote": "Koselugo Total Revenue, entirely comprising Product Sales in the US, amounted to $7m in the half, following its launch during the period."
+  },
+  "notes": "AstraZeneca Product Sales, World column of the quarter's regional Product Sales table.",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 901832) filings via data.sec.gov submissions (2,057 filings, 1,620 of them 6-K). Located every quarterly results announcement 2018-2026 with EDGAR full-text search for 'Tagrisso' (present in every results document since 2016) plus brand-name searches; 118 documents fetched.",
+    "The quarter's figure is the first (World) figure of the brand row in the regional 'Product Sales year-on-year analysis' table for the quarter; the table's period is read from its header (2019-2020) or from the table title / the sentence above it ('The Q2 2025 information in respect of the three months ended 30 June 2025 ...'). In the H1 2025 document both regional tables carry the header 'For the half year ended 30 June'; the second is titled 'Table 24 ... Q2 2025' and its figures equal H1 less Q1 (e.g. Lokelma 328 - 153 = 175), so it is cited as the quarter.",
+    "Koselugo checks: 2020 37 vs FY 38, 2021 107 vs 108, 2022 207 vs 208, 2023 331, 2024 530 vs 531, 2025 662 (rounding)."
+  ]
+}

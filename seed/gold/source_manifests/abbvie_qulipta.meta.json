@@ -1,0 +1,33 @@
+{
+  "drug_name": "Qulipta",
+  "generic_name": "atogepant",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_qulipta_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Preventive treatment of migraine (episodic, later chronic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (AbbVie's Total column: U.S. plus Int'l.)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Oral calcitonin gene-related peptide (CGRP) receptor antagonist (gepant)",
+  "moa_class": "cgrp_receptor_antagonist",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=215206",
+    "quote": "QULIPTA ATOGEPANT 10MG TABLET;ORAL ... 09/28/2021 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "commercial_start_quarter": "2022Q1",
+  "launch_quarter": "2021Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115222000007/abbv-20211231.htm",
+    "quote": "Neuroscience revenue growth driven by Vraylar, Botox Therapeutic, Ubrelvy and recently launched Qulipta.",
+    "note": "FDA approval on September 28, 2021 (AbbVie 10-Q for 2021Q3: 'In September 2021, AbbVie announced that the FDA approved Qulipta (atogepant)'); the first full quarter on the market is 2021Q4."
+  },
+  "series_start_reason": "Series starts 2022Q1, one quarter after the 2021Q4 launch: AbbVie's first Qulipta line is in the first-quarter 2022 release; the fourth-quarter 2022 release shows the 2021Q4 comparison only as a percentage ('>100.0'), not as a figure.",
+  "search_log": [
+    "Listed every AbbVie (CIK 1551152) filing via data.sec.gov/submissions (all forms); earnings releases are the 8-K filings with item 2.02 from 2013 (exhibit 99.1 'abbv-YYYYMMDDxexhibit991'), each exhibit resolved from index.json; plus every 10-Q and 10-K from 2013. AbbVie's Forms 10-Q and 10-K print none of Duopa/Duodopa, Epkinly, Orilissa or Qulipta on a revenue line; the releases do.",
+    "Every table row whose first cell starts with Duopa, Duodopa, Epkinly, Orilissa or Qulipta followed by a figure was extracted (scan.py). The quarter is the first table of the release (three months); value_reported is its Total column (U.S. + Int'l.), printed by AbbVie.",
+    "Qulipta rows: releases 2022Q1-2026Q2.",
+    "Four-quarter sums: 2022 = 158, 2023 = 408, 2024 = 658, 2025 = 1,036, each equal to the full-year Qulipta Total printed in that year's fourth-quarter release (full-year table)."
+  ]
+}

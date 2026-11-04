@@ -1,0 +1,37 @@
+{
+  "drug_name": "Paxlovid",
+  "generic_name": "nirmatrelvir tablets; ritonavir tablets (co-packaged)",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_paxlovid_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (COVID-19 treatment)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet (co-packaged)",
+  "route_of_administration": "oral",
+  "moa": "SARS-CoV-2 main protease (3CL protease) inhibitor boosted with ritonavir",
+  "moa_class": "sars_cov_2_protease_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=217188",
+    "quote": "05/25/2023 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 217188, PAXLOVID (COPACKAGED) NIRMATRELVIR; RITONAVIR)"
+  },
+  "launch_quarter": "2021Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000007800322000027/pfe-20211231.htm",
+    "quote": "In December 2021, the FDA authorized the emergency use of Paxlovid, a novel oral COVID-19 treatment, which is a SARS-CoV2-3CL protease inhibitor and is co-administered with a low dose of ritonavir"
+  },
+  "series_start_reason": "Series starts at launch: U.S. emergency use authorization in December 2021; the fourth-quarter 2021 release prints Paxlovid 76 with a nil prior-year column. first_approval_year is the 2023 NDA approval; sales began under the 2021 EUA.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000078003 (Pfizer) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (93 filings, 2004-10-20 to 2026-11-03; this filter cannot see earnings releases filed before Item 2.02 existed, none of which matter here because every product below launched in 2006 or later) and fetched every document in each filing's index.json except the 8-K cover document and the R*.htm XBRL viewer pages; also fetched every 10-Q, 10-K and 10-K/A primary document filed 2012-01-01 to 2026-11-03.",
+    "Product rows: in each release's Exhibit 99, the first table row whose first cell begins with the product label and whose first figure cell (after any one-to-four-letter business-unit code cell, printed 2014-2015) is a number; Pfizer's first product table is the quarter table with the Worldwide block first (quarter, same quarter a year earlier). The quarter of a release is the calendar quarter ended before its filing date; a second release mapping to the same quarter would have aborted the build (none did). The 2006-2007 releases are plain-text exhibits and were read line by line (first line beginning with the product token followed by a figure).",
+    "Paxlovid row present in every Pfizer release from 2021Q4 to 2026Q2 (and 2026Q3); label carries a footnote letter in some quarters ('Paxlovid (c)', '(d)', '(e)').",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2022: quarters sum to 18933; twelve-month figure 18,933 (current column of the 2022Q4 release); 2023: quarters sum to 1279; twelve-month figure 1,279 (current column of the 2023Q4 release); 2024: quarters sum to 5716; twelve-month figure 5,716 (current column of the 2024Q4 release); 2025: quarters sum to 2361; twelve-month figure 2,362 (current column of the 2025Q4 release)"
+  ],
+  "commercial_start_quarter": "2021Q4",
+  "reviewed_anomalies": {
+    "2023Q2": "A step down from the previous quarter as printed. Checked at source and kept as printed.",
+    "2023Q4": "Printed negative: Pfizer's footnoted reversal of about $3.5 billion of revenue for returned EUA product. Checked at source and kept as printed.",
+    "2024Q3": "A step up from the previous quarter as printed. Checked at source and kept as printed."
+  }
+}

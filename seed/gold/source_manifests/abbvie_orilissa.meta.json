@@ -1,0 +1,36 @@
+{
+  "drug_name": "Orilissa",
+  "generic_name": "elagolix",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_orilissa_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Moderate to severe pain associated with endometriosis",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (AbbVie's Total column: U.S. plus Int'l.); from 2020Q2 the line is 'Orilissa/Oriahnn' (adds Oriahnn, elagolix with estradiol and norethindrone acetate, approved May 2020)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Oral non-peptide gonadotropin-releasing hormone (GnRH) receptor antagonist",
+  "moa_class": "gnrh_receptor_antagonist",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=210450",
+    "quote": "ORILISSA ELAGOLIX SODIUM EQ 150MG BASE TABLET;ORAL ... 07/23/2018 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "commercial_start_quarter": "2019Q1",
+  "launch_quarter": "2018Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115218000029/abbv-20180630xexhibit991.htm",
+    "quote": "ORILISSA represents the first FDA-approved oral treatment for the management of moderate to severe pain associated with endometriosis in over a decade and is expected to be available in U.S. retail pharmacies in early August 2018."
+  },
+  "series_start_reason": "Series starts 2019Q1, two quarters after the August 2018 launch: AbbVie's releases print no Orilissa line before the second-quarter 2019 release, and 2019Q1 is read from AbbVie's recast quarterly table filed 2020-07-29. 2018Q3-2018Q4 sales are printed in no sec.gov filing.",
+  "series_end_quarter": "2021Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "AbbVie's last 'Orilissa/Oriahnn' line is in the fourth-quarter 2021 release (https://www.sec.gov/Archives/edgar/data/1551152/000155115222000003/abbv-20211231xexhibit991.htm: 'Orilissa/Oriahnn | 37 | 2 | 39'). From the first-quarter 2022 release (https://www.sec.gov/Archives/edgar/data/1551152/000155115222000010/abbv-20220331xexhibit991.htm) the Women's Health block is gone (Neuroscience, Eye Care, then 'Other Key Products | 689 | 218 | 907') and the release does not name the product; no later AbbVie release, 10-Q or 10-K prints an Orilissa revenue line.",
+  "search_log": [
+    "Listed every AbbVie (CIK 1551152) filing via data.sec.gov/submissions (all forms); earnings releases are the 8-K filings with item 2.02 from 2013 (exhibit 99.1 'abbv-YYYYMMDDxexhibit991'), each exhibit resolved from index.json; plus every 10-Q and 10-K from 2013. AbbVie's Forms 10-Q and 10-K print none of Duopa/Duodopa, Epkinly, Orilissa or Qulipta on a revenue line; the releases do.",
+    "Every table row whose first cell starts with Duopa, Duodopa, Epkinly, Orilissa or Qulipta followed by a figure was extracted (scan.py). The quarter is the first table of the release (three months); value_reported is its Total column (U.S. + Int'l.), printed by AbbVie.",
+    "Orilissa rows: recast table (8-K 2020-07-29) for 2019Q1; releases 2019Q2-2021Q4 (label 'Orilissa', then 'Orilissa/Oriahnn' from 2020Q2).",
+    "Scope note: the 'Orilissa/Oriahnn' line adds Oriahnn from its May 2020 approval; AbbVie's own recast (exhibit 99.2 of 2020-07-31) carries the earlier 'Orilissa' history unchanged under the new label, so it is kept as one series. A consumer who needs elagolix-for-endometriosis alone should end the series at 2020Q1.",
+    "Four-quarter sums: 2019 = 93, 2020 = 125, 2021 = 145, each equal to the full-year Total in that year's fourth-quarter release."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "drug_name": "Vytorin",
+  "generic_name": "ezetimibe/simvastatin",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_vytorin_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Hypercholesterolaemia",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Merck/Schering-Plough partnership worldwide sales to 2009Q3; Merck Global column from 2009Q4)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "cholesterol absorption inhibitor (NPC1L1) plus HMG-CoA reductase inhibitor",
+  "moa_class": "cholesterol_absorption_inhibitor_statin_combination",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021687",
+    "quote": "07/23/2004 ORIG-1 Approval (NDA 021687, VYTORIN EZETIMIBE; SIMVASTATIN)"
+  },
+  "commercial_start_quarter": "2004Q2",
+  "launch_quarter": "2004Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/64978/000095012304004942/y96349exv99w1.txt",
+    "quote": "VYTORIN (branded \"INEGY\" in many countries outside of the United States) has been launched in Germany and Mexico."
+  },
+  "series_start_reason": "Launched in Germany and Mexico ahead of the July 2004 U.S. approval (first-quarter 2004 release, filed 2004-04-22). The legacy Merck collaboration table first prints VYTORIN (Worldwide) in the second-quarter 2004 release ($5 million for the quarter and $5 million year to date), so there were no first-quarter sales and the series starts 2004Q2.",
+  "series_end_quarter": "2021Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck's Form 10-K for 2020 (filed 2021-02-25, https://www.sec.gov/Archives/edgar/data/310158/000031015821000004/mrk-20201231.htm) states 'Zetia, Vytorin, Atozet and Rosuzet will be contributed to Organon in connection with the spin-off'. Merck's first-quarter 2021 release (filed 2021-04-29) is the last to print Vytorin; the second-quarter 2021 release states 'Completed the Spinoff of Organon on June 2' and 'As Organon results are reflected within discontinued operations, they are excluded from the financial information provided below', and prints no Vytorin line.",
+  "notes": "2004Q2-2009Q3 are the worldwide sales of the Merck/Schering-Plough partnership as printed by legacy Merck in its 'Merck / Schering-Plough Collaboration' table (the partnership was equity-accounted, so these are not Merck revenues); from 2009Q4 the figure is Merck's consolidated worldwide Vytorin sales (2009Q4 on the supplemental combined basis). Both are worldwide sales of the product.",
+  "search_log": [
+    "Listed every filing of CIK 310158 (Merck & Co., Inc.; Schering-Plough Corporation before its November 2009 renaming), CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) and CIK 912183 (Cubist Pharmaceuticals) via data.sec.gov submissions incl. the older 'files' pages, all forms. Earnings 8-Ks selected by item 2.02 or item 12 (2003-2004), plus every 2003 and older 8-K reviewed by date; every EX-99 document of those filings fetched (cached), plus every 10-Q and 10-K main document 1997-2026 for 310158, 1997-2010 for 64978 and all for 912183.",
+    "Rows read from HTML table rows (or text lines for the 2003-2005 .txt exhibits) the same way the verifier reads them; the product line is matched on its exact label (footnote markers such as '(2)' ignored), and the quarter of each release is checked against its own column header ('4Q 2019' etc.). Where Merck's Table 3a prints the product, the Global current-quarter column is used; a quarter Merck's own release does not print is read from the prior-year column of the release four quarters later (derivation direct_prior_year_column).",
+    "Caveat on the 2009Q4 row: Merck's fourth-quarter 2009 release (filed 2010-02-16) prints product sales on a 'Supplemental Combined Non-GAAP' basis (a full three months for both Merck and Schering-Plough) in its Global 4Q column; that is the row cited.",
+    "2004Q2-2009Q3 from the Merck / Schering-Plough Collaboration table of each legacy Merck release (CIK 64978), current-quarter column; Schering-Plough's own releases (CIK 310158) print only its share of partnership results, not product sales, and were not used; 2009Q4 supplemental combined; 2010Q1-2021Q1 Table 3a.",
+    "Quarter sums against printed full years: 2006 1,955.3, 2007 2,779.1 and 2008 2,360.0 match exactly; 2010-2020 within 1. Two documented differences: 2005 quarters as printed (179, 193, 274, 355) sum to 1,001 while the 4Q 2005 release prints 1,028 for the year (its 9-month figure, 673, also exceeds 179+193+274); 2009 sums to 2,077 against the supplemental combined full year 2,112. The quarter figures are kept as printed."
+  ]
+}

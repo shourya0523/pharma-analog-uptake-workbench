@@ -1,0 +1,52 @@
+{
+  "drug_name": "Tivdak",
+  "generic_name": "tisotumab vedotin-tftv",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_tivdak_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (recurrent or metastatic cervical cancer)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Seagen net product sales of TIVDAK)",
+  "formulation": "lyophilized powder for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Tissue factor-directed antibody-drug conjugate (MMAE payload)",
+  "moa_class": "antibody_drug_conjugate",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761208",
+    "quote": "09/20/2021 ORIG-1 Approval (BLA 761208, TIVDAK TISOTUMAB VEDOTIN-TFTV)"
+  },
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1060736/000106073622000016/sgen-20211231.htm",
+    "quote": "TIVDAK was approved by FDA in September 2021. In the U.S., following FDA approval in September 2021, we and Genmab co-promote TIVDAK. We record sales of TIVDAK in the U.S. and are responsible for leading U.S. distribution activities."
+  },
+  "search_log": [
+    "Listed every filing for CIK 1060736 (Seagen) and CIK 78003 (Pfizer) via data.sec.gov/submissions; fetched every Seagen 10-Q/10-K and 8-K item 2.02 exhibit filed 2021-10 to 2023-12 and every Pfizer 8-K item 2.02 exhibit filed 2024-01 to 2026-09.",
+    "Seagen first-to-third quarters from the 'TIVDAK' row of the MD&A net product sales table of each Form 10-Q (dollars in thousands); Seagen fourth quarters from the 'TIVDAK' row of the Q4 earnings release (USD millions, 6.1 for 2021 and whole millions for 2022). Pfizer quarters from the U.S. column of the 'Tivdak' row in the quarter block of Pfizer's revenues-by-product table (USD millions). The 2021Q3 10-Q prints the prior-year quarter as a dash, so 2021Q3 is the first quarter of sales.",
+    "The Pfizer 2024 releases print the prior-year Tivdak columns as dashes (Seagen was not yet owned), so the joined series switches issuer at 2024Q1 with 2023Q4 unreported.",
+    "Full-year check: 2022: 11.415 + 17.209 + 16.467 + 18 = 63.091 vs 63 (full-year column of the Q4 quote).",
+    "Prior-year check: the prior-year comparative column of 4 quarterly quotes equals the figure recorded for that earlier quarter from its own filing; differences (printed rounding or restated comparatives; the current-period figure is kept): 2022Q4 prior-year column 6 vs 2021Q4 6.1.",
+    "[joined piece] Listed every filing for CIK 1060736 (Seagen) and CIK 78003 (Pfizer) via data.sec.gov/submissions; fetched every Seagen 10-Q/10-K and 8-K item 2.02 exhibit filed 2021-10 to 2023-12 and every Pfizer 8-K item 2.02 exhibit filed 2024-01 to 2026-09.",
+    "[joined piece] Seagen first-to-third quarters from the 'TIVDAK' row of the MD&A net product sales table of each Form 10-Q (dollars in thousands); Seagen fourth quarters from the 'TIVDAK' row of the Q4 earnings release (USD millions, 6.1 for 2021 and whole millions for 2022). Pfizer quarters from the U.S. column of the 'Tivdak' row in the quarter block of Pfizer's revenues-by-product table (USD millions). The 2021Q3 10-Q prints the prior-year quarter as a dash, so 2021Q3 is the first quarter of sales.",
+    "[joined piece] The Pfizer 2024 releases print the prior-year Tivdak columns as dashes (Seagen was not yet owned), so the joined series switches issuer at 2024Q1 with 2023Q4 unreported.",
+    "[joined piece] Full-year check: none available.",
+    "[joined piece] Prior-year check: the prior-year comparative column of 6 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2021Q3",
+  "unreported_quarters": {
+    "2023Q4": "Seagen was acquired by Pfizer on December 14, 2023; Seagen filed no report for 2023Q4 (last 10-Q is for 2023Q3, Form 15 filed 2023-12-26, https://www.sec.gov/Archives/edgar/data/1060736/000119312523302421/d669576d1512g.htm) and Pfizer's 4Q23 release (https://www.sec.gov/Archives/edgar/data/78003/000007800324000017/pfe-12312023xex99.htm) prints Tivdak '4' under footnote (i), revenues from legacy Seagen products subsequent to the acquisition - a December 14-31 stub, so 2023Q4 has no full-quarter figure. The Seagen-issued series therefore ends at 2023Q3; Pfizer's own U.S. Tivdak line from 2024Q1 is staged separately as pfizer_tivdak (same scope and units basis), and the two join across the unreported 2023Q4. | Continuation of seagen_tivdak (Seagen, 2021Q3-2023Q3) after the change of ownership. Seagen was acquired by Pfizer on December 14, 2023; Seagen filed no report for 2023Q4 (last 10-Q is for 2023Q3, Form 15 filed 2023-12-26, https://www.sec.gov/Archives/edgar/data/1060736/000119312523302421/d669576d1512g.htm) and Pfizer's 4Q23 release (https://www.sec.gov/Archives/edgar/data/78003/000007800324000017/pfe-12312023xex99.htm) prints Tivdak '4' under footnote (i), revenues from legacy Seagen products subsequent to the acquisition - a December 14-31 stub, so 2023Q4 has no full-quarter figure. Pfizer's series therefore starts at 2024Q1, its first full quarter of ownership; the launch-to-2023Q3 history is the Seagen piece."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Seagen",
+      "first_quarter": "2021Q3",
+      "last_quarter": "2023Q3"
+    },
+    {
+      "issuer": "Pfizer",
+      "first_quarter": "2024Q1",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

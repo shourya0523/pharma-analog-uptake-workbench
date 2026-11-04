@@ -1,0 +1,34 @@
+{
+  "drug_name": "Xenpozyme",
+  "generic_name": "olipudase alfa",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_xenpozyme_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Rare disease (acid sphingomyelinase deficiency)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sanofi total net sales for the product)",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant acid sphingomyelinase (enzyme replacement therapy)",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761261",
+    "quote": "08/31/2022 ORIG-1 Approval N/A; Orphan (BLA 761261, XENPOZYME)",
+    "note": "First approval worldwide was Japan's (MHLW) in March 2022, reported in Sanofi's Q1 2022 release; US approval 08/31/2022."
+  },
+  "commercial_start_quarter": "2022Q3",
+  "launch_quarter": "2022Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140422000018/pressreleaseq32022english.htm",
+    "quote": "Xenpozyme TM (olipudase alfa) was launched in Japan in June as the first and only enzyme replacement therapy for the treatment of non-Central Nervous System (CNS) manifestations of Acid Sphingomyelinase. Third-quarter sales were \u20ac2 million."
+  },
+  "series_start_reason": "Sanofi first prints a Xenpozyme figure in the Q3 2022 release text ('Third-quarter sales were \u20ac2 million'); the Q4 2022 release text gives Q4 17 and full-year 21; table rows begin with Q1 2023 (18, +1700.0% at CER). The 2022Q1 and 2022Q2 quarters (together 2 = 21 - 2 - 17) are not printed separately in any SEC filing found, so the series starts 2022Q3, one quarter after the June 2022 Japanese launch.",
+  "search_log": [
+    "Listed every filing for CIK 1121404 (Sanofi) from data.sec.gov/submissions including the older 'files' pages. Candidate results filings: every 6-K/6-K/A from 2009 on, filed 20 Jan-28 Feb, 15 Apr-12 May, 15 Jul-12 Aug or 15 Oct-12 Nov, with total filing size >= 250 KB; each candidate's index.json was read and every exhibit between 20 KB and 4 MB was fetched and searched for Multaq, Jevtana, Lemtrada, Soliqua, Zaltrap, Rezurock and Xenpozyme (XBRL R pages, the 20-F-style half-year XBRL documents and the 6-K cover pages excluded from selection).",
+    "Each candidate exhibit's quarter was read from the header of the net-sales tables that print the products (e.g. 'Q3 2010 net sales', 'Q2 2024 (\u20ac million)'); per quarter the exhibit with most product rows is the quarterly results press release. Header detection failed for 2009Q3/2009Q4 (header 'Millions of euros / 2009 Q3 net sales') and mislabelled the 2012Q2 release (its table header misprints 'Q2 2011 net sales'; the figures are the 2012 quarter, the year 2012 is in the release); those were set by hand, and for 2021Q1 and 2025Q3 Sanofi's own 6-K press release (pressreleaseq12021english.htm, pressreleaseq32025english.htm) was preferred over a later 6-K re-filing of the same release.",
+    "Row selection: the first table in the release that prints the product (the franchise summary 'Net sales (\u20ac million) / Qn YYYY / Change at CER', or from 2023/2024 the 'Qn YYYY (\u20ac million) / Total Sales / % CER / ... United States / Europe / Rest of World' table whose first column is the worldwide total). In 2016-2019 the appendix splits sales into 'Total GBUs' (excluding Emerging Markets) and 'Total Franchises' (worldwide); where a product prints only in that appendix (Multaq 2016Q1-2018Q2), the Total Franchises column is recorded. Units as declared beside each table: '\u20ac million' / 'millions of euros'.",
+    "2022Q3 and 2022Q4 are read from the release text (rows quote the sentence's figures); 2023Q1 on from the net-sales tables.",
+    "Sum checks: 2023: 18+20+27+26=91 vs full-year 91 OK; 2024: 35+37+41+38=151 vs full-year 151 OK; 2025: 56+54+57+61=228 vs full-year 228 OK"
+  ]
+}

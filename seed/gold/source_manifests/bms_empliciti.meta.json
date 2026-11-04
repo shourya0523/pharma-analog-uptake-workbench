@@ -1,0 +1,34 @@
+{
+  "drug_name": "Empliciti",
+  "generic_name": "elotuzumab",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_empliciti_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (multiple myeloma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "SLAMF7-directed immunostimulatory monoclonal antibody",
+  "moa_class": "slamf7_antibody",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761035",
+    "quote": "11/30/2015 ORIG-1 Approval (BLA 761035, EMPLICITI ELOTUZUMAB)"
+  },
+  "launch_quarter": "2015Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000001427216000288/bmy-20151231x10xk.htm",
+    "quote": "Empliciti was launched in the U.S. in December 2015."
+  },
+  "series_end_quarter": "2022Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The fourth-quarter 2022 release (2023-02-02) is the last to print an Empliciti row. The first-quarter 2023 release (https://www.sec.gov/Archives/edgar/data/14272/000001427223000102/q12023ex991.htm) and every later release through 2026Q3 have no Empliciti row; the 2023Q1 table folds such brands into 'Mature and other products (a)' ('(a) Includes over-the-counter (OTC) products, royalty revenue and mature products'), and the first-quarter 2024 release (https://www.sec.gov/Archives/edgar/data/14272/000001427224000094/q12024ex991-filing.htm) names it: '(a) Includes Nulojix, Onureg, Inrebic, Empliciti and royalty revenue'.",
+  "search_log": [
+    "Listed every filing (all forms) for CIK 0000014272 (Bristol-Myers Squibb) via data.sec.gov/submissions incl. the older 'files' pages; selected every 8-K/8-K/A whose items include 2.02 (105 filings, 2004-10-29 to 2026-10-29) and fetched every document in each filing's index.json except the cover document and R*.htm pages; product rows read from Exhibit 99.1 (the file name matching 'ex99.?1' or 'ex991'), whose first product table is the quarter table.",
+    "Row rule: first table row of the Exhibit 99.1 whose first cell begins with the product name and whose first figure cell is a number. 2015Q4-2022Q4 releases print worldwide quarter then same quarter a year earlier (2019Q4-2022Q4 also a summary table on the first page, which is the row read); from the 2023Q1 release the columns are U.S., Int'l, WW and the WW (third) figure is used.",
+    "Empliciti product row present in every BMS Exhibit 99.1 from 2015Q4 to 2022Q4, absent from 2023Q1 on.",
+    "Full-year checks (quarters against the twelve-month figure of the Q4 release): 2016: quarters sum to 150; twelve-month figure 150 (current column of the 2016Q4 release); 2017: quarters sum to 231; twelve-month figure 231 (current column of the 2017Q4 release); 2018: quarters sum to 247; twelve-month figure 247 (current column of the 2018Q4 release); 2019: quarters sum to 357; twelve-month figure 357 (current column of the 2019Q4 release); 2020: quarters sum to 381; twelve-month figure 381 (current column of the 2020Q4 release); 2021: quarters sum to 334; twelve-month figure 334 (current column of the 2021Q4 release); 2022: quarters sum to 296; twelve-month figure 296 (current column of the 2022Q4 release)"
+  ],
+  "commercial_start_quarter": "2015Q4"
+}

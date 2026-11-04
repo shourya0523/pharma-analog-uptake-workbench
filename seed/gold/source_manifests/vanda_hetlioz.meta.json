@@ -1,0 +1,31 @@
+{
+  "drug_name": "Hetlioz",
+  "generic_name": "tasimelteon",
+  "manufacturer": "Vanda Pharmaceuticals",
+  "benchmark_identity": "vanda_hetlioz_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Sleep disorders (Non-24-hour sleep-wake disorder; Smith-Magenis syndrome)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Vanda HETLIOZ net product sales; U.S. plus Europe from 2016)",
+  "formulation": "capsule (and oral suspension, HETLIOZ LQ)",
+  "route_of_administration": "oral",
+  "moa": "Melatonin MT1/MT2 receptor agonist",
+  "moa_class": "melatonin_receptor_agonist",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=205677",
+    "quote": "01/31/2014 ORIG-1 Approval (NDA 205677, HETLIOZ TASIMELTEON)"
+  },
+  "launch_quarter": "2014Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1347178/000119312515091300/d824216d10k.htm",
+    "quote": "HETLIOZ (tasimelteon) | Non-24 | United States | FDA approval in January 2014; Commercial launch in April 2014"
+  },
+  "search_log": [
+    "Listed every filing for CIK 1347178 (Vanda Pharmaceuticals) via data.sec.gov/submissions; fetched the exhibits of every 8-K with item 2.02 and every 10-Q/10-K filed 2010-01 to 2026-09.",
+    "Rows read from the HETLIOZ net product sales line of the condensed consolidated statements of operations in each quarterly earnings release (8-K Exhibit 99.1, thousands); the guidance table rows of the same releases ('HETLIOZ net product sales | $x to $y million') carry no single figure and are skipped. Where January preliminary-revenue 8-Ks (2017-01-09, 2018-01-08) map to the same fourth quarter as the February earnings release, the later earnings release is used. The 2014Q2 release prints the prior-year quarter as a dash, so 2014Q2 is the first quarter of sales. The quarter is confirmed by the prior-year comparative column.",
+    "Full-year check: 2015: 7.46 + 10.017 + 11.682 + 15.143 = 44.302 vs 44.302 (full-year column of the Q4 quote); 2016: 16.201 + 17.46 + 18.715 + 19.295 = 71.671 vs 71.671 (full-year column of the Q4 quote); 2017: 20.182 + 22.507 + 22.279 + 25.01 = 89.978 vs 89.978 (full-year column of the Q4 quote); 2018: 25.423 + 28.045 + 29.923 + 32.444 = 115.835 vs 115.835 (full-year column of the Q4 quote); 2019: 28.957 + 37.835 + 37.589 + 38.599 = 142.980 vs 142.98 (full-year column of the Q4 quote); 2020: 35.336 + 41.561 + 39.618 + 44.171 = 160.686 vs 160.686 (full-year column of the Q4 quote); 2022: 37.031 + 41.188 + 41.335 + 40.101 = 159.655 vs 159.655 (full-year column of the Q4 quote); 2023: 39.616 + 21.979 + 17.5 + 21.072 = 100.167 vs 100.167 (full-year column of the Q4 quote); 2024: 20.053 + 18.708 + 17.87 + 20.044 = 76.675 vs 76.675 (full-year column of the Q4 quote); 2025: 20.872 + 16.192 + 17.978 + 16.389 = 71.431 vs 71.431 (full-year column of the Q4 quote).",
+    "Prior-year check: the prior-year comparative column of 45 quarterly quotes equals the figure recorded for that earlier quarter from its own filing."
+  ],
+  "commercial_start_quarter": "2014Q2"
+}

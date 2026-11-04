@@ -1,0 +1,33 @@
+{
+  "drug_name": "Rezurock",
+  "generic_name": "belumosudil",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_rezurock_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Transplant (chronic graft-versus-host disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sanofi total net sales for the product)",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "ROCK2 (Rho-associated coiled-coil kinase 2) inhibitor",
+  "moa_class": "rock2_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=214783",
+    "quote": "07/16/2021 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan (NDA 214783, REZUROCK)"
+  },
+  "commercial_start_quarter": "2022Q1",
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1557142/000155714221000077/kdmn-20211104xex99_1.htm",
+    "quote": "On August 19, 2021 REZUROCK became commercially available for shipment to prescribed patients in the United States through a network of rare hematology/oncology specialty pharmacies and distributors"
+  },
+  "series_start_reason": "Rezurock was launched by Kadmon Holdings (CIK 1557142) in 2021Q3 and consolidated by Sanofi from the 9 November 2021 close of the Kadmon acquisition. Sanofi's Q4 2021 release covers only the post-close weeks and prints no Rezurock figure ('Sales of Rezurock ... were consolidated as of November 9'); Sanofi's first Rezurock row is Q1 2022 (41, change 'na'). Kadmon's own 2021Q3 figure is in USD and from a different issuer, so it is not spliced into this EUR series. Series starts 2022Q1, 2 quarters after launch.",
+  "search_log": [
+    "Listed every filing for CIK 1121404 (Sanofi) from data.sec.gov/submissions including the older 'files' pages. Candidate results filings: every 6-K/6-K/A from 2009 on, filed 20 Jan-28 Feb, 15 Apr-12 May, 15 Jul-12 Aug or 15 Oct-12 Nov, with total filing size >= 250 KB; each candidate's index.json was read and every exhibit between 20 KB and 4 MB was fetched and searched for Multaq, Jevtana, Lemtrada, Soliqua, Zaltrap, Rezurock and Xenpozyme (XBRL R pages, the 20-F-style half-year XBRL documents and the 6-K cover pages excluded from selection).",
+    "Each candidate exhibit's quarter was read from the header of the net-sales tables that print the products (e.g. 'Q3 2010 net sales', 'Q2 2024 (\u20ac million)'); per quarter the exhibit with most product rows is the quarterly results press release. Header detection failed for 2009Q3/2009Q4 (header 'Millions of euros / 2009 Q3 net sales') and mislabelled the 2012Q2 release (its table header misprints 'Q2 2011 net sales'; the figures are the 2012 quarter, the year 2012 is in the release); those were set by hand, and for 2021Q1 and 2025Q3 Sanofi's own 6-K press release (pressreleaseq12021english.htm, pressreleaseq32025english.htm) was preferred over a later 6-K re-filing of the same release.",
+    "Row selection: the first table in the release that prints the product (the franchise summary 'Net sales (\u20ac million) / Qn YYYY / Change at CER', or from 2023/2024 the 'Qn YYYY (\u20ac million) / Total Sales / % CER / ... United States / Europe / Rest of World' table whose first column is the worldwide total). In 2016-2019 the appendix splits sales into 'Total GBUs' (excluding Emerging Markets) and 'Total Franchises' (worldwide); where a product prints only in that appendix (Multaq 2016Q1-2018Q2), the Total Franchises column is recorded. Units as declared beside each table: '\u20ac million' / 'millions of euros'.",
+    "2022: 41+43+60+63=207 equals the 2022 figure; the Q2 and Q3 2022 releases print H1 84 and 9M 144.",
+    "Sum checks: 2022: 41+43+60+63=207 vs full-year 207 OK; 2023: 67+74+83+86=310 vs full-year 310 OK; 2024: 93+114+131+132=470 vs full-year 470 OK; 2025: 131+132+114+113=490 vs full-year 490 OK"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "drug_name": "Intelence",
+  "generic_name": "etravirine",
+  "manufacturer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_intelence_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (HIV)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (J&J WW row: US + Intl)",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "HIV-1 non-nucleoside reverse transcriptase inhibitor",
+  "moa_class": "nnrti",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022187",
+    "quote": "01/18/2008 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY (NDA 022187, INTELENCE)"
+  },
+  "commercial_start_quarter": "2010Q1",
+  "launch_quarter": "2008Q1",
+  "launch_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022187",
+    "quote": "01/18/2008 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY",
+    "basis": "FDA approval record; no filing found that dates the first sale, so the approval quarter is used as the launch anchor."
+  },
+  "series_start_reason": "J&J first prints an INTELENCE line (US, Intl, WW) in the 2011Q1 Exhibit 99.2 (8-K 2011-04-19, under 'MAJOR NEW PHARMACEUTICAL PRODUCTS'); the 2008Q1-2010Q4 exhibits do not contain the word. The 2011Q1-2011Q4 schedules print 2010Q1-2010Q4 in their prior-year column (55, 56, 67, 65), so the series starts at 2010Q1, 8 quarters after the 2008Q1 approval.",
+  "series_end_quarter": "2013Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 2014Q1 Exhibit 99.2 (https://www.sec.gov/Archives/edgar/data/200406/000020040614000042/a1q20148kexhibit992o.htm) prints the infectious-disease lines 'EDURANT', 'INCIVO', 'OLYSIO/SOVRIAD', 'PREZISTA', 'OTHER INFECTIOUS DISEASES' and no INTELENCE line (the word does not appear in any 2014Q1-2026Q3 exhibit); the last INTELENCE quarter is 2013Q4 (2013Q4 schedule: INTELENCE WW 95 vs 84).",
+  "search_log": [
+    "Listed every filing for CIK 200406 (Johnson & Johnson) from data.sec.gov/submissions including the older 'files' pages (all forms). Earnings 8-Ks: the quarter->Exhibit 99.2 map was taken for 2008Q1-2026Q3 from 8-Ks with item 2.02 (and, before item codes, 8-Ks whose exhibits print a product schedule with WW rows); 2010Q2, 2010Q4, 2011Q2 and 2011Q3 were added by reading those 8-Ks' index.json (exhibit992o.htm, exhibit99152o4thqtr2010.htm, ninetyninetwoo.htm, exhibit992o3rdqtr2011.htm). All 75 exhibits were fetched in this run and each was checked to print 'Dollars in Millions'.",
+    "Each exhibit was parsed table by table: a single-cell row is a product line, the US / Intl / WW rows beneath it are its regions; the WW row is recorded. The first occurrence of a product in an exhibit is the quarter table (the quarter table precedes the six/nine/twelve-month table; confirmed against each table's own QUARTER vs MONTHS header where the header is in the table). A quarter whose own release prints no line for the product is read from the prior-year (second) column of the release a year later (derivation direct_prior_year_column).",
+    "Also scanned every 10-K and 10-Q primary document filed from 2013-04 to 2026-10 for the brand names (none prints a sales figure for these brands).",
+    "Sum checks: 2011: 69+79+83+83=314 vs twelve-month 314 OK; 2012: 80+91+94+84=349 vs twelve-month 349 OK; 2013: 89+103+92+95=379 vs twelve-month 379 OK",
+    "2010: 55+56+67+65=243, equal to the prior-year twelve-month column of the 2011Q4 schedule (314 vs 243)."
+  ]
+}
